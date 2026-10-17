@@ -33,13 +33,11 @@ htmlcov/
 .mypy_cache/
 
 # Test output artifacts (generated sample receipts & images)
-receipt_*.pdf
-receipt_*.png
-receipt_*.txt
-test_receipt_*.pdf
-test_receipt_*.png
+receipt_*.*
+test_receipt_*.*
 donations_admin_report.*
 test_donations_report.*
+donations_report*.*
 
 # Embedded MongoDB binaries and database data
 backend/mongodb/

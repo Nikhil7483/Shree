@@ -17,7 +17,10 @@ Set-Location $BackendDir
 Write-Host "[1/2] Running automated unit tests with pytest..." -ForegroundColor Cyan
 & $PytestExe -v tests/test_receipt_generator.py
 
-Write-Host "`n[2/2] Running visual receipt inspection generator..." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "[2/2] Running visual receipt inspection generator..." -ForegroundColor Cyan
 & $PythonExe tests/test_receipt_inspection.py
 
-Write-Host "`n[✓] All receipt tests completed successfully!" -ForegroundColor Green
+Write-Host ""
+Write-Host "[OK] All receipt tests completed successfully!" -ForegroundColor Green
+

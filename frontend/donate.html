@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donate & Scan to Pay | Shree Shanishwara Swamy Temple</title>
+    <title>Scan & Pay • ಭಕ್ತಿ ಸಮರ್ಪಣೆ | Shree Shanishwara Swamy Temple</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/components.css">
     <style>
         /* ============================================================
-           DONATION & SCAN-TO-PAY STYLES — TEMPLE LUXURY DESIGN
+           SCAN & PAY STYLES — TEMPLE LUXURY DESIGN
+           Sole Payment Method: Official UPI QR & Direct Bank Credit
            ============================================================ */
         :root {
             --temple-forest: #052E20;
@@ -26,7 +27,7 @@
         .donate-hero {
             background: linear-gradient(135deg, rgba(5, 46, 32, 0.95) 0%, rgba(11, 61, 46, 0.92) 50%, rgba(20, 90, 50, 0.88) 100%),
                         url('/static/assets/gallery/temple-view.png') center/cover no-repeat;
-            padding: 70px 20px 50px;
+            padding: 75px 20px 55px;
             text-align: center;
             color: #ffffff;
             position: relative;
@@ -47,70 +48,34 @@
             text-transform: uppercase;
         }
         .donate-hero h1 {
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 700;
             margin: 0 0 10px;
             color: #ffffff;
             text-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
         .donate-hero p {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.9);
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.92);
             max-width: 680px;
             margin: 0 auto;
         }
 
         .donate-wrapper {
             max-width: 1040px;
-            margin: -35px auto 60px;
+            margin: -40px auto 60px;
             padding: 0 16px;
             position: relative;
             z-index: 10;
         }
 
-        /* Mode Selector Tabs */
-        .donation-mode-tabs {
-            display: flex;
-            background: var(--temple-cream);
-            padding: 6px;
-            border-radius: 16px;
-            max-width: 580px;
-            margin: 0 auto 30px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        .mode-tab-btn {
-            flex: 1;
-            padding: 12px 18px;
-            border: none;
-            background: transparent;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--temple-forest-mid);
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .mode-tab-btn.active {
-            background: var(--temple-forest-mid);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(5, 46, 32, 0.25);
-        }
-        .mode-tab-btn.active .tab-icon-gold {
-            color: var(--temple-gold);
-        }
-
-        /* SCAN & PAY MAIN CARD */
+        /* SCAN & PAY MAIN CARD (SOLE DEDICATED PAYMENT METHOD) */
         .scan-pay-card {
             background: var(--temple-ivory);
             border-radius: 24px;
             border: 1px solid rgba(212, 175, 55, 0.35);
             box-shadow: var(--temple-card-shadow);
-            padding: 40px;
+            padding: 42px 40px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .scan-pay-card:hover {
@@ -130,7 +95,10 @@
                 gap: 32px;
             }
             .scan-pay-card {
-                padding: 24px 18px;
+                padding: 26px 18px;
+            }
+            .donate-hero h1 {
+                font-size: 2rem;
             }
         }
 
@@ -142,7 +110,7 @@
             align-items: center;
         }
         .qr-card-header {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .scan-pay-heading {
             font-size: 2rem;
@@ -155,9 +123,16 @@
             color: var(--temple-gold);
             font-size: 1.05rem;
             font-weight: 600;
-            margin: 0;
+            margin: 0 0 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        .scan-pay-instruction {
+            font-size: 0.88rem;
+            color: #555555;
+            max-width: 320px;
+            margin: 0 auto 16px;
+            line-height: 1.45;
         }
 
         /* High-Visibility White QR Box */
@@ -210,9 +185,9 @@
         }
         .btn-view-qr, .btn-download-qr {
             flex: 1;
-            padding: 10px 14px;
+            padding: 11px 14px;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -371,7 +346,7 @@
 
         /* UTR INTIMATION SECTION */
         .utr-intimation-card {
-            margin-top: 30px;
+            margin-top: 36px;
             background: #ffffff;
             border-radius: 20px;
             border: 1px solid rgba(5, 46, 32, 0.12);
@@ -498,19 +473,6 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
 
-        /* Online Gateway Section */
-        .gateway-section-box {
-            display: none;
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: var(--temple-card-shadow);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        .gateway-section-box.active {
-            display: block;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -527,25 +489,13 @@
                 <span>ॐ</span>
                 <span>ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ • SHREE KSHETRA SIDDAGIRI</span>
             </div>
-            <h1 data-i18n="donate_title">Make a Donation</h1>
-            <p data-i18n="donate_subtitle">Support Shree Shanishwara Swamy Temple (R.) with your sacred offering</p>
+            <h1 data-i18n="scan_pay_title">Scan & Pay</h1>
+            <p data-i18n="scan_pay_subtitle">Support Our Temple</p>
         </div>
     </div>
 
     <div class="donate-wrapper">
-        <!-- Mode Switcher Tabs -->
-        <div class="donation-mode-tabs" role="tablist">
-            <button type="button" class="mode-tab-btn active" id="tab-scan-pay" onclick="switchDonationTab('scan')">
-                <span class="tab-icon-gold">⚡</span>
-                <span data-i18n="scan_pay_title">Scan & Pay</span>
-            </button>
-            <button type="button" class="mode-tab-btn" id="tab-gateway" onclick="switchDonationTab('gateway')">
-                <span>💳</span>
-                <span data-i18n="or_online_gateway">Online Gateway</span>
-            </button>
-        </div>
-
-        <!-- TAB 1: SCAN & PAY (THE PRIMARY FOCUS) -->
+        <!-- SCAN & PAY (THE EXCLUSIVE DEDICATED PAYMENT METHOD) -->
         <div id="section-scan-pay" class="scan-pay-card fade-in">
             <div class="scan-pay-grid">
                 <!-- QR Image Column -->
@@ -554,6 +504,10 @@
                         <h2 class="scan-pay-heading" data-i18n="scan_pay_title">Scan & Pay</h2>
                         <p class="scan-pay-subheading" data-i18n="scan_pay_subtitle">Support Our Temple</p>
                     </div>
+
+                    <p class="scan-pay-instruction" data-i18n="scan_pay_desc">
+                        Scan the official temple UPI QR code using any UPI app (Google Pay, PhonePe, Paytm, BHIM, Canara ai1) to make your sacred offering directly to the temple bank account.
+                    </p>
 
                     <!-- Clean White Frame for QR Code -->
                     <div class="qr-box-container">
@@ -702,80 +656,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- TAB 2: ONLINE PAYMENT GATEWAY (RAZORPAY) -->
-        <div id="section-gateway" class="gateway-section-box fade-in">
-            <div id="donate-form">
-                <div style="text-align:center;margin-bottom:24px;">
-                    <div style="font-size:2.5rem;margin-bottom:8px;">🙏</div>
-                    <h2 data-i18n="donate_title" style="color:var(--temple-forest);font-size:1.8rem;">Online Donation Gateway</h2>
-                    <p style="color:var(--text-muted);font-size:0.95rem;">Instant online contribution via Credit/Debit Cards, NetBanking, and UPI</p>
-                </div>
-
-                <!-- Donation Type -->
-                <label class="form-label" data-i18n="donate_type">Donation Type</label>
-                <div class="type-selector">
-                    <button type="button" class="type-btn active" onclick="selectType(this,'general')"><span class="emoji">🪔</span><span data-i18n="donate_type_general">General</span></button>
-                    <button type="button" class="type-btn" onclick="selectType(this,'annadanam')"><span class="emoji">🍚</span><span data-i18n="donate_type_annadanam">Annadanam</span></button>
-                    <button type="button" class="type-btn" onclick="selectType(this,'temple_development')"><span class="emoji">🏛️</span><span data-i18n="donate_type_development">Development</span></button>
-                    <button type="button" class="type-btn" onclick="selectType(this,'festival')"><span class="emoji">🎉</span><span data-i18n="donate_type_festival">Festival</span></button>
-                    <button type="button" class="type-btn" onclick="selectType(this,'goshala')"><span class="emoji">🐄</span><span data-i18n="donate_type_goshala">Goshala</span></button>
-                </div>
-
-                <!-- Amount -->
-                <label class="form-label" data-i18n="donate_amount">Select Amount</label>
-                <div class="amount-buttons" style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
-                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,100)">₹100</button>
-                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,500)">₹500</button>
-                    <button type="button" class="amount-btn btn btn-primary active" onclick="selectAmount(this,1000)">₹1,000</button>
-                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,5000)">₹5,000</button>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" data-i18n="donate_custom">Custom Amount</label>
-                    <input type="number" id="custom-amount" class="form-input" placeholder="Enter amount in ₹" min="1" oninput="customAmountChanged()">
-                </div>
-
-                <!-- Donor Details -->
-                <form onsubmit="handleDonation(event)">
-                    <div class="form-group">
-                        <label class="form-label" data-i18n="donate_name">Full Name</label>
-                        <input type="text" id="donor-name" class="form-input" required placeholder="Enter full name">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-i18n="donate_email">Email Address</label>
-                        <input type="email" id="donor-email" class="form-input" required placeholder="name@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-i18n="donate_mobile">Mobile Number</label>
-                        <input type="tel" id="donor-mobile" class="form-input" required placeholder="10-digit mobile number">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-i18n="donate_address">Address (Optional)</label>
-                        <textarea id="donor-address" class="form-input" rows="2" placeholder="Postal address"></textarea>
-                    </div>
-                    <div class="form-group checkbox-group" style="margin-top:10px;margin-bottom:18px;">
-                        <input type="checkbox" id="donate-anonymous">
-                        <label for="donate-anonymous" style="font-size:0.85rem;color:var(--text-muted);cursor:pointer;margin-left:6px;">Donate Anonymously (Hide name from live ticker)</label>
-                    </div>
-                    <button type="submit" id="donate-submit-btn" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="donate_proceed">Proceed to Pay</button>
-                </form>
-            </div>
-
-            <!-- Razorpay Gateway Success State -->
-            <div id="donate-success" style="display:none;text-align:center;padding:30px 10px;">
-                <div style="font-size:3.5rem;margin-bottom:12px;">✅</div>
-                <h2 data-i18n="donate_success" style="color:var(--temple-forest);font-size:1.8rem;margin-bottom:8px;">Donation Successful!</h2>
-                <p data-i18n="donate_success_msg" style="color:var(--text-muted);max-width:500px;margin:0 auto 24px;">Thank you for your generous contribution. May Lord Shanishwara bless you.</p>
-                <div style="background:var(--temple-cream);border-radius:16px;padding:20px;max-width:380px;margin:0 auto 24px;border:1px solid rgba(212,175,55,0.4);">
-                    <p data-i18n="donate_receipt" style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin:0 0 4px;">Receipt Number</p>
-                    <div class="receipt-number" id="receipt-number" style="font-size:1.3rem;font-weight:700;color:var(--temple-forest);font-family:monospace;">—</div>
-                </div>
-                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                    <button type="button" onclick="downloadReceipt()" class="btn btn-primary" data-i18n="donate_download">Download Receipt (PDF)</button>
-                    <a href="/dashboard" class="btn btn-outline" data-i18n="nav_dashboard">Dashboard</a>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- QR LIGHTBOX MODAL -->
@@ -813,30 +693,9 @@
 
     <div id="footer-container"></div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js?v=2.2"></script>
     <script>
-        // Tab switching between Scan & Pay and Online Gateway
-        function switchDonationTab(tab) {
-            const scanBtn = document.getElementById('tab-scan-pay');
-            const gatewayBtn = document.getElementById('tab-gateway');
-            const scanSection = document.getElementById('section-scan-pay');
-            const gatewaySection = document.getElementById('section-gateway');
-
-            if (tab === 'scan') {
-                scanBtn.classList.add('active');
-                gatewayBtn.classList.remove('active');
-                scanSection.style.display = 'block';
-                gatewaySection.style.display = 'none';
-            } else {
-                gatewayBtn.classList.add('active');
-                scanBtn.classList.remove('active');
-                scanSection.style.display = 'none';
-                gatewaySection.style.display = 'block';
-            }
-        }
-
         // Copy to clipboard helper
         function copyValue(text, btnElement) {
             navigator.clipboard.writeText(text).then(() => {
@@ -929,179 +788,18 @@
             }
         }
 
-        // Razorpay Gateway Logic
-        let selectedType = 'general';
-        let selectedAmount = 1000;
-        let currentDonationId = '';
-
-        function selectType(btn, type) {
-            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedType = type;
-        }
-
-        function selectAmount(btn, amount) {
-            document.querySelectorAll('.amount-btn').forEach(b => {
-                b.classList.remove('active');
-                b.classList.remove('btn-primary');
-                b.classList.add('btn-outline');
-            });
-            btn.classList.add('active');
-            btn.classList.add('btn-primary');
-            btn.classList.remove('btn-outline');
-            selectedAmount = amount;
-            document.getElementById('custom-amount').value = '';
-        }
-
-        function customAmountChanged() {
-            const val = parseInt(document.getElementById('custom-amount').value);
-            if (val > 0) {
-                document.querySelectorAll('.amount-btn').forEach(b => {
-                    b.classList.remove('active');
-                    b.classList.remove('btn-primary');
-                    b.classList.add('btn-outline');
-                });
-                selectedAmount = val;
-            }
-        }
-
         // Auto-fill logged in user details if available
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof getUser === 'function') {
                 const user = getUser();
                 if (user) {
-                    const nameInput = document.getElementById('donor-name');
-                    const emailInput = document.getElementById('donor-email');
                     const utrNameInput = document.getElementById('utr-donor-name');
-                    if (nameInput && user.name) nameInput.value = user.name;
-                    if (emailInput && user.email) emailInput.value = user.email;
+                    const utrMobileInput = document.getElementById('utr-donor-mobile');
                     if (utrNameInput && user.name) utrNameInput.value = user.name;
+                    if (utrMobileInput && user.mobile) utrMobileInput.value = user.mobile;
                 }
             }
         });
-
-        async function handleDonation(event) {
-            event.preventDefault();
-            const submitBtn = document.getElementById('donate-submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Processing...';
-
-            const data = {
-                amount: selectedAmount,
-                donation_type: selectedType,
-                donor_name: document.getElementById('donor-name').value,
-                donor_email: document.getElementById('donor-email').value,
-                donor_mobile: document.getElementById('donor-mobile').value,
-                donor_address: document.getElementById('donor-address').value,
-                is_anonymous: document.getElementById('donate-anonymous').checked,
-            };
-
-            try {
-                const order = await apiFetch('/donate/create-order', {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                });
-
-                currentDonationId = order.donation_id;
-
-                if (order.demo_mode) {
-                    await simulateDemoPayment(order);
-                } else {
-                    openRazorpayCheckout(order);
-                }
-            } catch (err) {
-                if (typeof showToast === 'function') {
-                    showToast(err.message || 'Donation failed', 'error');
-                }
-                submitBtn.disabled = false;
-                submitBtn.textContent = typeof t === 'function' ? t('donate_proceed') : 'Proceed to Pay';
-            }
-        }
-
-        function openRazorpayCheckout(order) {
-            const options = {
-                key: order.key_id,
-                amount: order.amount,
-                currency: order.currency,
-                name: 'Shree Shanishwara Swamy Temple',
-                description: `${selectedType} Donation`,
-                order_id: order.order_id,
-                prefill: {
-                    name: order.donor_name,
-                    email: order.donor_email,
-                    contact: order.donor_mobile,
-                },
-                theme: { color: '#0B3D2E' },
-                handler: async function(response) {
-                    try {
-                        const result = await apiFetch('/donate/verify', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                donation_id: currentDonationId,
-                            }),
-                        });
-                        showDonationSuccess(result.receipt_number);
-                    } catch (err) {
-                        if (typeof showToast === 'function') showToast('Payment verification failed', 'error');
-                    }
-                },
-                modal: {
-                    ondismiss: function() {
-                        const btn = document.getElementById('donate-submit-btn');
-                        btn.disabled = false;
-                        btn.textContent = typeof t === 'function' ? t('donate_proceed') : 'Proceed to Pay';
-                    }
-                }
-            };
-            const rzp = new Razorpay(options);
-            rzp.open();
-        }
-
-        async function simulateDemoPayment(order) {
-            try {
-                const result = await apiFetch('/donate/verify', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        razorpay_order_id: order.order_id,
-                        razorpay_payment_id: 'demo_pay_' + Date.now(),
-                        razorpay_signature: 'demo_sig',
-                        donation_id: currentDonationId,
-                    }),
-                });
-                showDonationSuccess(result.receipt_number);
-            } catch (err) {
-                if (typeof showToast === 'function') showToast('Demo payment failed', 'error');
-            }
-        }
-
-        function showDonationSuccess(receiptNumber) {
-            document.getElementById('donate-form').style.display = 'none';
-            document.getElementById('donate-success').style.display = 'block';
-            document.getElementById('receipt-number').textContent = receiptNumber;
-            if (typeof showToast === 'function') showToast('Donation successful! Thank you! 🙏', 'success');
-        }
-
-        async function downloadReceipt() {
-            if (!currentDonationId) return;
-            try {
-                const token = localStorage.getItem('temple_token');
-                const response = await fetch(`/api/donate/receipt/${currentDonationId}`, {
-                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-                });
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `receipt_${document.getElementById('receipt-number').textContent}.pdf`;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } catch (err) {
-                if (typeof showToast === 'function') showToast('Failed to download receipt', 'error');
-            }
-        }
     </script>
 </body>
 </html>

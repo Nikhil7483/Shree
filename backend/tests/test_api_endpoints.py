@@ -103,6 +103,11 @@ def test_donate_page_content(client):
     assert "Koduru" in content
     # Verify Verification notice
     assert "Verify the details with the temple management" in content
+    # Verify Online Gateway tab & Razorpay script are completely removed
+    assert "checkout.razorpay.com" not in content
+    assert "tab-gateway" not in content
+    assert "section-gateway" not in content
+    assert "or_online_gateway" not in content
 
 
 def test_submit_utr_endpoint(client):

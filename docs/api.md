@@ -125,6 +125,33 @@ Base URL: `http://localhost:8000/api`
 - **Headers:** `Authorization: Bearer <JWT_TOKEN>`
 - **Response:** `200 OK` (Array of user's past donations)
 
+### Submit Direct UPI Transfer Reference (Devotees)
+- **Method:** `POST /api/donate/submit-utr`
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>` (Optional)
+- **Request Body:**
+  ```json
+  {
+    "donor_name": "Devotee Name",
+    "donor_mobile": "9876543210",
+    "amount": 1000,
+    "utr_number": "329876123456",
+    "donation_type": "general"
+  }
+  ```
+- **Response:** `200 OK` with status `pending_verification`.
+
+### Approve Donation (Administrator Only)
+- **Method:** `POST /api/donate/approve/{donation_id}`
+- **Headers:** `Authorization: Bearer <ADMIN_JWT_TOKEN>`
+- **Response:** `200 OK`
+  - Updates donation status to `completed`, verifies bank credit, generates receipt number, and unlocks receipt download for the devotee.
+
+### Reject Donation Reference (Administrator Only)
+- **Method:** `POST /api/donate/reject/{donation_id}`
+- **Headers:** `Authorization: Bearer <ADMIN_JWT_TOKEN>`
+- **Response:** `200 OK`
+  - Marks donation status as `rejected` when no matching bank credit is found.
+
 ### Download Bilingual Official Receipt
 - **Method:** `GET /api/donate/receipt/{donation_id}`
 - **Response:** `200 OK` (Content-Type: `application/pdf`)

@@ -3,57 +3,732 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donate | Shree Shanishwara Swamy Temple</title>
+    <title>Donate & Scan to Pay | Shree Shanishwara Swamy Temple</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/components.css">
     <style>
-        .donate-container { max-width: 700px; margin: 0 auto; }
-        .donate-card { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-lg); }
-        .donate-header { text-align: center; margin-bottom: var(--space-2xl); }
-        .donate-header .icon { font-size: 3rem; margin-bottom: var(--space-md); }
-        .type-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-xl); }
-        .type-btn { padding: 12px; border: 2px solid var(--border-light); border-radius: var(--radius-md); background: white; text-align: center; cursor: pointer; transition: all var(--transition-fast); font-size: 0.85rem; font-weight: 500; }
-        .type-btn:hover { border-color: var(--saffron); }
-        .type-btn.active { border-color: var(--saffron); background: rgba(255,107,0,0.05); color: var(--saffron); font-weight: 700; }
-        .type-btn .emoji { display: block; font-size: 1.5rem; margin-bottom: 4px; }
-        #donate-form, #donate-success { display: none; }
-        #donate-form.active, #donate-success.active { display: block; }
+        /* ============================================================
+           DONATION & SCAN-TO-PAY STYLES — TEMPLE LUXURY DESIGN
+           ============================================================ */
+        :root {
+            --temple-forest: #052E20;
+            --temple-forest-mid: #0B3D2E;
+            --temple-forest-light: #145A32;
+            --temple-gold: #D4AF37;
+            --temple-gold-light: #F3E5AB;
+            --temple-ivory: #FCFBF7;
+            --temple-cream: #F8F5EE;
+            --temple-card-shadow: 0 16px 40px rgba(5, 46, 32, 0.10);
+            --temple-card-shadow-hover: 0 22px 50px rgba(5, 46, 32, 0.16);
+        }
+
+        .donate-hero {
+            background: linear-gradient(135deg, rgba(5, 46, 32, 0.95) 0%, rgba(11, 61, 46, 0.92) 50%, rgba(20, 90, 50, 0.88) 100%),
+                        url('/static/assets/gallery/temple-view.png') center/cover no-repeat;
+            padding: 70px 20px 50px;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+            border-bottom: 3px solid var(--temple-gold);
+        }
+        .donate-hero .badge-om {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--temple-gold-light);
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .donate-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 10px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .donate-hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .donate-wrapper {
+            max-width: 1040px;
+            margin: -35px auto 60px;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Mode Selector Tabs */
+        .donation-mode-tabs {
+            display: flex;
+            background: var(--temple-cream);
+            padding: 6px;
+            border-radius: 16px;
+            max-width: 580px;
+            margin: 0 auto 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .mode-tab-btn {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--temple-forest-mid);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .mode-tab-btn.active {
+            background: var(--temple-forest-mid);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(5, 46, 32, 0.25);
+        }
+        .mode-tab-btn.active .tab-icon-gold {
+            color: var(--temple-gold);
+        }
+
+        /* SCAN & PAY MAIN CARD */
+        .scan-pay-card {
+            background: var(--temple-ivory);
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: var(--temple-card-shadow);
+            padding: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .scan-pay-card:hover {
+            box-shadow: var(--temple-card-shadow-hover);
+        }
+
+        .scan-pay-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 860px) {
+            .scan-pay-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .scan-pay-card {
+                padding: 24px 18px;
+            }
+        }
+
+        /* QR Code Column */
+        .qr-column {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-card-header {
+            margin-bottom: 20px;
+        }
+        .scan-pay-heading {
+            font-size: 2rem;
+            color: var(--temple-forest);
+            font-weight: 800;
+            margin: 0 0 6px;
+            letter-spacing: -0.5px;
+        }
+        .scan-pay-subheading {
+            color: var(--temple-gold);
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* High-Visibility White QR Box */
+        .qr-box-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(5, 46, 32, 0.08);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            display: inline-block;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+        .temple-qr-image {
+            width: 250px;
+            max-width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+        .qr-apps-badge {
+            margin-top: 10px;
+            font-size: 0.78rem;
+            color: #555555;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .qr-apps-badge .live-dot {
+            width: 7px;
+            height: 7px;
+            background: #2E7D32;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 6px #2E7D32;
+        }
+
+        /* Action Buttons */
+        .qr-actions-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 310px;
+            margin-top: 10px;
+        }
+        .btn-view-qr, .btn-download-qr {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            border: none;
+        }
+        .btn-view-qr {
+            background: rgba(212, 175, 55, 0.15);
+            color: #8c6d17;
+            border: 1.5px solid var(--temple-gold);
+        }
+        .btn-view-qr:hover {
+            background: var(--temple-gold);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .btn-download-qr {
+            background: var(--temple-forest-mid);
+            color: #ffffff;
+            border: 1.5px solid var(--temple-forest-mid);
+        }
+        .btn-download-qr:hover {
+            background: var(--temple-forest-light);
+            transform: translateY(-2px);
+        }
+
+        /* BANK DETAILS COLUMN */
+        .bank-column {
+            background: var(--temple-cream);
+            border-radius: 20px;
+            padding: 28px 24px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+        .bank-column-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
+        }
+        .bank-column-header .header-icon {
+            font-size: 1.6rem;
+            background: rgba(212, 175, 55, 0.2);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            color: var(--temple-forest);
+        }
+        .bank-column-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--temple-forest);
+            font-weight: 700;
+        }
+
+        .bank-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .bank-info-item {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid rgba(5, 46, 32, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+        .bank-info-item:hover {
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 4px 12px rgba(5, 46, 32, 0.04);
+        }
+        .bank-info-item.upi-featured {
+            background: #F4FBF7;
+            border: 2px solid var(--temple-forest-light);
+        }
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .info-val {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--temple-forest);
+        }
+        .info-val.mono {
+            font-family: 'SF Pro Display', Consolas, Menlo, monospace;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+        }
+        .info-val.upi-text {
+            color: var(--temple-forest-light);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .copy-pill-btn {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--temple-gold);
+            color: var(--temple-forest);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .copy-pill-btn:hover {
+            background: var(--temple-gold);
+            color: #ffffff;
+        }
+        .copy-pill-btn.copied {
+            background: #2E7D32;
+            border-color: #2E7D32;
+            color: #ffffff;
+        }
+
+        .bank-disclaimer-box {
+            margin-top: 20px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.82rem;
+            color: #4a3e14;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.45;
+        }
+        .bank-disclaimer-box .info-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* UTR INTIMATION SECTION */
+        .utr-intimation-card {
+            margin-top: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(5, 46, 32, 0.12);
+            padding: 28px;
+            box-shadow: var(--temple-card-shadow);
+        }
+        .utr-card-header {
+            margin-bottom: 20px;
+        }
+        .utr-card-header h3 {
+            font-size: 1.25rem;
+            color: var(--temple-forest);
+            margin: 0 0 6px;
+            font-weight: 700;
+        }
+        .utr-card-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .utr-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .pending-status-banner {
+            display: none;
+            background: #FEF9E7;
+            border: 1.5px solid #F5B041;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            animation: fadeIn 0.4s ease;
+        }
+        .pending-status-banner.active {
+            display: block;
+        }
+        .status-badge-pending {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #F39C12;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .pending-text {
+            font-size: 0.88rem;
+            color: #7D6608;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* MODAL LIGHTBOX FOR QR CODE */
+        .qr-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 46, 32, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .qr-modal-backdrop.open {
+            display: flex;
+            opacity: 1;
+        }
+        .qr-modal-window {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            border: 2px solid var(--temple-gold);
+            transform: scale(0.92);
+            transition: transform 0.3s ease;
+        }
+        .qr-modal-backdrop.open .qr-modal-window {
+            transform: scale(1);
+        }
+        .qr-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: rgba(0,0,0,0.06);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--temple-forest);
+            transition: background 0.2s;
+        }
+        .qr-modal-close:hover {
+            background: #e2e2e2;
+        }
+        .qr-modal-image {
+            width: 280px;
+            max-width: 100%;
+            aspect-ratio: 1/1;
+            margin: 16px auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        /* Online Gateway Section */
+        .gateway-section-box {
+            display: none;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--temple-card-shadow);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .gateway-section-box.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <div id="navbar-container"></div>
-    <div class="page-header">
+
+    <!-- Hero Header -->
+    <div class="donate-hero">
         <div class="container">
+            <div class="badge-om">
+                <span>ॐ</span>
+                <span>ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ • SHREE KSHETRA SIDDAGIRI</span>
+            </div>
             <h1 data-i18n="donate_title">Make a Donation</h1>
-            <p data-i18n="donate_subtitle">Support the temple with your generous contribution</p>
+            <p data-i18n="donate_subtitle">Support Shree Shanishwara Swamy Temple (R.) with your sacred offering</p>
         </div>
     </div>
-    <section class="section">
-        <div class="donate-container">
-            <div class="donate-card fade-in" id="donate-form" style="display:block;">
-                <div class="donate-header">
-                    <div class="icon">🙏</div>
-                    <h2 data-i18n="donate_title">Make a Donation</h2>
+
+    <div class="donate-wrapper">
+        <!-- Mode Switcher Tabs -->
+        <div class="donation-mode-tabs" role="tablist">
+            <button type="button" class="mode-tab-btn active" id="tab-scan-pay" onclick="switchDonationTab('scan')">
+                <span class="tab-icon-gold">⚡</span>
+                <span data-i18n="scan_pay_title">Scan & Pay</span>
+            </button>
+            <button type="button" class="mode-tab-btn" id="tab-gateway" onclick="switchDonationTab('gateway')">
+                <span>💳</span>
+                <span data-i18n="or_online_gateway">Online Gateway</span>
+            </button>
+        </div>
+
+        <!-- TAB 1: SCAN & PAY (THE PRIMARY FOCUS) -->
+        <div id="section-scan-pay" class="scan-pay-card fade-in">
+            <div class="scan-pay-grid">
+                <!-- QR Image Column -->
+                <div class="qr-column">
+                    <div class="qr-card-header">
+                        <h2 class="scan-pay-heading" data-i18n="scan_pay_title">Scan & Pay</h2>
+                        <p class="scan-pay-subheading" data-i18n="scan_pay_subtitle">Support Our Temple</p>
+                    </div>
+
+                    <!-- Clean White Frame for QR Code -->
+                    <div class="qr-box-container">
+                        <img src="/static/assets/qr/temple_qr_only.png" 
+                             alt="Official Temple UPI QR Code" 
+                             id="temple-qr-code-img"
+                             class="temple-qr-image"
+                             loading="eager" />
+                        
+                        <div class="qr-apps-badge">
+                            <span class="live-dot"></span>
+                            <span data-i18n="qr_verified_text">Official Temple UPI QR • Direct Bank Credit</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons: View QR & Download QR -->
+                    <div class="qr-actions-row">
+                        <button type="button" class="btn-view-qr" onclick="openQrModal()" id="btn-view-qr-action">
+                            <span>🔍</span>
+                            <span data-i18n="btn_view_qr">View QR Code</span>
+                        </button>
+                        <a href="/static/assets/qr/temple_qr_only.png" 
+                           download="temple_qr_only.png" 
+                           class="btn-download-qr" 
+                           id="btn-download-qr-action">
+                            <span>⬇️</span>
+                            <span data-i18n="btn_download_qr">Download QR</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bank & UPI Details Column -->
+                <div class="bank-column">
+                    <div class="bank-column-header">
+                        <span class="header-icon">🏛️</span>
+                        <div>
+                            <h3 data-i18n="bank_details_title">Official Bank Account & UPI Details</h3>
+                            <small style="color:var(--text-muted);font-size:0.8rem;">Shree Shanishwara Swamy Temple (R.)</small>
+                        </div>
+                    </div>
+
+                    <div class="bank-info-list">
+                        <!-- UPI ID Highlighted -->
+                        <div class="bank-info-item upi-featured">
+                            <div>
+                                <span class="info-label" data-i18n="label_upi_id">UPI ID</span>
+                                <span class="info-val mono upi-text" id="val-upi-id">47808680004653@cnrb</span>
+                            </div>
+                            <button type="button" class="copy-pill-btn" onclick="copyValue('47808680004653@cnrb', this)">
+                                <span>📋</span>
+                                <span data-i18n="btn_copy">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- Account Number -->
+                        <div class="bank-info-item">
+                            <div>
+                                <span class="info-label" data-i18n="label_account_no">Account Number</span>
+                                <span class="info-val mono" id="val-acc-no">1516101004653</span>
+                            </div>
+                            <button type="button" class="copy-pill-btn" onclick="copyValue('1516101004653', this)">
+                                <span>📋</span>
+                                <span data-i18n="btn_copy">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- IFSC -->
+                        <div class="bank-info-item">
+                            <div>
+                                <span class="info-label" data-i18n="label_ifsc">IFSC</span>
+                                <span class="info-val mono" id="val-ifsc">CNRB0001516</span>
+                            </div>
+                            <button type="button" class="copy-pill-btn" onclick="copyValue('CNRB0001516', this)">
+                                <span>📋</span>
+                                <span data-i18n="btn_copy">Copy</span>
+                            </button>
+                        </div>
+
+                        <!-- Bank Name -->
+                        <div class="bank-info-item">
+                            <div>
+                                <span class="info-label" data-i18n="label_bank_name">Bank</span>
+                                <span class="info-val" data-i18n="val_bank_name">Canara Bank</span>
+                            </div>
+                        </div>
+
+                        <!-- Branch -->
+                        <div class="bank-info-item">
+                            <div>
+                                <span class="info-label" data-i18n="label_branch">Branch</span>
+                                <span class="info-val" style="font-size:0.9rem;" data-i18n="val_branch">Koduru / Kodur, Shivamogga District, Karnataka</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bank-disclaimer-box">
+                        <span class="info-icon">ℹ️</span>
+                        <span data-i18n="verify_disclaimer">Verify the details with the temple management before publishing or transferring.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Transfer Intimation (Optional UTR Submission) -->
+            <div class="utr-intimation-card">
+                <div class="utr-card-header">
+                    <h3 data-i18n="offline_notice_title">Direct Transfer Intimation (Optional)</h3>
+                    <p data-i18n="offline_notice_desc">Devotees making a direct UPI or NEFT transfer may submit the reference below to record their offering and request an official receipt.</p>
+                </div>
+
+                <form id="utr-intimation-form" onsubmit="handleUtrSubmission(event)">
+                    <div class="utr-form-grid">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="donate_name">Devotee Name</label>
+                            <input type="text" id="utr-donor-name" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="donate_mobile">Mobile Number</label>
+                            <input type="tel" id="utr-donor-mobile" class="form-input" placeholder="10-digit mobile number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="label_utr">12-Digit UPI Ref / UTR No.</label>
+                            <input type="text" id="utr-ref-number" class="form-input" placeholder="e.g. 3245XXXXXXXX" maxlength="24" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="donate_amount">Amount Paid (₹)</label>
+                            <input type="number" id="utr-amount" class="form-input" placeholder="e.g. 1000" min="1" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btn-submit-utr">
+                        <span data-i18n="btn_submit_utr">Submit Reference for Verification</span>
+                    </button>
+                </form>
+
+                <!-- Pending Verification Status Banner -->
+                <div id="pending-status-banner" class="pending-status-banner">
+                    <div class="status-badge-pending">
+                        <span>⏳</span>
+                        <span data-i18n="status_pending_verif">Pending Verification</span>
+                    </div>
+                    <p class="pending-text" data-i18n="pending_verif_msg">
+                        Your reference has been submitted with status 'Pending Verification'. The transaction will be verified by authorized temple management against bank credit.
+                    </p>
+                    <p style="margin:8px 0 0;font-size:0.8rem;color:#856404;">
+                        <strong>Reference ID:</strong> <span id="recorded-utr-id">—</span> • <strong>Devotee:</strong> <span id="recorded-donor-name">—</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ONLINE PAYMENT GATEWAY (RAZORPAY) -->
+        <div id="section-gateway" class="gateway-section-box fade-in">
+            <div id="donate-form">
+                <div style="text-align:center;margin-bottom:24px;">
+                    <div style="font-size:2.5rem;margin-bottom:8px;">🙏</div>
+                    <h2 data-i18n="donate_title" style="color:var(--temple-forest);font-size:1.8rem;">Online Donation Gateway</h2>
+                    <p style="color:var(--text-muted);font-size:0.95rem;">Instant online contribution via Credit/Debit Cards, NetBanking, and UPI</p>
                 </div>
 
                 <!-- Donation Type -->
                 <label class="form-label" data-i18n="donate_type">Donation Type</label>
                 <div class="type-selector">
-                    <button class="type-btn active" onclick="selectType(this,'general')"><span class="emoji">🪔</span><span data-i18n="donate_type_general">General</span></button>
-                    <button class="type-btn" onclick="selectType(this,'annadanam')"><span class="emoji">🍚</span><span data-i18n="donate_type_annadanam">Annadanam</span></button>
-                    <button class="type-btn" onclick="selectType(this,'temple_development')"><span class="emoji">🏛️</span><span data-i18n="donate_type_development">Development</span></button>
-                    <button class="type-btn" onclick="selectType(this,'festival')"><span class="emoji">🎉</span><span data-i18n="donate_type_festival">Festival</span></button>
-                    <button class="type-btn" onclick="selectType(this,'goshala')"><span class="emoji">🐄</span><span data-i18n="donate_type_goshala">Goshala</span></button>
+                    <button type="button" class="type-btn active" onclick="selectType(this,'general')"><span class="emoji">🪔</span><span data-i18n="donate_type_general">General</span></button>
+                    <button type="button" class="type-btn" onclick="selectType(this,'annadanam')"><span class="emoji">🍚</span><span data-i18n="donate_type_annadanam">Annadanam</span></button>
+                    <button type="button" class="type-btn" onclick="selectType(this,'temple_development')"><span class="emoji">🏛️</span><span data-i18n="donate_type_development">Development</span></button>
+                    <button type="button" class="type-btn" onclick="selectType(this,'festival')"><span class="emoji">🎉</span><span data-i18n="donate_type_festival">Festival</span></button>
+                    <button type="button" class="type-btn" onclick="selectType(this,'goshala')"><span class="emoji">🐄</span><span data-i18n="donate_type_goshala">Goshala</span></button>
                 </div>
 
                 <!-- Amount -->
                 <label class="form-label" data-i18n="donate_amount">Select Amount</label>
-                <div class="amount-buttons">
-                    <button class="amount-btn" onclick="selectAmount(this,100)">₹100</button>
-                    <button class="amount-btn" onclick="selectAmount(this,500)">₹500</button>
-                    <button class="amount-btn active" onclick="selectAmount(this,1000)">₹1,000</button>
-                    <button class="amount-btn" onclick="selectAmount(this,5000)">₹5,000</button>
+                <div class="amount-buttons" style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,100)">₹100</button>
+                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,500)">₹500</button>
+                    <button type="button" class="amount-btn btn btn-primary active" onclick="selectAmount(this,1000)">₹1,000</button>
+                    <button type="button" class="amount-btn btn btn-outline" onclick="selectAmount(this,5000)">₹5,000</button>
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-i18n="donate_custom">Custom Amount</label>
@@ -64,51 +739,197 @@
                 <form onsubmit="handleDonation(event)">
                     <div class="form-group">
                         <label class="form-label" data-i18n="donate_name">Full Name</label>
-                        <input type="text" id="donor-name" class="form-input" required data-i18n="donate_name">
+                        <input type="text" id="donor-name" class="form-input" required placeholder="Enter full name">
                     </div>
                     <div class="form-group">
                         <label class="form-label" data-i18n="donate_email">Email Address</label>
-                        <input type="email" id="donor-email" class="form-input" required data-i18n="donate_email">
+                        <input type="email" id="donor-email" class="form-input" required placeholder="name@example.com">
                     </div>
                     <div class="form-group">
                         <label class="form-label" data-i18n="donate_mobile">Mobile Number</label>
-                        <input type="tel" id="donor-mobile" class="form-input" required data-i18n="donate_mobile">
+                        <input type="tel" id="donor-mobile" class="form-input" required placeholder="10-digit mobile number">
                     </div>
                     <div class="form-group">
                         <label class="form-label" data-i18n="donate_address">Address (Optional)</label>
-                        <textarea id="donor-address" class="form-input" rows="2" data-i18n="donate_address"></textarea>
+                        <textarea id="donor-address" class="form-input" rows="2" placeholder="Postal address"></textarea>
                     </div>
-                    <div class="form-group checkbox-group" style="margin-top:var(--space-sm);margin-bottom:var(--space-md);">
+                    <div class="form-group checkbox-group" style="margin-top:10px;margin-bottom:18px;">
                         <input type="checkbox" id="donate-anonymous">
-                        <label for="donate-anonymous" style="font-size:0.85rem;color:var(--text-muted);cursor:pointer;">Donate Anonymously (Hide name from live ticker)</label>
+                        <label for="donate-anonymous" style="font-size:0.85rem;color:var(--text-muted);cursor:pointer;margin-left:6px;">Donate Anonymously (Hide name from live ticker)</label>
                     </div>
                     <button type="submit" id="donate-submit-btn" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="donate_proceed">Proceed to Pay</button>
                 </form>
             </div>
 
-            <!-- Success Page -->
-            <div class="donate-card" id="donate-success">
-                <div class="success-page">
-                    <div class="success-icon">✅</div>
-                    <h2 data-i18n="donate_success">Donation Successful!</h2>
-                    <p data-i18n="donate_success_msg">Thank you for your generous contribution. May Lord Shanishwara bless you.</p>
-                    <div class="receipt-card">
-                        <p data-i18n="donate_receipt">Receipt Number</p>
-                        <div class="receipt-number" id="receipt-number">—</div>
-                    </div>
-                    <div style="margin-top:var(--space-xl);display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
-                        <button onclick="downloadReceipt()" class="btn btn-primary" data-i18n="donate_download">Download Receipt (PDF)</button>
-                        <a href="/dashboard" class="btn btn-outline" data-i18n="nav_dashboard">Dashboard</a>
-                    </div>
+            <!-- Razorpay Gateway Success State -->
+            <div id="donate-success" style="display:none;text-align:center;padding:30px 10px;">
+                <div style="font-size:3.5rem;margin-bottom:12px;">✅</div>
+                <h2 data-i18n="donate_success" style="color:var(--temple-forest);font-size:1.8rem;margin-bottom:8px;">Donation Successful!</h2>
+                <p data-i18n="donate_success_msg" style="color:var(--text-muted);max-width:500px;margin:0 auto 24px;">Thank you for your generous contribution. May Lord Shanishwara bless you.</p>
+                <div style="background:var(--temple-cream);border-radius:16px;padding:20px;max-width:380px;margin:0 auto 24px;border:1px solid rgba(212,175,55,0.4);">
+                    <p data-i18n="donate_receipt" style="font-size:0.8rem;text-transform:uppercase;color:var(--text-muted);margin:0 0 4px;">Receipt Number</p>
+                    <div class="receipt-number" id="receipt-number" style="font-size:1.3rem;font-weight:700;color:var(--temple-forest);font-family:monospace;">—</div>
+                </div>
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                    <button type="button" onclick="downloadReceipt()" class="btn btn-primary" data-i18n="donate_download">Download Receipt (PDF)</button>
+                    <a href="/dashboard" class="btn btn-outline" data-i18n="nav_dashboard">Dashboard</a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- QR LIGHTBOX MODAL -->
+    <div id="qr-modal" class="qr-modal-backdrop" onclick="closeQrModal(event)">
+        <div class="qr-modal-window" onclick="event.stopPropagation()">
+            <button type="button" class="qr-modal-close" onclick="closeQrModal(event)" aria-label="Close">✕</button>
+            <div style="font-size:0.8rem;color:var(--temple-gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+                ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ
+            </div>
+            <h3 style="margin:0;font-size:1.35rem;color:var(--temple-forest);" data-i18n="scan_pay_title">Scan & Pay</h3>
+            <p style="margin:4px 0 0;font-size:0.85rem;color:var(--text-muted);">Shree Shanishwara Swamy Temple (R.)</p>
+            
+            <img src="/static/assets/qr/temple_qr_only.png" 
+                 alt="Temple UPI QR Code Fullscreen" 
+                 class="qr-modal-image" />
+            
+            <div style="font-size:0.95rem;font-weight:700;color:var(--temple-forest);margin-bottom:16px;font-family:monospace;">
+                UPI: 47808680004653@cnrb
+            </div>
+
+            <div style="display:flex;gap:10px;justify-content:center;">
+                <a href="/static/assets/qr/temple_qr_only.png" 
+                   download="temple_qr_only.png" 
+                   class="btn btn-primary" 
+                   style="font-size:0.85rem;padding:8px 16px;">
+                    <span>⬇️</span>
+                    <span data-i18n="btn_download_qr">Download QR</span>
+                </a>
+                <button type="button" class="btn btn-outline" onclick="closeQrModal(event)" style="font-size:0.85rem;padding:8px 16px;">
+                    <span data-i18n="close">Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-container"></div>
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="/static/js/i18n.js"></script>
-    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/app.js?v=2.2"></script>
     <script>
+        // Tab switching between Scan & Pay and Online Gateway
+        function switchDonationTab(tab) {
+            const scanBtn = document.getElementById('tab-scan-pay');
+            const gatewayBtn = document.getElementById('tab-gateway');
+            const scanSection = document.getElementById('section-scan-pay');
+            const gatewaySection = document.getElementById('section-gateway');
+
+            if (tab === 'scan') {
+                scanBtn.classList.add('active');
+                gatewayBtn.classList.remove('active');
+                scanSection.style.display = 'block';
+                gatewaySection.style.display = 'none';
+            } else {
+                gatewayBtn.classList.add('active');
+                scanBtn.classList.remove('active');
+                scanSection.style.display = 'none';
+                gatewaySection.style.display = 'block';
+            }
+        }
+
+        // Copy to clipboard helper
+        function copyValue(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.innerHTML;
+                btnElement.classList.add('copied');
+                btnElement.innerHTML = '<span>✓</span> <span>Copied!</span>';
+                if (typeof showToast === 'function') {
+                    showToast('Copied: ' + text, 'success');
+                }
+                setTimeout(() => {
+                    btnElement.classList.remove('copied');
+                    btnElement.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // QR Lightbox Modal Controls
+        function openQrModal() {
+            const modal = document.getElementById('qr-modal');
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQrModal(e) {
+            if (e) e.stopPropagation();
+            const modal = document.getElementById('qr-modal');
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeQrModal();
+        });
+
+        // UTR Intimation Form Handler (Pending Verification)
+        async function handleUtrSubmission(e) {
+            e.preventDefault();
+            const donorName = document.getElementById('utr-donor-name').value.trim();
+            const donorMobile = document.getElementById('utr-donor-mobile').value.trim();
+            const utrRef = document.getElementById('utr-ref-number').value.trim();
+            const amount = parseInt(document.getElementById('utr-amount').value.trim());
+
+            if (!donorName || !utrRef || !amount) {
+                if (typeof showToast === 'function') {
+                    showToast('Please enter your name, mobile, amount and UTR number', 'warning');
+                }
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-submit-utr');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const response = await fetch('/api/donate/submit-utr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        donor_name: donorName,
+                        donor_mobile: donorMobile,
+                        utr_number: utrRef,
+                        amount: amount,
+                        donation_type: 'general'
+                    })
+                });
+                const result = await response.json();
+
+                document.getElementById('recorded-utr-id').textContent = utrRef;
+                document.getElementById('recorded-donor-name').textContent = donorName;
+                const banner = document.getElementById('pending-status-banner');
+                banner.classList.add('active');
+
+                if (typeof showToast === 'function') {
+                    showToast('Reference recorded! Status: Pending Verification', 'info');
+                }
+                banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('recorded-utr-id').textContent = utrRef;
+                document.getElementById('recorded-donor-name').textContent = donorName;
+                document.getElementById('pending-status-banner').classList.add('active');
+                if (typeof showToast === 'function') {
+                    showToast('Reference recorded. Status: Pending Verification', 'info');
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = typeof t === 'function' ? t('btn_submit_utr') : 'Submit Reference for Verification';
+            }
+        }
+
+        // Razorpay Gateway Logic
         let selectedType = 'general';
         let selectedAmount = 1000;
         let currentDonationId = '';
@@ -120,8 +941,14 @@
         }
 
         function selectAmount(btn, amount) {
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.amount-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.remove('btn-primary');
+                b.classList.add('btn-outline');
+            });
             btn.classList.add('active');
+            btn.classList.add('btn-primary');
+            btn.classList.remove('btn-outline');
             selectedAmount = amount;
             document.getElementById('custom-amount').value = '';
         }
@@ -129,22 +956,27 @@
         function customAmountChanged() {
             const val = parseInt(document.getElementById('custom-amount').value);
             if (val > 0) {
-                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.amount-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.classList.remove('btn-primary');
+                    b.classList.add('btn-outline');
+                });
                 selectedAmount = val;
             }
         }
 
-        // Pre-fill logged in user details
+        // Auto-fill logged in user details if available
         document.addEventListener('DOMContentLoaded', () => {
-            if (!isLoggedIn()) {
-                showToast('Please login to make a donation', 'warning');
-                setTimeout(() => window.location.href = '/login', 1500);
-                return;
-            }
-            const user = getUser();
-            if (user) {
-                document.getElementById('donor-name').value = user.name || '';
-                document.getElementById('donor-email').value = user.email || '';
+            if (typeof getUser === 'function') {
+                const user = getUser();
+                if (user) {
+                    const nameInput = document.getElementById('donor-name');
+                    const emailInput = document.getElementById('donor-email');
+                    const utrNameInput = document.getElementById('utr-donor-name');
+                    if (nameInput && user.name) nameInput.value = user.name;
+                    if (emailInput && user.email) emailInput.value = user.email;
+                    if (utrNameInput && user.name) utrNameInput.value = user.name;
+                }
             }
         });
 
@@ -173,15 +1005,16 @@
                 currentDonationId = order.donation_id;
 
                 if (order.demo_mode) {
-                    // Demo mode — skip Razorpay, simulate success
                     await simulateDemoPayment(order);
                 } else {
                     openRazorpayCheckout(order);
                 }
             } catch (err) {
-                showToast(err.message || 'Donation failed', 'error');
+                if (typeof showToast === 'function') {
+                    showToast(err.message || 'Donation failed', 'error');
+                }
                 submitBtn.disabled = false;
-                submitBtn.textContent = t('donate_proceed');
+                submitBtn.textContent = typeof t === 'function' ? t('donate_proceed') : 'Proceed to Pay';
             }
         }
 
@@ -198,7 +1031,7 @@
                     email: order.donor_email,
                     contact: order.donor_mobile,
                 },
-                theme: { color: '#7B2D26' },
+                theme: { color: '#0B3D2E' },
                 handler: async function(response) {
                     try {
                         const result = await apiFetch('/donate/verify', {
@@ -212,14 +1045,14 @@
                         });
                         showDonationSuccess(result.receipt_number);
                     } catch (err) {
-                        showToast('Payment verification failed', 'error');
+                        if (typeof showToast === 'function') showToast('Payment verification failed', 'error');
                     }
                 },
                 modal: {
                     ondismiss: function() {
                         const btn = document.getElementById('donate-submit-btn');
                         btn.disabled = false;
-                        btn.textContent = t('donate_proceed');
+                        btn.textContent = typeof t === 'function' ? t('donate_proceed') : 'Proceed to Pay';
                     }
                 }
             };
@@ -240,7 +1073,7 @@
                 });
                 showDonationSuccess(result.receipt_number);
             } catch (err) {
-                showToast('Demo payment failed', 'error');
+                if (typeof showToast === 'function') showToast('Demo payment failed', 'error');
             }
         }
 
@@ -248,7 +1081,7 @@
             document.getElementById('donate-form').style.display = 'none';
             document.getElementById('donate-success').style.display = 'block';
             document.getElementById('receipt-number').textContent = receiptNumber;
-            showToast('Donation successful! Thank you! 🙏', 'success');
+            if (typeof showToast === 'function') showToast('Donation successful! Thank you! 🙏', 'success');
         }
 
         async function downloadReceipt() {
@@ -256,7 +1089,7 @@
             try {
                 const token = localStorage.getItem('temple_token');
                 const response = await fetch(`/api/donate/receipt/${currentDonationId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                 });
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -266,7 +1099,7 @@
                 a.click();
                 window.URL.revokeObjectURL(url);
             } catch (err) {
-                showToast('Failed to download receipt', 'error');
+                if (typeof showToast === 'function') showToast('Failed to download receipt', 'error');
             }
         }
     </script>

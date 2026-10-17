@@ -10,12 +10,42 @@ import io
 from datetime import datetime
 from app.core.dependencies import get_current_user, get_current_admin
 from app.domain.donations.models import Donation
-from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest
-from app.domain.donations.service import create_donation_order, verify_donation_payment
+from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest, UtrIntimationRequest
+from app.domain.donations.service import create_donation_order, verify_donation_payment, generate_receipt_number
 from app.domain.users.models import User
 from app.utils.pdf_receipt import generate_receipt_pdf, generate_donations_report_pdf
 
 router = APIRouter(prefix="/donate", tags=["Donations"])
+
+
+@router.post("/submit-utr")
+async def submit_utr(data: UtrIntimationRequest):
+    """
+    Record an offline direct UPI or bank transfer reference.
+    Marks transaction as 'pending_verification' for administrator review.
+    """
+    receipt_number = generate_receipt_number()
+    donation = Donation(
+        user_id="direct_upi_donor",
+        donor_name=data.donor_name.strip(),
+        donor_email=data.donor_email.strip() if data.donor_email else "",
+        donor_mobile=data.donor_mobile.strip(),
+        donor_address="",
+        amount=int(data.amount * 100),  # rupees to paise
+        donation_type=data.donation_type or "general",
+        is_anonymous=False,
+        status="pending_verification",
+        receipt_number=receipt_number,
+        razorpay_order_id=None,
+        razorpay_payment_id=f"UTR:{data.utr_number.strip()}",
+    )
+    await donation.insert()
+    return {
+        "status": "pending_verification",
+        "receipt_number": receipt_number,
+        "donation_id": str(donation.id),
+        "message": "Transaction reference recorded. Status: Pending Verification."
+    }
 
 
 @router.post("/create-order")

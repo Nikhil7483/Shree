@@ -34,3 +34,14 @@ class DonationResponse(BaseModel):
     receipt_number: str
     created_at: str
     donor_name: str
+
+
+class UtrIntimationRequest(BaseModel):
+    """Schema for submitting offline UPI UTR reference for verification."""
+    donor_name: str
+    donor_mobile: str
+    amount: int = Field(..., gt=0)
+    utr_number: str
+    donor_email: Optional[str] = ""
+    donation_type: Optional[str] = "general"
+

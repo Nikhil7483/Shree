@@ -3,7 +3,7 @@
 # ==============================================================================
 param (
     [int]$Port = 8000,
-    [string]$Host = "127.0.0.1",
+    [string]$BindHost = "127.0.0.1",
     [switch]$Reload = $true
 )
 
@@ -33,5 +33,5 @@ if ($MongoRunning) {
 Set-Location $BackendDir
 
 $ReloadFlag = if ($Reload) { "--reload" } else { "" }
-Write-Host "[✓] Launching Uvicorn server on http://$Host:$Port..." -ForegroundColor Green
-& $PythonExe -m uvicorn app.main:app --host $Host --port $Port $ReloadFlag
+Write-Host "[✓] Launching Uvicorn server on http://$BindHost`:$Port..." -ForegroundColor Green
+& $PythonExe -m uvicorn app.main:app --host $BindHost --port $Port $ReloadFlag

@@ -1,0 +1,1 @@
+# Donations domain init

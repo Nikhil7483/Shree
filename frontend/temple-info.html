@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Temple Information | Shree Shanishwara Swamy Temple (R.)</title>
+    <meta name="description" content="Official Information, Committee Members, Parivara Deities, and Certified Documents of Shree Shanishwara Swamy Temple (R.), Shri Kshetra Siddagiri.">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        /* ============================================================
+           Temple Info Custom Styles
+           ============================================================ */
+        
+        .info-hero {
+            background: linear-gradient(135deg, rgba(5, 46, 32, 0.95) 0%, rgba(11, 61, 46, 0.92) 50%, rgba(20, 90, 50, 0.88) 100%), url('/static/assets/images/temple-hero.jpg') center/cover no-repeat;
+            color: var(--warm-white);
+            padding: 5rem 1rem 4rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .info-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 4px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-full);
+        }
+
+        .info-reg-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.4rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .info-hero h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-kannada), var(--font-english);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .info-hero .sub-title-en {
+            font-size: 1.2rem;
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-hero .location-text {
+            font-size: 0.95rem;
+            color: rgba(253, 251, 245, 0.85);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Dignitaries Bar (Dharmadarshi & Manager) */
+        .dignitaries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: -2.5rem;
+            margin-bottom: 3.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .dignitary-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: 0 10px 30px rgba(11, 61, 46, 0.1);
+            border-top: 4px solid var(--gold);
+            border: 1px solid var(--border-light);
+            border-top-width: 4px;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+
+        .dignitary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(11, 61, 46, 0.15);
+        }
+
+        .dignitary-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            border: 2px solid var(--gold);
+        }
+
+        .dignitary-info h4 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+            font-family: var(--font-kannada), var(--font-english);
+        }
+
+        .dignitary-info .role {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.35rem;
+        }
+
+        .dignitary-info .contact-links {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .dignitary-info .contact-links a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            background: var(--cream);
+            padding: 0.15rem 0.6rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-medium);
+            transition: background var(--transition-fast);
+        }
+
+        .dignitary-info .contact-links a:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        /* Section Headings */
+        .section-header-wrap {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header-wrap h2 {
+            font-size: 1.85rem;
+            color: var(--primary);
+            font-family: var(--font-kannada), var(--font-english);
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .section-header-wrap p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Deities Construction Cards */
+        .deities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .deity-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all var(--transition-normal);
+        }
+
+        .deity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-gold);
+        }
+
+        .deity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--gold);
+        }
+
+        .deity-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .deity-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: rgba(212, 175, 55, 0.12);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .deity-title-kn {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: var(--font-kannada);
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .deity-title-en {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .deity-status-badge {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(30, 132, 73, 0.12);
+            color: var(--primary-light);
+            border: 1px solid rgba(30, 132, 73, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Special Contribution Notice Banner */
+        .notice-banner {
+            background: linear-gradient(135deg, #0B3D2E 0%, #145A32 50%, #052E20 100%);
+            border: 2px solid var(--gold);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            color: var(--warm-white);
+            box-shadow: 0 15px 40px rgba(11, 61, 46, 0.2);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notice-banner::before {
+            content: 'ॐ';
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            font-size: 10rem;
+            color: rgba(212, 175, 55, 0.05);
+            font-family: serif;
+            pointer-events: none;
+        }
+
+        .notice-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 1.25rem;
+        }
+
+        .notice-title-box {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notice-title-box h3 {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            font-family: var(--font-kannada), var(--font-english);
+            margin: 0;
+        }
+
+        .amount-highlight-badge {
+            background: var(--gradient-gold);
+            color: #052E20;
+            font-weight: 800;
+            font-size: 1.15rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius-full);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .notice-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .notice-body-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .notice-card-kannada, .notice-card-english {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #D4AF37;
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .notice-card-kannada h4, .notice-card-english h4 {
+            color: #FFD700 !important;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+            letter-spacing: 0.3px;
+        }
+
+        .notice-card-kannada p, .notice-card-english p {
+            line-height: 1.85;
+            font-size: 1.12rem;
+            font-weight: 600;
+            color: #FFFFFF !important;
+            margin-bottom: 0.85rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .notice-card-kannada p strong, .notice-card-english p strong {
+            color: #FFD700 !important;
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        .notice-blessing-text {
+            color: #FFE082 !important;
+            font-size: 1.08rem !important;
+            font-weight: 700 !important;
+            line-height: 1.85 !important;
+            margin: 0 !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        .notice-action-bar {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .btn-donate-special {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--gradient-gold);
+            color: #052E20;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 0.85rem 2.25rem;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .btn-donate-special:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
+            color: #052E20;
+        }
+
+        /* Committee Members Section */
+        .committee-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .committee-search {
+            flex: 1;
+            min-width: 260px;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .committee-search input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-medium);
+            background: #FFFFFF;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color var(--transition-fast);
+        }
+
+        .committee-search input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(11, 61, 46, 0.1);
+        }
+
+        .committee-search .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .members-counter {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--cream);
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-medium);
+        }
+
+        /* Committee Cards Grid */
+        .committee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 600px) {
+            .committee-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .member-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            transition: all var(--transition-fast);
+        }
+
+        .member-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .member-card.memorial-card {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FDFBF5 100%);
+            border-left: 4px solid var(--gold);
+            grid-column: 1 / -1;
+        }
+
+        .member-sl-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--cream);
+            color: var(--primary);
+            border: 1px solid var(--border-medium);
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .memorial-card .member-sl-badge {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold);
+            color: var(--gold-dark);
+        }
+
+        .member-details {
+            flex: 1;
+        }
+
+        .member-name-kn {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: var(--font-kannada);
+            line-height: 1.4;
+            margin-bottom: 0.2rem;
+        }
+
+        .member-name-en {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .member-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.3rem;
+        }
+
+        .badge-designation {
+            background: rgba(20, 90, 50, 0.08);
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-location {
+            background: var(--cream);
+            color: var(--text-secondary);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            border: 1px solid var(--border-light);
+        }
+
+        /* Document Viewer Section */
+        .doc-viewer-wrap {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-medium);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .viewer-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .page-switch-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--cream);
+            padding: 0.3rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-medium);
+        }
+
+        .page-tab-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 0.5rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-kannada), var(--font-english);
+        }
+
+        .page-tab-btn.active {
+            background: var(--primary);
+            color: #FFFFFF;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .viewer-action-btns {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #FFFFFF;
+            border: 1px solid var(--border-medium);
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .tool-btn:hover {
+            background: var(--cream);
+            border-color: var(--primary);
+        }
+
+        .tool-btn.btn-download-pdf {
+            background: var(--gradient-gold);
+            color: #052E20;
+            border-color: var(--gold);
+        }
+
+        .tool-btn.btn-download-pdf:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .viewer-viewport-box {
+            background: #1a1a1a;
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            overflow: auto;
+            position: relative;
+            min-height: 520px;
+            max-height: 750px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-medium);
+        }
+
+        .viewer-img-wrap {
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center center;
+            display: inline-block;
+            cursor: grab;
+        }
+
+        .viewer-img-wrap:active {
+            cursor: grabbing;
+        }
+
+        .viewer-img-wrap img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block;
+        }
+
+        /* Fullscreen Modal */
+        .modal-fullscreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 46, 32, 0.97);
+            z-index: 99999;
+            padding: 1.5rem;
+            flex-direction: column;
+        }
+
+        .modal-fullscreen.active {
+            display: flex;
+        }
+
+        .modal-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #FFFFFF;
+            padding-bottom: 1rem;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--transition-fast);
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-img-container {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-img-container img {
+            max-height: 90vh;
+            max-width: 95vw;
+            object-fit: contain;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border-radius: var(--radius-md);
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <!-- Hero Header -->
+    <header class="info-hero">
+        <div class="container">
+            <div class="info-reg-badge" id="reg-badge">
+                <span>🏛️</span>
+                <span data-i18n="temple_reg_label">Registration No.</span>: <strong>DRSH/SOR/637/2023-24</strong>
+            </div>
+            <h1 id="temple-heading-kn">ಶ್ರೀ ಶನೀಶ್ವರ ಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ.)</h1>
+            <div class="sub-title-en" id="temple-heading-en">Shree Shanishwara Swamy Temple (R.), Shri Kshetra Siddagiri</div>
+            <p class="location-text" id="temple-address-text">
+                ಕುಸುಗುಂಡಿ ಗ್ರಾಮ, ಕೋಡೂರು ಅಂಚೆ, ಹೊಸನಗರ ತಾಲ್ಲೂಕು, ಶಿವಮೊಗ್ಗ ಜಿಲ್ಲೆ - ಕರ್ನಾಟಕ<br>
+                Kusugundi Village, Koduru Post, Hosanagara Taluk, Shimoga Dist., Karnataka
+            </p>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 1rem;">
+        <!-- Dignitaries (Dharmadarshi & Manager) -->
+        <section class="dignitaries-grid" id="dignitaries-container">
+            <!-- Dharmadarshi Card -->
+            <div class="dignitary-card">
+                <div class="dignitary-avatar">🕉️</div>
+                <div class="dignitary-info">
+                    <div class="role" data-i18n="temple_dharmadarshi_title">Founder / Dharmadarshi</div>
+                    <h4 id="dharmadarshi-name">ಶಂಕರ ಸ್ವಾಮಿ (Shankara Swamy)</h4>
+                    <div class="contact-links" id="dharmadarshi-phones">
+                        <a href="tel:9841943965">📞 9841943965</a>
+                        <a href="tel:9741943965">📞 9741943965</a>
+                        <a href="tel:9482643965">📞 9482643965</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manager Card -->
+            <div class="dignitary-card">
+                <div class="dignitary-avatar">📋</div>
+                <div class="dignitary-info">
+                    <div class="role" data-i18n="temple_manager_title">Manager</div>
+                    <h4 id="manager-name">ಶ್ರೀಮತಿ ಎಸ್. ಸಾವಿತ್ರಮ್ಮ (Smt. S. Savithramma)</h4>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">ವ್ಯವಸ್ಥಾಪಕರು, ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Parivara Deities Section -->
+        <section class="section" style="padding-top: 0;">
+            <div class="section-header-wrap">
+                <h2><span>🛕</span> <span data-i18n="temple_deities_title">Parivara Deities Construction</span></h2>
+                <p data-i18n="temple_deities_subtitle">Successfully Completed Holy Constructions</p>
+            </div>
+
+            <div class="deities-grid" id="deities-container">
+                <!-- Fallback Deities (populated dynamically or fallback) -->
+                <div class="deity-card">
+                    <div>
+                        <div class="deity-header">
+                            <div class="deity-icon">🐍</div>
+                            <div>
+                                <div class="deity-title-kn">ಶ್ರೀ ನಾಗಪರಿವಾರ ದೇವರ ದೇವಸ್ಥಾನ</div>
+                                <div class="deity-title-en">Shree Nagaparivara Devara Temple</div>
+                            </div>
+                        </div>
+                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">
+                            ಪರಿವಾರ ದೇವರ ಪವಿತ್ರ ಗರ್ಭಗುಡಿ ಹಾಗೂ ಪರಿಸರದ ನಿರ್ಮಾಣ ಕಾರ್ಯ ಯಶಸ್ವಿಯಾಗಿ ಸಂಪೂರ್ಣಗೊಂಡಿದೆ.
+                        </p>
+                    </div>
+                    <div class="deity-status-badge">
+                        <span>✓</span> <span data-i18n="temple_status_completed">Construction Completed</span>
+                    </div>
+                </div>
+
+                <div class="deity-card">
+                    <div>
+                        <div class="deity-header">
+                            <div class="deity-icon">⚔️</div>
+                            <div>
+                                <div class="deity-title-kn">ಶ್ರೀ ವೀರಕಲ್ಲುಕುಟಿಕ ಪರಿವಾರ ದೈವಗಳು</div>
+                                <div class="deity-title-en">Shree Veerakallukutika Parivara Daivagalu</div>
+                            </div>
+                        </div>
+                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">
+                            ವೀರ ಪರಿವಾರ ದೈವಗಳ ಶಿಲಾ ಸ್ಥಾಪನೆ ಹಾಗೂ ದೇವಸ್ಥಾನ ನಿರ್ಮಾಣ ಕಾರ್ಯ ಸಂಪೂರ್ಣ.
+                        </p>
+                    </div>
+                    <div class="deity-status-badge">
+                        <span>✓</span> <span data-i18n="temple_status_completed">Construction Completed</span>
+                    </div>
+                </div>
+
+                <div class="deity-card">
+                    <div>
+                        <div class="deity-header">
+                            <div class="deity-icon">🌺</div>
+                            <div>
+                                <div class="deity-title-kn">ಶ್ರೀ ರಕ್ತೇಶ್ವರಿ ದೇವಿ ನೆಲೆಸಿದ ಕ್ಷೇತ್ರ</div>
+                                <div class="deity-title-en">Shree Rakteshwari Devi Nelesida Kshetra</div>
+                            </div>
+                        </div>
+                        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">
+                            ಶ್ರೀ ರಕ್ತೇಶ್ವರಿ ಅಮ್ಮನವರ ಸನ್ನಿಧಿಯ ನೂತನ ದೇವಸ್ಥಾನ ನಿರ್ಮಾಣ ಸಂಪೂರ್ಣ.
+                        </p>
+                    </div>
+                    <div class="deity-status-badge">
+                        <span>✓</span> <span data-i18n="temple_status_completed">Construction Completed</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Contribution Notice Banner -->
+        <section class="notice-banner" id="special-notice-section">
+            <div class="notice-header-row">
+                <div class="notice-title-box">
+                    <span style="font-size:2rem;">📜</span>
+                    <div>
+                        <h3 data-i18n="temple_notice_title">Special Contribution Notice</h3>
+                        <p style="color:var(--gold); font-size:0.9rem; margin:0;">ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ ದೇವಸ್ಥಾನ ಕಟ್ಟಡಕ್ಕೆ ಧನಸಹಾಯ</p>
+                    </div>
+                </div>
+                <div class="amount-highlight-badge" id="notice-amount-badge">
+                    ₹10,000/- ಮತ್ತು ಮೇಲೆ (₹10,000 & Above)
+                </div>
+            </div>
+
+            <div class="notice-body-grid">
+                <!-- Kannada Notice (Exact wording from document) -->
+                <div class="notice-card-kannada">
+                    <h4><span>🏛️</span> ಅಮೃತ ಶಿಲಾಫಲಕ ಗೌರವಾರ್ಪಣೆ</h4>
+                    <p id="notice-kn-text">
+                        ದೇವಸ್ಥಾನ ಕಟ್ಟಡಕ್ಕೆ ಧನಸಹಾಯ <strong>10,000/- (ಹತ್ತು ಸಾವಿರ) ಮೇಲೆ</strong> ನೀಡಿದ ದಾನಿಗಳ ಹೆಸರನ್ನು <strong>ಅಮೃತ ಶಿಲಾಫಲಕದಲ್ಲಿ</strong> ಬರೆಯಲಾಗುವುದು.
+                    </p>
+                    <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 0.85rem; margin-top: 0.85rem;">
+                        <p class="notice-blessing-text" id="notice-kn-blessing">
+                            🙏 ಶ್ರೀ ಸ್ವಾಮಿಯು ತಮ್ಮ ಹಾಗೂ ಕುಟುಂಬ ವರ್ಗದವರ ಕಷ್ಟ ನಿವಾರಣೆ ಮಾಡಿ ಮೋಕ್ಷಾನುಗ್ರಹಕ್ಕೆ ಪಾತ್ರರಾಗುವಂತೆ ಶ್ರೀ ಸ್ವಾಮಿಯಲ್ಲಿ ಪ್ರಾರ್ಥಿಸಲಾಗುವುದು.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- English Explanation -->
+                <div class="notice-card-english">
+                    <h4><span>✨</span> Marble Plaque Inscription & Blessings</h4>
+                    <p id="notice-en-text">
+                        The names of all generous donors contributing <strong>₹10,000/- (Ten Thousand) and above</strong> towards the temple building construction will be permanently inscribed on the holy <strong>Marble Stone Plaque</strong>.
+                    </p>
+                    <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 0.85rem; margin-top: 0.85rem;">
+                        <p class="notice-blessing-text" id="notice-en-blessing">
+                            🙏 Special prayers will be offered to Lord Shanishwara to dispel all difficulties from the donors and their family members, bestowing divine salvation and grace.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notice-action-bar">
+                <a href="/donate" class="btn-donate-special">
+                    <span>🙏</span>
+                    <span data-i18n="hero_donate_btn">Donate Now</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Committee Members & Donors Section -->
+        <section class="section" style="padding-top: 0;">
+            <div class="section-header-wrap">
+                <h2><span>👥</span> <span data-i18n="temple_committee_title">Committee Members & Honored Donors</span></h2>
+                <p data-i18n="temple_committee_subtitle">List of respected dignitaries, office bearers, and patrons</p>
+            </div>
+
+            <div class="committee-filter-bar">
+                <div class="committee-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="member-search-input" placeholder="Search by name or place (ಹೆಸರು ಅಥವಾ ಊರು ಹುಡುಕಿ)..." oninput="filterMembers()">
+                </div>
+                <div class="members-counter" id="members-count-badge">
+                    23 ಗೌರವಾನ್ವಿತ ಸದಸ್ಯರು (Members)
+                </div>
+            </div>
+
+            <div class="committee-grid" id="committee-grid">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Official Certified Document Viewer -->
+        <section class="section" style="padding-top: 0;" id="doc-viewer-section">
+            <div class="section-header-wrap">
+                <h2><span>📑</span> <span data-i18n="temple_doc_title">Official Document Viewer</span></h2>
+                <p data-i18n="temple_doc_subtitle">View original certified appeal and committee document</p>
+            </div>
+
+            <div class="doc-viewer-wrap">
+                <div class="viewer-toolbar">
+                    <div class="page-switch-tabs">
+                        <button class="page-tab-btn active" id="btn-page-1" onclick="switchDocPage(1)">
+                            📄 <span data-i18n="temple_doc_page1">Page 1: Temple Appeal & Registration</span>
+                        </button>
+                        <button class="page-tab-btn" id="btn-page-2" onclick="switchDocPage(2)">
+                            📄 <span data-i18n="temple_doc_page2">Page 2: Committee & Deities List</span>
+                        </button>
+                    </div>
+
+                    <div class="viewer-action-btns">
+                        <button class="tool-btn" onclick="zoomDoc(0.2)" title="Zoom In">
+                            🔍 <span data-i18n="temple_doc_zoom_in">Zoom In</span>
+                        </button>
+                        <button class="tool-btn" onclick="zoomDoc(-0.2)" title="Zoom Out">
+                            🔍 <span data-i18n="temple_doc_zoom_out">Zoom Out</span>
+                        </button>
+                        <button class="tool-btn" onclick="resetZoomDoc()" title="Reset Zoom">
+                            🔄 <span data-i18n="temple_doc_zoom_reset">Reset</span>
+                        </button>
+                        <button class="tool-btn" onclick="openFullscreenModal()" title="Fullscreen">
+                            ⛶ <span data-i18n="temple_doc_fullscreen">Fullscreen</span>
+                        </button>
+                        <a href="/static/assets/documents/official_temple_document.pdf" download="Shree_Shanishwara_Official_Document.pdf" class="tool-btn btn-download-pdf">
+                            📥 <span data-i18n="temple_doc_download">Download PDF</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="viewer-viewport-box" id="viewer-box">
+                    <div class="viewer-img-wrap" id="viewer-img-wrap">
+                        <img id="viewer-img" src="/static/assets/documents/official_document_p1.jpg" alt="Official Temple Document Page 1">
+                    </div>
+                </div>
+                <p style="text-align:center; font-size:0.82rem; color:var(--text-muted); margin-top:0.75rem;">
+                    💡 Pinch or drag on mobile, use buttons above to zoom or view in full screen.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen Image Modal -->
+    <div class="modal-fullscreen" id="fullscreen-modal">
+        <div class="modal-header-bar">
+            <div>
+                <strong style="color:var(--gold); font-size:1.1rem;" id="modal-title">Official Document - Page 1</strong>
+                <span style="font-size:0.85rem; opacity:0.8; margin-left:0.5rem;">(Press ESC or click ✕ to close)</span>
+            </div>
+            <button class="modal-close-btn" onclick="closeFullscreenModal()" title="Close Fullscreen">✕</button>
+        </div>
+        <div class="modal-img-container" onclick="closeFullscreenModal()">
+            <img id="modal-img" src="/static/assets/documents/official_document_p1.jpg" alt="Fullscreen Document" onclick="event.stopPropagation()">
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        // Default Committee Members (exact data from document, preserved 100%)
+        const defaultMembers = [
+            { sl_no: 1, name_kn: "ಶ್ರೀ ಡಿ.ಹೆಚ್. ಶಂಕರಮೂರ್ತಿ", name_en: "Sri D.H. Shankaramurthy", designation_kn: "ಮಾಜಿ ಸ್ಪೀಕರ್, ವಿಧಾನ ಪರಿಷತ್", designation_en: "Former Chairman, Legislative Council", location_kn: "ಕರ್ನಾಟಕ", location_en: "Karnataka" },
+            { sl_no: 2, name_kn: "ಶ್ರೀ ಉದಯಕುಮಾರ ಶೆಟ್ಟಿ", name_en: "Sri Udayakumar Shetty", designation_kn: "", designation_en: "", location_kn: "ಪಾಲಾಡಿ, ಬೆಂಗಳೂರು", location_en: "Paladi, Bengaluru" },
+            { sl_no: 3, name_kn: "ಶ್ರೀ ಮತ್ತು ಶ್ರೀಮತಿ ಎಸ್.ಎನ್. ಜ್ಯೋತಿ ಪ್ರಕಾಶ್", name_en: "Sri & Smt. S.N. Jyothi Prakash", designation_kn: "ಎಪಿಎಂಸಿ ಮಾಜಿ ಅಧ್ಯಕ್ಷರು", designation_en: "Former APMC President", location_kn: "ಶಿವಮೊಗ್ಗ", location_en: "Shimoga" },
+            { sl_no: 4, name_kn: "ಶ್ರೀ ಎಂ.ಆರ್. ಮೂರ್ತಿ", name_en: "Sri M.R. Murthy", designation_kn: "ಇಂಜಿನಿಯರ್", designation_en: "Engineer", location_kn: "", location_en: "" },
+            { sl_no: 5, name_kn: "ಶ್ರೀ ಬಿ.ವೈ. ರಾಘವೇಂದ್ರರವರು", name_en: "Sri B.Y. Raghavendra", designation_kn: "ಮಾನ್ಯ ಸಂಸದರು", designation_en: "Member of Parliament", location_kn: "ಶಿವಮೊಗ್ಗ ಲೋಕಸಭಾ ಕ್ಷೇತ್ರ", location_en: "Shimoga Parliamentary Constituency" },
+            { sl_no: 6, name_kn: "ಶ್ರೀ ನಟರಾಜ್", name_en: "Sri Nataraj", designation_kn: "", designation_en: "", location_kn: "ಶಿವಮೊಗ್ಗ", location_en: "Shimoga" },
+            { sl_no: 7, name_kn: "ಶ್ರೀಮತಿ ಗಣೇಶ್ ಕುಡತ್ಕಲ್", name_en: "Smt. Ganesh Kudatkal", designation_kn: "", designation_en: "", location_kn: "ಅಂಕೋಲ", location_en: "Ankola" },
+            { sl_no: 8, name_kn: "ಶ್ರೀ ಶಂಕರ ಶೆಟ್ಟಿ", name_en: "Sri Shankara Shetty", designation_kn: "", designation_en: "", location_kn: "ಕುರುವಳ್ಳಿ ತೀರ್ಥಹಳ್ಳಿ ತಾಲೂಕು", location_en: "Kuruvalli Thirthahalli Taluk" },
+            { sl_no: 9, name_kn: "ಶ್ರೀ ಮಂಗಲ್ ದಾಸ್ ಮತ್ತು ವಾಮನ ಭಟ್", name_en: "Sri Mangaldas & Vamana Bhat", designation_kn: "", designation_en: "", location_kn: "ಅಂಕೋಲ", location_en: "Ankola" },
+            { sl_no: 10, name_kn: "ಶ್ರೀ ನಾಗರಾಜ ಶೆಟ್ಟಿ", name_en: "Sri Nagaraja Shetty", designation_kn: "", designation_en: "", location_kn: "ನಗರ, ಬೆಂಗಳೂರು", location_en: "Nagara, Bengaluru" },
+            { sl_no: 11, name_kn: "ಪೋಲೀಸ್ ಎಸ್.ಎಸ್. ಮಂಜುನಾಥ", name_en: "Police S.SS. Manjunath", designation_kn: "ಪೋಲೀಸ್", designation_en: "Police", location_kn: "ಬೆಂಗಳೂರು", location_en: "Bengaluru" },
+            { sl_no: 12, name_kn: "ಶ್ರೀ ಆನಂದ ಕುಂದರ್ ಸಿ.", name_en: "Sri Ananda Kundar C.", designation_kn: "", designation_en: "", location_kn: "ಕೋಟ, ಉಡುಪಿ ಜಿಲ್ಲೆ", location_en: "Kota, Udupi District" },
+            { sl_no: 13, name_kn: "ಶ್ರೀ ಬಸವರಾಜ್ ಮತ್ತು ಮನೆಯವರು", name_en: "Sri Basavaraj & Family", designation_kn: "", designation_en: "", location_kn: "ಗಾಂಧಿ ಬಜಾರ್, ಶಿವಮೊಗ್ಗ", location_en: "Gandhi Bazaar, Shimoga" },
+            { sl_no: 14, name_kn: "ಶ್ರೀಮತಿ ಕಾಂಚನ ಕೆ.", name_en: "Smt. Kanchana K.", designation_kn: "", designation_en: "", location_kn: "", location_en: "" },
+            { sl_no: 15, name_kn: "ಶ್ರೀ ಕೆ.ಆರ್. ರಾಜಶೇಖರ್", name_en: "Sri K.R. Rajashekhar", designation_kn: "", designation_en: "", location_kn: "", location_en: "" },
+            { sl_no: 16, name_kn: "ದಿ|| ರಾಜಯ್ಯ, ದಿ|| ಸಿದ್ದಲಿಂಗಯ್ಯ ರಬಕವಿ, ದಿ|| ರಾಜಮ್ಮ ಬೆಂಗಳೂರು, ದಿ|| ವೀರಯ್ಯ ಸೋಲಾಪುರ, ದಿ|| ದುಂಡವ್ವ ಗೋಕಾಕ್, ದಿ|| ಚಂದ್ರಶೇಖರ್ ತುಮಕೂರು, ದಿ|| ಸೋಮಶೇಖರ್ ಮೈಸೂರು, ದಿ|| ನೀಲಮ್ಮ, ದಿ|| ಆರಾಧ್ಯ ನೀಲಮ್ಮ", name_en: "Late Rajayya, Late Siddalingayya (Rabakavi), Late Rajamma (Bengaluru), Late Veerayya (Solapur), Late Dundavva (Gokak), Late Chandrashekhar (Tumakuru), Late Somashekhar (Mysuru), Late Neelamma, Late Aradhya Neelamma", designation_kn: "ದಿವಂಗತ ಮಹನೀಯರು / ಸ್ಮರಣಾರ್ಥ", designation_en: "Memorial Dedication for Departed Souls", location_kn: "ರವಿಕಿ/ರಬಕವಿ, ಬೆಂಗಳೂರು, ಸೋಲಾಪುರ, ಗೋಕಾಕ್, ತುಮಕೂರು, ಮೈಸೂರು", location_en: "Rabakavi, Bengaluru, Solapur, Gokak, Tumakuru, Mysuru" },
+            { sl_no: 17, name_kn: "ಶ್ರೀಮತಿ ಆರ್. ನಾಗವೇಣಿ", name_en: "Smt. R. Nagaveni", designation_kn: "ಮಣಿ ಪೈಂಟ್ ಅಂಡ್ ಹಾರ್ಡ್‌ವೇರ್", designation_en: "Mani Paint & Hardware", location_kn: "ಶಿವಮೊಗ್ಗ", location_en: "Shimoga" },
+            { sl_no: 18, name_kn: "ಶ್ರೀ ಆತ್ಮಾರಾಮ್ ರಂಗಡೋಳ್ಕರ್", name_en: "Sri Atmaram Rangodolkar", designation_kn: "ಇಂಜಿನಿಯರ್", designation_en: "Engineer", location_kn: "", location_en: "" },
+            { sl_no: 19, name_kn: "ಶ್ರೀ ಇಂಬಾಲಿ ಭಾಸ್ಕರ ಕಿಣಿ", name_en: "Sri Imbali Bhaskara Kini", designation_kn: "ರಿಟೈರ್ಡ್ ಆರ್ಮಿ", designation_en: "Retired Army", location_kn: "ಕುಂಭಾಸಿ", location_en: "Kumbhashi" },
+            { sl_no: 20, name_kn: "ಶ್ರೀಮತಿ ಅಮೃತ, ಶ್ರೀ ನವೀನ್ (ಜಯನಗರ)", name_en: "Smt. Amrutha & Sri Naveen (Jayanagar)", designation_kn: "", designation_en: "", location_kn: "ಜರ್ಮನಿ", location_en: "Germany" },
+            { sl_no: 21, name_kn: "ಶ್ರೀ ಲಕ್ಷ್ಮಣ್ ಸಾರ್ ಮತ್ತು ಮನೆಯವರು", name_en: "Sri Lakshman Sir & Family", designation_kn: "ಗೀತಾಂಜಲಿ ಬಟ್ಟೆ ಅಂಗಡಿ", designation_en: "Geethanjali Cloth Store", location_kn: "ಉಡುಪಿ", location_en: "Udupi" },
+            { sl_no: 22, name_kn: "ಶ್ರೀಮತಿ ದಿವ್ಯ ನಾಗರಾಜ", name_en: "Smt. Divya Nagaraja", designation_kn: "ಶಂಕರೇಶ್ವರ ಸ್ವೀಟ್ ಹೌಸ್", designation_en: "Shankareshwara Sweet House", location_kn: "ಶಿವಮೊಗ್ಗ", location_en: "Shimoga" },
+            { sl_no: 23, name_kn: "ಶ್ರೀಮತಿ ಕನಕ, ಕೆ.ಎಸ್.ಎನ್. ಮೂರ್ತಿ", name_en: "Smt. Kanaka, K.S.N. Murthy", designation_kn: "ಮೂರ್ತಿ ವಾಚ್ ಕಂಪನಿ", designation_en: "Murthy Watch Co.", location_kn: "ಶಿವಮೊಗ್ಗ", location_en: "Shimoga" }
+        ];
+
+        let currentMembers = [...defaultMembers];
+        let currentZoom = 1.0;
+        let currentPageNum = 1;
+        const page1Url = '/static/assets/documents/official_document_p1.jpg';
+        const page2Url = '/static/assets/documents/official_document_p2.jpg';
+
+        // Load official info from backend
+        async function loadOfficialInfo() {
+            try {
+                const data = await apiFetch('/temple/official-info');
+                if (data) {
+                    renderOfficialInfo(data);
+                }
+            } catch (err) {
+                console.warn('Using default official info data:', err);
+                renderMembers(defaultMembers);
+            }
+        }
+
+        function renderOfficialInfo(data) {
+            const lang = getCurrentLang();
+
+            // Headings & Registration
+            const regNo = data.registration_no || data.registration_number;
+            if (regNo) {
+                const regEl = document.getElementById('reg-badge');
+                if (regEl) regEl.innerHTML = `<span>🏛️</span> ${lang === 'kn' ? 'ನೋಂದಣಿ ಸಂಖ್ಯೆ' : 'Registration No.'}: <strong>${regNo}</strong>`;
+            }
+            const headKn = data.heading_kn || data.temple_name_kn;
+            const headEn = data.heading_en || data.temple_name_en;
+            if (headKn) document.getElementById('temple-heading-kn').textContent = headKn;
+            if (headEn) document.getElementById('temple-heading-en').textContent = headEn;
+
+            // Dharmadarshi & Manager
+            const dNameKn = data.dharmadarshi_kn || data.dharmadarshi_name_kn;
+            const dNameEn = data.dharmadarshi_en || data.dharmadarshi_name_en;
+            if (dNameKn) {
+                document.getElementById('dharmadarshi-name').textContent = lang === 'kn' ? dNameKn : `${dNameKn} (${dNameEn || ''})`;
+            }
+            const dPhone = data.dharmadarshi_phone || (data.dharmadarshi_phones && data.dharmadarshi_phones.join(' / '));
+            if (dPhone) {
+                const phonesContainer = document.getElementById('dharmadarshi-phones');
+                const phonesList = typeof dPhone === 'string' ? dPhone.split(/[\/,]/).map(p => p.trim()) : dPhone;
+                phonesContainer.innerHTML = phonesList.map(p => `<a href="tel:${p}">📞 ${p}</a>`).join(' ');
+            }
+            const mNameKn = data.manager_kn || data.manager_name_kn;
+            const mNameEn = data.manager_en || data.manager_name_en;
+            if (mNameKn) {
+                document.getElementById('manager-name').textContent = lang === 'kn' ? mNameKn : `${mNameKn} (${mNameEn || ''})`;
+            }
+
+            // Deities
+            const deitiesList = data.deities || data.parivara_deities;
+            if (deitiesList && deitiesList.length > 0) {
+                const deitiesContainer = document.getElementById('deities-container');
+                deitiesContainer.innerHTML = deitiesList.map((d, i) => {
+                    const icon = i === 0 ? '🐍' : (i === 1 ? '⚔️' : '🌺');
+                    const titleKn = d.name_kn;
+                    const titleEn = d.name_en;
+                    const statusText = lang === 'kn' ? (d.status_kn || 'ನಿರ್ಮಾಣ ಸಂಪೂರ್ಣ') : (d.status_en || 'Construction Completed');
+                    return `
+                        <div class="deity-card">
+                            <div>
+                                <div class="deity-header">
+                                    <div class="deity-icon">${icon}</div>
+                                    <div>
+                                        <div class="deity-title-kn">${titleKn}</div>
+                                        <div class="deity-title-en">${titleEn}</div>
+                                    </div>
+                                </div>
+                                <p style="font-size:0.9rem; color:var(--text-secondary); margin:0;">
+                                    ${lang === 'kn' ? (d.description_kn || `${titleKn} ಕಾರ್ಯ ಯಶಸ್ವಿಯಾಗಿ ಸಂಪೂರ್ಣಗೊಂಡಿದೆ.`) : (d.description_en || `${titleEn} construction successfully completed.`)}
+                                </p>
+                            </div>
+                            <div class="deity-status-badge">
+                                <span>✓</span> <span>${statusText}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Special Notice
+            if (data.special_notice) {
+                const sn = data.special_notice;
+                const amtBadge = lang === 'kn' ? (sn.amount_text_kn || sn.amount_text || '₹10,000/- (ಹತ್ತು ಸಾವಿರ) ಮೇಲೆ') : (sn.amount_text_en || sn.amount_text || '₹10,000/- and above');
+                document.getElementById('notice-amount-badge').textContent = amtBadge;
+
+                const condKn = sn.condition_kn || sn.notice_text_kn;
+                const condEn = sn.condition_en || sn.notice_text_en;
+                if (condKn) {
+                    document.getElementById('notice-kn-text').innerHTML = `ದೇವಸ್ಥಾನ ಕಟ್ಟಡಕ್ಕೆ ಧನಸಹಾಯ <strong>${sn.amount_text_kn || '10,000/- (ಹತ್ತು ಸಾವಿರ) ಮೇಲೆ'}</strong> ನೀಡಿದ ${condKn}`;
+                }
+                if (condEn) {
+                    let cleanCondEn = condEn;
+                    if (cleanCondEn.toLowerCase().startsWith("the names of the donors will be ")) {
+                        cleanCondEn = cleanCondEn.substring("the names of the donors will be ".length);
+                    } else if (cleanCondEn.toLowerCase().startsWith("the names of donors will be ")) {
+                        cleanCondEn = cleanCondEn.substring("the names of donors will be ".length);
+                    }
+                    document.getElementById('notice-en-text').innerHTML = `The names of donors contributing <strong>${sn.amount_text_en || '₹10,000/- (Ten Thousand) and above'}</strong> towards temple construction will be <strong>${cleanCondEn}</strong>`;
+                }
+
+                const benKn = sn.benefit_kn || sn.benefits_kn;
+                const benEn = sn.benefit_en || sn.benefits_en;
+                if (benKn) document.getElementById('notice-kn-blessing').textContent = '🙏 ' + benKn;
+                if (benEn) document.getElementById('notice-en-blessing').textContent = '🙏 ' + benEn;
+            }
+
+            // Document visibility & URLs
+            if (data.is_document_public === false) {
+                const docSection = document.getElementById('doc-viewer-section');
+                if (docSection) docSection.style.display = 'none';
+            }
+
+            // Committee Members
+            if (data.committee_members && data.committee_members.length > 0) {
+                currentMembers = data.committee_members;
+            }
+            renderMembers(currentMembers);
+        }
+
+        function renderMembers(members) {
+            const container = document.getElementById('committee-grid');
+            const lang = getCurrentLang();
+            const counter = document.getElementById('members-count-badge');
+            if (counter) {
+                counter.textContent = `${members.length} ${lang === 'kn' ? 'ಗೌರವಾನ್ವಿತ ಸದಸ್ಯರು (ಸದಸ್ಯರ ಪಟ್ಟಿ)' : 'Honored Members'}`;
+            }
+
+            if (!members || members.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">No members found matching your search.</div>`;
+                return;
+            }
+
+            container.innerHTML = members.map(m => {
+                const isMemorial = m.sl_no === 16;
+                const nameDisplayKn = m.name_kn || '';
+                const nameDisplayEn = m.name_en || '';
+                const desig = lang === 'kn' ? (m.designation_kn || m.designation_en) : (m.designation_en || m.designation_kn);
+                const loc = lang === 'kn' ? (m.location_kn || m.location_en) : (m.location_en || m.location_kn);
+
+                return `
+                    <div class="member-card ${isMemorial ? 'memorial-card' : ''}">
+                        <div class="member-sl-badge">${m.sl_no}</div>
+                        <div class="member-details">
+                            <div class="member-name-kn">${nameDisplayKn}</div>
+                            ${nameDisplayEn ? `<div class="member-name-en">${nameDisplayEn}</div>` : ''}
+                            <div class="member-meta-row">
+                                ${desig ? `<span class="badge-designation">🎖️ ${desig}</span>` : ''}
+                                ${loc ? `<span class="badge-location">📍 ${loc}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterMembers() {
+            const query = document.getElementById('member-search-input').value.toLowerCase().trim();
+            if (!query) {
+                renderMembers(currentMembers);
+                return;
+            }
+
+            const filtered = currentMembers.filter(m => 
+                (m.name_kn && m.name_kn.toLowerCase().includes(query)) ||
+                (m.name_en && m.name_en.toLowerCase().includes(query)) ||
+                (m.designation_kn && m.designation_kn.toLowerCase().includes(query)) ||
+                (m.designation_en && m.designation_en.toLowerCase().includes(query)) ||
+                (m.location_kn && m.location_kn.toLowerCase().includes(query)) ||
+                (m.location_en && m.location_en.toLowerCase().includes(query))
+            );
+            renderMembers(filtered);
+        }
+
+        // Document Viewer Controls
+        function switchDocPage(pageNum) {
+            currentPageNum = pageNum;
+            const btn1 = document.getElementById('btn-page-1');
+            const btn2 = document.getElementById('btn-page-2');
+            const img = document.getElementById('viewer-img');
+            const modalImg = document.getElementById('modal-img');
+            const modalTitle = document.getElementById('modal-title');
+
+            if (pageNum === 1) {
+                btn1.classList.add('active');
+                btn2.classList.remove('active');
+                img.src = page1Url;
+                modalImg.src = page1Url;
+                modalTitle.textContent = 'Official Document - Page 1 (Temple Appeal & Registration)';
+            } else {
+                btn2.classList.add('active');
+                btn1.classList.remove('active');
+                img.src = page2Url;
+                modalImg.src = page2Url;
+                modalTitle.textContent = 'Official Document - Page 2 (Committee & Deities List)';
+            }
+            resetZoomDoc();
+        }
+
+        function zoomDoc(delta) {
+            currentZoom = Math.min(Math.max(0.6, currentZoom + delta), 2.5);
+            const wrap = document.getElementById('viewer-img-wrap');
+            wrap.style.transform = `scale(${currentZoom})`;
+        }
+
+        function resetZoomDoc() {
+            currentZoom = 1.0;
+            const wrap = document.getElementById('viewer-img-wrap');
+            wrap.style.transform = `scale(1)`;
+        }
+
+        function openFullscreenModal() {
+            document.getElementById('fullscreen-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreenModal() {
+            document.getElementById('fullscreen-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeFullscreenModal();
+        });
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOfficialInfo();
+        });
+    </script>
+</body>
+</html>

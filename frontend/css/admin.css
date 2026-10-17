@@ -1,0 +1,251 @@
+/*
+ * ============================================================
+ * ADMIN PANEL STYLES — Shree Shanishwara Swamy Temple
+ * ============================================================
+ * Dark-themed admin panel with sidebar navigation.
+ * ============================================================
+ */
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    padding-top: var(--nav-height);
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 260px;
+    background: var(--dark-brown);
+    color: white;
+    padding: var(--space-xl) 0;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.admin-sidebar .sidebar-header {
+    padding: 0 var(--space-xl) var(--space-xl);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: var(--space-lg);
+}
+
+.admin-sidebar .sidebar-header h3 {
+    color: var(--gold);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.admin-sidebar .sidebar-header p {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.admin-sidebar .nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border-left: 3px solid transparent;
+}
+
+.admin-sidebar .nav-item:hover,
+.admin-sidebar .nav-item.active {
+    background: rgba(255,215,0,0.08);
+    color: var(--gold);
+    border-left-color: var(--gold);
+}
+
+.admin-sidebar .nav-item .icon {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* Main Content */
+.admin-main {
+    flex: 1;
+    margin-left: 260px;
+    padding: var(--space-2xl);
+    background: var(--warm-white);
+    min-height: calc(100vh - var(--nav-height));
+}
+
+.admin-page-title {
+    font-size: 1.5rem;
+    color: var(--dark-brown);
+    margin-bottom: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.stat-card:nth-child(1)::before { background: var(--gradient-saffron); }
+.stat-card:nth-child(2)::before { background: var(--gradient-gold); }
+.stat-card:nth-child(3)::before { background: var(--gradient-maroon); }
+.stat-card:nth-child(4)::before { background: linear-gradient(135deg, #2E7D32, #66BB6A); }
+
+.stat-card .stat-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+}
+
+.stat-card .stat-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--dark-brown);
+    margin-bottom: 2px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.stat-card .stat-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Admin Table Actions */
+.action-btn {
+    padding: 4px 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-right: 4px;
+}
+
+.action-btn.edit { background: rgba(255,107,0,0.1); color: var(--saffron); }
+.action-btn.edit:hover { background: var(--saffron); color: white; }
+.action-btn.delete { background: rgba(198,40,40,0.1); color: var(--error); }
+.action-btn.delete:hover { background: var(--error); color: white; }
+.action-btn.block { background: rgba(245,127,23,0.1); color: var(--warning); }
+.action-btn.block:hover { background: var(--warning); color: white; }
+
+/* Admin Forms */
+.admin-form {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-2xl);
+    box-shadow: var(--shadow-md);
+    max-width: 800px;
+}
+
+.admin-form h3 {
+    margin-bottom: var(--space-xl);
+    color: var(--dark-brown);
+}
+
+/* Search & Filter Bar */
+.admin-toolbar {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.admin-search {
+    flex: 1;
+    min-width: 250px;
+    padding: 10px 16px;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+
+.admin-search:focus {
+    border-color: var(--saffron);
+}
+
+/* Receipt PDF Action Button */
+.receipt-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--dark-green, #0B3D2E);
+    background: #EBF3EC;
+    border: 1px solid #BDD4B3;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.2s);
+    white-space: nowrap;
+}
+
+.receipt-badge-btn:hover {
+    background: var(--dark-green, #0B3D2E);
+    color: #FFFFFF;
+    border-color: var(--dark-green, #0B3D2E);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(11, 61, 46, 0.2);
+}
+
+/* Responsive Admin */
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        width: 200px;
+    }
+    .admin-main {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        display: none;
+    }
+    .admin-main {
+        margin-left: 0;
+    }
+}

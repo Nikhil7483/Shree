@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temple Timings & Festivals | Shree Shanishwara Swamy Temple</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        .timings-main { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); margin-bottom: var(--space-3xl); }
+        .timing-main-card { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); border-top: 5px solid var(--saffron); transition: transform var(--transition-normal), box-shadow var(--transition-normal); }
+        .timing-main-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+        .timing-main-card .icon { font-size: 4rem; margin-bottom: var(--space-lg); }
+        .timing-main-card h3 { font-size: 1.5rem; margin-bottom: var(--space-md); color: var(--maroon); }
+        .timing-main-card .time-range { font-size: 2rem; font-weight: 800; color: var(--saffron); margin-bottom: var(--space-sm); }
+        
+        /* Festivals section */
+        .festivals-section { margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 1px solid var(--border-light); }
+        .festivals-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
+        .festival-card { background: white; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--border-light); transition: all var(--transition-normal); display: flex; flex-direction: column; }
+        .festival-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+        .festival-banner { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .festival-banner .emoji { font-size: 4rem; }
+        .festival-banner .date-badge { position: absolute; top: var(--space-md); right: var(--space-md); background: rgba(255,255,255,0.95); color: var(--maroon); padding: 6px 14px; border-radius: var(--radius-xl); font-size: 0.8rem; font-weight: 700; box-shadow: var(--shadow-sm); }
+        .festival-body { padding: var(--space-xl); flex-grow: 1; display: flex; flex-direction: column; }
+        .festival-body h3 { font-size: 1.25rem; margin-bottom: var(--space-sm); color: var(--dark-brown); }
+        .festival-body p { color: var(--text-muted); line-height: 1.7; font-size: 0.92rem; }
+
+        @media (max-width: 992px) {
+            .festivals-container { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .timings-main { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .festivals-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="timings_title">Temple Timings</h1>
+            <p data-i18n="timings_subtitle">Plan your visit</p>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <!-- Morning & Evening Darshan Timings -->
+            <div class="timings-main">
+                <div class="timing-main-card fade-in">
+                    <div class="icon">🌅</div>
+                    <h3 data-i18n="timings_morning">Morning Darshan</h3>
+                    <div class="time-range" id="morning-range">6:00 AM – 12:30 PM</div>
+                    <p style="color:var(--text-muted);" data-i18n="timings_morning_desc">Daily morning worship hours</p>
+                </div>
+                <div class="timing-main-card fade-in" style="transition-delay:0.15s;">
+                    <div class="icon">🌇</div>
+                    <h3 data-i18n="timings_evening">Evening Darshan</h3>
+                    <div class="time-range" id="evening-range">5:00 PM – 8:30 PM</div>
+                    <p style="color:var(--text-muted);" data-i18n="timings_evening_desc">Daily evening worship hours</p>
+                </div>
+            </div>
+
+            <!-- Temple Festivals & Special Poojas Section -->
+            <div class="festivals-section" id="festivals">
+                <div class="section-title fade-in">
+                    <h2 data-i18n="festivals_section_title">Temple Festivals & Special Poojas</h2>
+                    <p data-i18n="festivals_section_subtitle">Celebrations of faith and devotion</p>
+                </div>
+                <div class="festivals-container" id="festivals-list">
+                    <!-- Cards will be populated by renderFestivals() -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        const festivalGradients = {
+            'Shani Amavasya': '#1a1a2e,#16213e',
+            'Deepavali': '#ff6b35,#f7c59f',
+            'Ugadi': '#2d6a4f,#74c69d',
+            'Makara Sankranti': '#e76f51,#f4a261',
+            'Annual Jatre (Temple Fair)': '#800020,#c0392b',
+            'Annual Jatre': '#800020,#c0392b',
+            'Special Poojas': '#b8860b,#ffd700'
+        };
+
+        const gradients = [
+            '#1a1a2e,#16213e',
+            '#ff6b35,#f7c59f',
+            '#2d6a4f,#74c69d',
+            '#e76f51,#f4a261',
+            '#800020,#c0392b',
+            '#b8860b,#ffd700',
+            '#264653,#2a9d8f'
+        ];
+
+        const emojis = {
+            'Shani Amavasya': '🌑',
+            'Deepavali': '🪔',
+            'Ugadi': '🌿',
+            'Makara Sankranti': '☀️',
+            'Annual Jatre': '🕉️',
+            'Annual Jatre (Temple Fair)': '🕉️',
+            'Special Poojas': '🙏'
+        };
+
+        const dateKnMap = {
+            'Every Amavasya': 'ಪ್ರತಿ ಅಮಾವಾಸ್ಯೆ',
+            'October/November': 'ಅಕ್ಟೋಬರ್/ನವೆಂಬರ್',
+            'March/April': 'ಮಾರ್ಚ್/ಏಪ್ರಿಲ್',
+            'January 14-15': 'ಜನವರಿ ೧೪–೧೫',
+            'January 14–15': 'ಜನವರಿ ೧೪–೧೫',
+            'February/March': 'ಫೆಬ್ರವರಿ/ಮಾರ್ಚ್',
+            'On request': 'ಕೋರಿಕೆಯ ಮೇರೆಗೆ'
+        };
+
+        const canonicalFestivals = [
+            {
+                name_en: "Shani Amavasya",
+                name_kn: "ಶನಿ ಅಮಾವಾಸ್ಯೆ",
+                description_en: "The most auspicious day dedicated to Lord Shanishwara. Thousands of devotees visit the temple for special pooja and darshan.",
+                description_kn: "ಶನೀಶ್ವರ ದೇವರಿಗೆ ಸಮರ್ಪಿತ ಅತ್ಯಂತ ಪವಿತ್ರ ದಿನ. ಸಾವಿರಾರು ಭಕ್ತರು ವಿಶೇಷ ಪೂಜೆ ಮತ್ತು ದರ್ಶನಕ್ಕಾಗಿ ಕ್ಷೇತ್ರಕ್ಕೆ ಆಗಮಿಸುತ್ತಾರೆ.",
+                date: "Every Amavasya",
+                date_kn: "ಪ್ರತಿ ಅಮಾವಾಸ್ಯೆ"
+            },
+            {
+                name_en: "Deepavali",
+                name_kn: "ದೀಪಾವಳಿ",
+                description_en: "Festival of Lights celebrated with grand illumination, special poojas, and community feast at the temple.",
+                description_kn: "ದೀಪಗಳ ಹಬ್ಬವನ್ನು ಭವ್ಯ ದೀಪಾಲಂಕಾರ, ವಿಶೇಷ ಪೂಜೆಗಳು ಮತ್ತು ಸಮುದಾಯ ಅನ್ನದಾನದೊಂದಿಗೆ ಆಚರಿಸಲಾಗುತ್ತದೆ.",
+                date: "October/November",
+                date_kn: "ಅಕ್ಟೋಬರ್/ನವೆಂಬರ್"
+            },
+            {
+                name_en: "Ugadi",
+                name_kn: "ಯುಗಾದಿ",
+                description_en: "Kannada New Year celebrated with traditional Panchanga Shravana and special temple rituals.",
+                description_kn: "ಕನ್ನಡ ಹೊಸ ವರ್ಷವನ್ನು ಸಾಂಪ್ರದಾಯಿಕ ಪಂಚಾಂಗ ಶ್ರವಣ ಮತ್ತು ವಿಶೇಷ ದೇವಾಲಯ ಧಾರ್ಮಿಕ ವಿಧಿಗಳೊಂದಿಗೆ ಆಚರಿಸಲಾಗುತ್ತದೆ.",
+                date: "March/April",
+                date_kn: "ಮಾರ್ಚ್/ಏಪ್ರಿಲ್"
+            },
+            {
+                name_en: "Makara Sankranti",
+                name_kn: "ಮಕರ ಸಂಕ್ರಾಂತಿ",
+                description_en: "Harvest festival celebrated with special poojas, ellu-bella distribution, and community gathering.",
+                description_kn: "ಸುಗ್ಗಿಯ ಹಬ್ಬವನ್ನು ವಿಶೇಷ ಪೂಜೆಗಳು, ಎಳ್ಳು-ಬೆಲ್ಲ ವಿತರಣೆ ಮತ್ತು ಸಮುದಾಯ ಸಭೆಯೊಂದಿಗೆ ಆಚರಿಸಲಾಗುತ್ತದೆ.",
+                date: "January 14–15",
+                date_kn: "ಜನವರಿ ೧೪–೧೫"
+            },
+            {
+                name_en: "Annual Jatre (Temple Fair)",
+                name_kn: "ವಾರ್ಷಿಕ ಜಾತ್ರೆ",
+                description_en: "Grand annual temple fair with special rituals, cultural programs, Annadanam, and religious processions.",
+                description_kn: "ವಿಶೇಷ ಆಚರಣೆಗಳು, ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳು, ಅನ್ನದಾನ ಮತ್ತು ಧಾರ್ಮಿಕ ಮೆರವಣಿಗೆಗಳೊಂದಿಗೆ ಭವ್ಯ ವಾರ್ಷಿಕ ಜಾತ್ರೆ.",
+                date: "February/March",
+                date_kn: "ಫೆಬ್ರವರಿ/ಮಾರ್ಚ್"
+            },
+            {
+                name_en: "Special Poojas",
+                name_kn: "ವಿಶೇಷ ಪೂಜೆಗಳು",
+                description_en: "Tailadhara, Shani Shanti Homa, Navagraha Shanti, and other special rituals performed for devotees.",
+                description_kn: "ತೈಲಾಧಾರ, ಶನಿ ಶಾಂತಿ ಹೋಮ, ನವಗ್ರಹ ಶಾಂತಿ, ಮತ್ತು ಇತರ ವಿಶೇಷ ಆಚರಣೆಗಳು ಭಕ್ತರಿಗಾಗಿ ನೆರವೇರಿಸಲಾಗುತ್ತದೆ.",
+                date: "On request",
+                date_kn: "ಕೋರಿಕೆಯ ಮೇರೆಗೆ"
+            }
+        ];
+
+        let festivalsList = canonicalFestivals;
+
+        function renderFestivals() {
+            const lang = getCurrentLang();
+            const container = document.getElementById('festivals-list');
+            if (!container) return;
+
+            container.innerHTML = festivalsList.map((f, i) => {
+                let emoji = emojis[f.name_en] || '🕉️';
+                if (!emojis[f.name_en]) {
+                    for (const key in emojis) {
+                        if (f.name_en && f.name_en.includes(key)) {
+                            emoji = emojis[key];
+                            break;
+                        }
+                    }
+                }
+                const dateText = (lang === 'kn'
+                    ? (f.date_kn || dateKnMap[f.date] || f.date)
+                    : (f.date === 'January 14-15' ? 'January 14–15' : f.date)
+                );
+                const nameText = (lang === 'kn' && f.name_kn) ? f.name_kn : f.name_en;
+                const descText = (lang === 'kn' && f.description_kn) ? f.description_kn : f.description_en;
+                const gradient = festivalGradients[f.name_en] || gradients[i % gradients.length];
+
+                return `
+                    <div class="festival-card fade-in" style="transition-delay:${i * 0.08}s;">
+                        <div class="festival-banner" style="background:linear-gradient(135deg, ${gradient});">
+                            <span class="emoji">${emoji}</span>
+                            ${dateText ? `<span class="date-badge">${dateText}</span>` : ''}
+                        </div>
+                        <div class="festival-body">
+                            <h3>${nameText}</h3>
+                            <p>${descText}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (typeof initScrollEffects === 'function') {
+                initScrollEffects();
+            }
+        }
+
+        async function loadTimings() {
+            try {
+                const temple = await apiFetch('/temple');
+                if (temple && temple.timings) {
+                    if (temple.timings.morning_open && temple.timings.morning_close) {
+                        document.getElementById('morning-range').textContent = `${temple.timings.morning_open} – ${temple.timings.morning_close}`;
+                    }
+                    if (temple.timings.evening_open && temple.timings.evening_close) {
+                        document.getElementById('evening-range').textContent = `${temple.timings.evening_open} – ${temple.timings.evening_close}`;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading temple timings:', err);
+            }
+        }
+
+        async function loadFestivals() {
+            try {
+                const remote = await apiFetch('/festivals');
+                if (remote && Array.isArray(remote) && remote.length > 0) {
+                    festivalsList = canonicalFestivals.map(canonical => {
+                        const match = remote.find(r => r.name_en === canonical.name_en || (r.name_en && r.name_en.includes(canonical.name_en.split(' ')[0])));
+                        if (match) {
+                            return {
+                                ...canonical,
+                                ...match,
+                                date_kn: canonical.date_kn || match.date_kn,
+                                date: canonical.date || match.date
+                            };
+                        }
+                        return canonical;
+                    });
+                    const extra = remote.filter(r => !festivalsList.some(m => m.name_en === r.name_en));
+                    if (extra.length > 0) {
+                        festivalsList = [...festivalsList, ...extra];
+                    }
+                }
+            } catch (err) {
+                console.warn('Using canonical festivals list:', err);
+            }
+            renderFestivals();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFestivals();
+            loadTimings();
+            loadFestivals();
+        });
+
+        // Re-render dynamic content when language is toggled
+        window.addEventListener('languageChanged', () => {
+            renderFestivals();
+            loadTimings();
+        });
+    </script>
+</body>
+</html>

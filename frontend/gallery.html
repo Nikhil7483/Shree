@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temple Gallery | Shree Shanishwara Swamy Temple</title>
+    <meta name="description" content="Explore sacred moments, deity shrines, temple architecture, and pooja ceremonies of Shree Shanishwara Swamy Temple (R.), Shri Kshetra Siddagiri.">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        /* ============================================================
+           Gallery Design System & Layout
+           ============================================================ */
+
+        .gallery-filter-wrap {
+            display: flex;
+            gap: var(--space-sm);
+            justify-content: center;
+            margin-bottom: var(--space-2xl);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.6rem;
+            border: 2px solid var(--border-medium);
+            border-radius: var(--radius-full);
+            background: #FFFFFF;
+            font-family: var(--font-english);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--cream);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: #FFFFFF;
+            border-color: var(--gold);
+            box-shadow: 0 4px 16px rgba(11, 61, 46, 0.25);
+        }
+
+        /* 3-column desktop, 2-column tablet, 1-column mobile grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.75rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 960px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+        }
+
+        .gallery-card {
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            height: 300px;
+            background: #052E20;
+            box-shadow: 0 6px 20px rgba(11, 61, 46, 0.08);
+            border: 1px solid var(--border-light);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 36px rgba(11, 61, 46, 0.18);
+            border-color: var(--gold);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Hover Overlay */
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5, 46, 32, 0.94) 0%, rgba(11, 61, 46, 0.45) 50%, rgba(5, 46, 32, 0.1) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.25rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-card:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .overlay-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overlay-category-badge {
+            background: rgba(5, 46, 32, 0.85);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            backdrop-filter: blur(4px);
+        }
+
+        .overlay-expand-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .gallery-card:hover .overlay-expand-btn {
+            background: var(--gold);
+            color: var(--primary-dark);
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .overlay-bottom {
+            color: #FFFFFF;
+        }
+
+        .overlay-title-primary {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            font-family: var(--font-kannada), var(--font-english);
+        }
+
+        .overlay-title-secondary {
+            font-size: 0.88rem;
+            color: var(--gold);
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 46, 32, 0.96);
+            backdrop-filter: blur(10px);
+            z-index: 99999;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.25rem;
+            user-select: none;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+        }
+
+        .lightbox-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            z-index: 10;
+        }
+
+        .lightbox-counter-badge {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.35rem 1rem;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .lightbox-close-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .lightbox-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .lightbox-content-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .lightbox-nav-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .lightbox-nav-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            border-color: var(--gold);
+            transform: scale(1.08);
+        }
+
+        .lightbox-image-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 76vh;
+            overflow: hidden;
+        }
+
+        .lightbox-image-wrap img {
+            max-height: 76vh;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.85);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .lightbox-bottombar {
+            text-align: center;
+            padding: 0.75rem 1rem;
+            color: #FFFFFF;
+            z-index: 10;
+        }
+
+        .lightbox-title-kn {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            font-family: var(--font-kannada);
+            margin-bottom: 0.25rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .lightbox-title-en {
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .lightbox-nav-btn {
+                position: absolute;
+                bottom: 10px;
+                width: 44px;
+                height: 44px;
+            }
+            .lightbox-prev-btn { left: 10px; }
+            .lightbox-next-btn { right: 10px; }
+            .lightbox-image-wrap {
+                max-height: 68vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="gallery_title">Temple Gallery</h1>
+            <p data-i18n="gallery_subtitle">Sacred moments captured</p>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <section class="section" style="padding-top: 2rem;">
+        <div class="container">
+            <!-- Filter Tabs -->
+            <div class="gallery-filter-wrap fade-in">
+                <button class="filter-btn active" onclick="filterGallery('all')" id="filter-all" data-i18n="gallery_all">All</button>
+                <button class="filter-btn" onclick="filterGallery('temple')" id="filter-temple" data-i18n="gallery_temple">Temple</button>
+                <button class="filter-btn" onclick="filterGallery('festival')" id="filter-festival" data-i18n="gallery_festival">Festivals</button>
+                <button class="filter-btn" onclick="filterGallery('pooja')" id="filter-pooja" data-i18n="gallery_pooja">Pooja</button>
+            </div>
+
+            <!-- Responsive 3-Column Grid -->
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Dynamically Populated with the 7 Real Temple Images -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Fullscreen Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox(event)">
+        <!-- Top Bar -->
+        <div class="lightbox-topbar" onclick="event.stopPropagation()">
+            <div class="lightbox-counter-badge" id="lightbox-counter">1 / 7</div>
+            <button class="lightbox-close-btn" onclick="closeLightbox()" title="Close (Esc)" aria-label="Close Lightbox">
+                <!-- Lucide X icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Center Image Viewport with Previous & Next Navigation -->
+        <div class="lightbox-content-area" onclick="event.stopPropagation()">
+            <button class="lightbox-nav-btn lightbox-prev-btn" onclick="navigateLightbox(-1)" title="Previous (Left Arrow)" aria-label="Previous Image">
+                <!-- Lucide ChevronLeft icon -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="lightbox-image-wrap">
+                <img id="lightbox-img" src="" alt="Gallery Image">
+            </div>
+
+            <button class="lightbox-nav-btn lightbox-next-btn" onclick="navigateLightbox(1)" title="Next (Right Arrow)" aria-label="Next Image">
+                <!-- Lucide ChevronRight icon -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Bottom Caption Bar -->
+        <div class="lightbox-bottombar" onclick="event.stopPropagation()">
+            <div class="lightbox-title-kn" id="lightbox-title-kn">ದೇವರ ಸನ್ನಿಧಿ</div>
+            <div class="lightbox-title-en" id="lightbox-title-en">Deity Shrine</div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        /**
+         * The 7 Real Temple Photographs (Exact Source Truth)
+         */
+        const initialGalleryItems = [
+            {
+                id: 1,
+                title_en: "Temple Entrance",
+                title_kn: "ದೇವಸ್ಥಾನದ ಪ್ರವೇಶ ದ್ವಾರ",
+                image_url: "/static/assets/gallery/temple-entrance.png",
+                alt_en: "Shree Shanishwara Swamy Temple entrance",
+                categories: ["temple"],
+                category_label_en: "Temple",
+                category_label_kn: "ದೇವಸ್ಥಾನ"
+            },
+            {
+                id: 2,
+                title_en: "Temple View",
+                title_kn: "ದೇವಸ್ಥಾನದ ನೋಟ",
+                image_url: "/static/assets/gallery/temple-view.png",
+                alt_en: "Shree Shanishwara Swamy Temple view",
+                categories: ["temple"],
+                category_label_en: "Temple",
+                category_label_kn: "ದೇವಸ್ಥಾನ"
+            },
+            {
+                id: 3,
+                title_en: "Temple Exterior",
+                title_kn: "ದೇವಸ್ಥಾನದ ಹೊರಾಂಗಣ",
+                image_url: "/static/assets/gallery/temple-exterior.png",
+                alt_en: "Shree Shanishwara Swamy Temple exterior",
+                categories: ["temple"],
+                category_label_en: "Temple",
+                category_label_kn: "ದೇವಸ್ಥಾನ"
+            },
+            {
+                id: 4,
+                title_en: "Temple Interior",
+                title_kn: "ದೇವಸ್ಥಾನದ ಒಳಾಂಗಣ",
+                image_url: "/static/assets/gallery/temple-interior.png",
+                alt_en: "Shree Shanishwara Swamy Temple interior",
+                categories: ["temple", "pooja"],
+                category_label_en: "Temple / Pooja",
+                category_label_kn: "ದೇವಸ್ಥಾನ / ಪೂಜೆ"
+            },
+            {
+                id: 5,
+                title_en: "Sacred Shrine",
+                title_kn: "ಪವಿತ್ರ ಸನ್ನಿಧಿ",
+                image_url: "/static/assets/gallery/sacred-shrine.png",
+                alt_en: "Shree Shanishwara Swamy Temple sacred shrine",
+                categories: ["pooja"],
+                category_label_en: "Pooja",
+                category_label_kn: "ಪೂಜೆ"
+            },
+            {
+                id: 6,
+                title_en: "Deity Shrine",
+                title_kn: "ದೇವರ ಸನ್ನಿಧಿ",
+                image_url: "/static/assets/gallery/deity-shrine.png",
+                alt_en: "Shree Shanishwara Swamy Temple deity shrine",
+                categories: ["temple", "pooja"],
+                category_label_en: "Temple / Pooja",
+                category_label_kn: "ದೇವಸ್ಥಾನ / ಪೂಜೆ"
+            },
+            {
+                id: 7,
+                title_en: "Temple Pooja",
+                title_kn: "ದೇವಸ್ಥಾನದ ಪೂಜೆ",
+                image_url: "/static/assets/gallery/temple-pooja.png",
+                alt_en: "Shree Shanishwara Swamy Temple pooja",
+                categories: ["pooja"],
+                category_label_en: "Pooja",
+                category_label_kn: "ಪೂಜೆ"
+            }
+        ];
+
+        let galleryItems = [...initialGalleryItems];
+        let currentFilteredItems = [...initialGalleryItems];
+        let currentLightboxIndex = 0;
+        let activeCategory = 'all';
+
+        // Load Gallery
+        async function loadGallery() {
+            try {
+                const apiItems = await apiFetch('/gallery');
+                if (apiItems && apiItems.length > 0) {
+                    // Map API items and ensure categories array is available
+                    galleryItems = apiItems.map((item, idx) => {
+                        const cats = (item.category || "temple").split(',').map(c => c.trim().toLowerCase());
+                        const initialMatch = initialGalleryItems.find(g => g.image_url === item.image_url);
+                        return {
+                            id: item.id || (idx + 1),
+                            title_en: item.title_en || initialMatch?.title_en || "Temple Image",
+                            title_kn: item.title_kn || initialMatch?.title_kn || "ದೇವಸ್ಥಾನದ ಚಿತ್ರ",
+                            image_url: item.image_url,
+                            alt_en: initialMatch?.alt_en || item.title_en,
+                            categories: cats,
+                            category_label_en: initialMatch?.category_label_en || item.category,
+                            category_label_kn: initialMatch?.category_label_kn || item.category
+                        };
+                    });
+                }
+            } catch (err) {
+                console.warn('API fetch failed, rendering bundled real photographs:', err);
+            }
+            filterGallery(activeCategory);
+        }
+
+        // Render Gallery Items
+        function renderGallery(items) {
+            const grid = document.getElementById('gallery-grid');
+            const lang = getCurrentLang();
+
+            if (!items || items.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
+                        <p style="font-size: 1.1rem;">${lang === 'kn' ? 'ಈ ವರ್ಗದಲ್ಲಿ ಯಾವುದೇ ಚಿತ್ರಗಳಿಲ್ಲ' : 'No images found in this category'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = items.map((item, index) => {
+                const titlePrimary = lang === 'kn' ? item.title_kn : item.title_en;
+                const titleSecondary = lang === 'kn' ? item.title_en : item.title_kn;
+                const categoryBadge = lang === 'kn' ? item.category_label_kn : item.category_label_en;
+
+                return `
+                    <div class="gallery-card fade-in" onclick="openLightbox(${index})" role="button" tabindex="0" aria-label="${titlePrimary}">
+                        <img src="${item.image_url}" alt="${item.alt_en || titlePrimary}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="overlay-top">
+                                <span class="overlay-category-badge">${categoryBadge}</span>
+                                <div class="overlay-expand-btn" aria-hidden="true">
+                                    <!-- Lucide Maximize / Expand icon -->
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="overlay-bottom">
+                                <div class="overlay-title-primary">${titlePrimary}</div>
+                                <div class="overlay-title-secondary">${titleSecondary}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Trigger scroll/fade-in effects
+            if (typeof initScrollEffects === 'function') {
+                initScrollEffects();
+            }
+        }
+
+        // Filter Gallery by Category
+        function filterGallery(category) {
+            activeCategory = category;
+            
+            // Highlight active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const targetBtn = document.getElementById(`filter-${category}`);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            if (category === 'all') {
+                currentFilteredItems = [...galleryItems];
+            } else {
+                currentFilteredItems = galleryItems.filter(item => 
+                    item.categories && item.categories.includes(category.toLowerCase())
+                );
+            }
+
+            renderGallery(currentFilteredItems);
+        }
+
+        // Lightbox Functions
+        function openLightbox(index) {
+            if (!currentFilteredItems || currentFilteredItems.length === 0) return;
+            currentLightboxIndex = index;
+            updateLightboxContent();
+
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            if (event && event.target && event.target.closest('.lightbox-content-area, .lightbox-topbar, .lightbox-bottombar')) {
+                return;
+            }
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function navigateLightbox(direction) {
+            const total = currentFilteredItems.length;
+            if (total <= 1) return;
+
+            currentLightboxIndex = (currentLightboxIndex + direction + total) % total;
+            updateLightboxContent();
+        }
+
+        function updateLightboxContent() {
+            const item = currentFilteredItems[currentLightboxIndex];
+            if (!item) return;
+
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+            const titleKn = document.getElementById('lightbox-title-kn');
+            const titleEn = document.getElementById('lightbox-title-en');
+
+            img.src = item.image_url;
+            img.alt = item.alt_en || item.title_en;
+            counter.textContent = `${currentLightboxIndex + 1} / ${currentFilteredItems.length}`;
+            titleKn.textContent = item.title_kn;
+            titleEn.textContent = item.title_en;
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('lightbox-modal');
+            if (!modal.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox(1);
+            }
+        });
+
+        // Touch Swipe Gestures for Mobile Lightbox
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox-modal').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.getElementById('lightbox-modal').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipeGesture();
+        }, { passive: true });
+
+        function handleSwipeGesture() {
+            const swipeThreshold = 45;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swiped Left -> Next
+                navigateLightbox(1);
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swiped Right -> Previous
+                navigateLightbox(-1);
+            }
+        }
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

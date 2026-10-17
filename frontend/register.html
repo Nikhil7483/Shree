@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Shree Shanishwara Swamy Temple</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-card" style="max-width:480px;">
+            <div class="auth-header">
+                <div class="temple-icon">
+                    <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="temple-logo-svg" style="margin: 0 auto var(--space-md);">
+                      <circle cx="50" cy="50" r="46" fill="#0B3D2E" stroke="#D4AF37" stroke-width="4"/>
+                      <path d="M45 18 L50 8 L55 18 Z" fill="#D4AF37"/>
+                      <path d="M42 20 L58 20 L56 28 L44 28 Z" fill="#D4AF37" stroke="#0B3D2E" stroke-width="0.5"/>
+                      <path d="M38 30 L62 30 L59 42 L41 42 Z" fill="#D4AF37" stroke="#0B3D2E" stroke-width="0.5"/>
+                      <path d="M32 44 L68 44 L64 60 L36 60 Z" fill="#D4AF37" stroke="#0B3D2E" stroke-width="0.5"/>
+                      <path d="M26 62 L74 62 L74 80 L68 80 L68 66 L32 66 L32 80 L26 80 Z" fill="#D4AF37"/>
+                      <path d="M50 64 C46 70 46 76 50 78 C54 76 54 70 50 64 Z" fill="#FF8C00"/>
+                      <path d="M50 68 C48 72 48 75 50 76 C52 75 52 72 50 68 Z" fill="#FFD700"/>
+                      <path d="M42 78 L58 78 L55 82 L45 82 Z" fill="#D4AF37"/>
+                      <path d="M18 82 L82 82 L80 86 L20 86 Z" fill="#D4AF37"/>
+                    </svg>
+                </div>
+                <h2 data-i18n="register_title">Create Account</h2>
+                <p class="auth-subtitle" data-i18n="register_subtitle">Join our temple community</p>
+            </div>
+            <form onsubmit="handleRegister(event)" novalidate>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_name">Full Name</label>
+                    <input type="text" id="register-name" class="form-input" placeholder="Enter your full name">
+                    <span class="form-error" id="error-register-name"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_email">Email Address</label>
+                    <input type="email" id="register-email" class="form-input" placeholder="Enter your email">
+                    <span class="form-error" id="error-register-email"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_mobile">Mobile Number</label>
+                    <input type="tel" id="register-mobile" class="form-input" placeholder="Enter mobile number">
+                    <span class="form-error" id="error-register-mobile"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="register-password" class="form-input" placeholder="Create a password (min 6 chars)" minlength="6" oninput="checkPasswordStrength()">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('register-password')">👁️</button>
+                    </div>
+                    <div class="strength-meter" id="strength-meter">
+                        <div class="strength-bar" id="strength-bar"></div>
+                    </div>
+                    <span class="strength-text" id="strength-text"></span>
+                    <span class="form-error" id="error-register-password"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_confirm">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="register-confirm" class="form-input" placeholder="Confirm your password" oninput="checkPasswordMatch()">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('register-confirm')">👁️</button>
+                    </div>
+                    <span class="match-text" id="match-text"></span>
+                    <span class="form-error" id="error-register-confirm"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="register_language">Preferred Language</label>
+                    <select id="register-language" class="form-input">
+                        <option value="en">English</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;" data-i18n="register_submit">Create Account</button>
+            </form>
+            <div class="auth-links">
+                <span data-i18n="register_has_account">Already have an account?</span>
+                <a href="/login" data-i18n="register_login">Login here</a>
+            </div>
+            <div style="text-align:center;margin-top:var(--space-lg);">
+                <a href="/" style="color:var(--text-muted);font-size:0.85rem;">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate | Shree Shanishwara Swamy Temple</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        .donate-container { max-width: 700px; margin: 0 auto; }
+        .donate-card { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-lg); }
+        .donate-header { text-align: center; margin-bottom: var(--space-2xl); }
+        .donate-header .icon { font-size: 3rem; margin-bottom: var(--space-md); }
+        .type-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-xl); }
+        .type-btn { padding: 12px; border: 2px solid var(--border-light); border-radius: var(--radius-md); background: white; text-align: center; cursor: pointer; transition: all var(--transition-fast); font-size: 0.85rem; font-weight: 500; }
+        .type-btn:hover { border-color: var(--saffron); }
+        .type-btn.active { border-color: var(--saffron); background: rgba(255,107,0,0.05); color: var(--saffron); font-weight: 700; }
+        .type-btn .emoji { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+        #donate-form, #donate-success { display: none; }
+        #donate-form.active, #donate-success.active { display: block; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="donate_title">Make a Donation</h1>
+            <p data-i18n="donate_subtitle">Support the temple with your generous contribution</p>
+        </div>
+    </div>
+    <section class="section">
+        <div class="donate-container">
+            <div class="donate-card fade-in" id="donate-form" style="display:block;">
+                <div class="donate-header">
+                    <div class="icon">🙏</div>
+                    <h2 data-i18n="donate_title">Make a Donation</h2>
+                </div>
+
+                <!-- Donation Type -->
+                <label class="form-label" data-i18n="donate_type">Donation Type</label>
+                <div class="type-selector">
+                    <button class="type-btn active" onclick="selectType(this,'general')"><span class="emoji">🪔</span><span data-i18n="donate_type_general">General</span></button>
+                    <button class="type-btn" onclick="selectType(this,'annadanam')"><span class="emoji">🍚</span><span data-i18n="donate_type_annadanam">Annadanam</span></button>
+                    <button class="type-btn" onclick="selectType(this,'temple_development')"><span class="emoji">🏛️</span><span data-i18n="donate_type_development">Development</span></button>
+                    <button class="type-btn" onclick="selectType(this,'festival')"><span class="emoji">🎉</span><span data-i18n="donate_type_festival">Festival</span></button>
+                    <button class="type-btn" onclick="selectType(this,'goshala')"><span class="emoji">🐄</span><span data-i18n="donate_type_goshala">Goshala</span></button>
+                </div>
+
+                <!-- Amount -->
+                <label class="form-label" data-i18n="donate_amount">Select Amount</label>
+                <div class="amount-buttons">
+                    <button class="amount-btn" onclick="selectAmount(this,100)">₹100</button>
+                    <button class="amount-btn" onclick="selectAmount(this,500)">₹500</button>
+                    <button class="amount-btn active" onclick="selectAmount(this,1000)">₹1,000</button>
+                    <button class="amount-btn" onclick="selectAmount(this,5000)">₹5,000</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="donate_custom">Custom Amount</label>
+                    <input type="number" id="custom-amount" class="form-input" placeholder="Enter amount in ₹" min="1" oninput="customAmountChanged()">
+                </div>
+
+                <!-- Donor Details -->
+                <form onsubmit="handleDonation(event)">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="donate_name">Full Name</label>
+                        <input type="text" id="donor-name" class="form-input" required data-i18n="donate_name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="donate_email">Email Address</label>
+                        <input type="email" id="donor-email" class="form-input" required data-i18n="donate_email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="donate_mobile">Mobile Number</label>
+                        <input type="tel" id="donor-mobile" class="form-input" required data-i18n="donate_mobile">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="donate_address">Address (Optional)</label>
+                        <textarea id="donor-address" class="form-input" rows="2" data-i18n="donate_address"></textarea>
+                    </div>
+                    <div class="form-group checkbox-group" style="margin-top:var(--space-sm);margin-bottom:var(--space-md);">
+                        <input type="checkbox" id="donate-anonymous">
+                        <label for="donate-anonymous" style="font-size:0.85rem;color:var(--text-muted);cursor:pointer;">Donate Anonymously (Hide name from live ticker)</label>
+                    </div>
+                    <button type="submit" id="donate-submit-btn" class="btn btn-primary btn-lg" style="width: 100%;" data-i18n="donate_proceed">Proceed to Pay</button>
+                </form>
+            </div>
+
+            <!-- Success Page -->
+            <div class="donate-card" id="donate-success">
+                <div class="success-page">
+                    <div class="success-icon">✅</div>
+                    <h2 data-i18n="donate_success">Donation Successful!</h2>
+                    <p data-i18n="donate_success_msg">Thank you for your generous contribution. May Lord Shanishwara bless you.</p>
+                    <div class="receipt-card">
+                        <p data-i18n="donate_receipt">Receipt Number</p>
+                        <div class="receipt-number" id="receipt-number">—</div>
+                    </div>
+                    <div style="margin-top:var(--space-xl);display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+                        <button onclick="downloadReceipt()" class="btn btn-primary" data-i18n="donate_download">Download Receipt (PDF)</button>
+                        <a href="/dashboard" class="btn btn-outline" data-i18n="nav_dashboard">Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="footer-container"></div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        let selectedType = 'general';
+        let selectedAmount = 1000;
+        let currentDonationId = '';
+
+        function selectType(btn, type) {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedType = type;
+        }
+
+        function selectAmount(btn, amount) {
+            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedAmount = amount;
+            document.getElementById('custom-amount').value = '';
+        }
+
+        function customAmountChanged() {
+            const val = parseInt(document.getElementById('custom-amount').value);
+            if (val > 0) {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                selectedAmount = val;
+            }
+        }
+
+        // Pre-fill logged in user details
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!isLoggedIn()) {
+                showToast('Please login to make a donation', 'warning');
+                setTimeout(() => window.location.href = '/login', 1500);
+                return;
+            }
+            const user = getUser();
+            if (user) {
+                document.getElementById('donor-name').value = user.name || '';
+                document.getElementById('donor-email').value = user.email || '';
+            }
+        });
+
+        async function handleDonation(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('donate-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            const data = {
+                amount: selectedAmount,
+                donation_type: selectedType,
+                donor_name: document.getElementById('donor-name').value,
+                donor_email: document.getElementById('donor-email').value,
+                donor_mobile: document.getElementById('donor-mobile').value,
+                donor_address: document.getElementById('donor-address').value,
+                is_anonymous: document.getElementById('donate-anonymous').checked,
+            };
+
+            try {
+                const order = await apiFetch('/donate/create-order', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                });
+
+                currentDonationId = order.donation_id;
+
+                if (order.demo_mode) {
+                    // Demo mode — skip Razorpay, simulate success
+                    await simulateDemoPayment(order);
+                } else {
+                    openRazorpayCheckout(order);
+                }
+            } catch (err) {
+                showToast(err.message || 'Donation failed', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = t('donate_proceed');
+            }
+        }
+
+        function openRazorpayCheckout(order) {
+            const options = {
+                key: order.key_id,
+                amount: order.amount,
+                currency: order.currency,
+                name: 'Shree Shanishwara Swamy Temple',
+                description: `${selectedType} Donation`,
+                order_id: order.order_id,
+                prefill: {
+                    name: order.donor_name,
+                    email: order.donor_email,
+                    contact: order.donor_mobile,
+                },
+                theme: { color: '#7B2D26' },
+                handler: async function(response) {
+                    try {
+                        const result = await apiFetch('/donate/verify', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                donation_id: currentDonationId,
+                            }),
+                        });
+                        showDonationSuccess(result.receipt_number);
+                    } catch (err) {
+                        showToast('Payment verification failed', 'error');
+                    }
+                },
+                modal: {
+                    ondismiss: function() {
+                        const btn = document.getElementById('donate-submit-btn');
+                        btn.disabled = false;
+                        btn.textContent = t('donate_proceed');
+                    }
+                }
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        async function simulateDemoPayment(order) {
+            try {
+                const result = await apiFetch('/donate/verify', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        razorpay_order_id: order.order_id,
+                        razorpay_payment_id: 'demo_pay_' + Date.now(),
+                        razorpay_signature: 'demo_sig',
+                        donation_id: currentDonationId,
+                    }),
+                });
+                showDonationSuccess(result.receipt_number);
+            } catch (err) {
+                showToast('Demo payment failed', 'error');
+            }
+        }
+
+        function showDonationSuccess(receiptNumber) {
+            document.getElementById('donate-form').style.display = 'none';
+            document.getElementById('donate-success').style.display = 'block';
+            document.getElementById('receipt-number').textContent = receiptNumber;
+            showToast('Donation successful! Thank you! 🙏', 'success');
+        }
+
+        async function downloadReceipt() {
+            if (!currentDonationId) return;
+            try {
+                const token = localStorage.getItem('temple_token');
+                const response = await fetch(`/api/donate/receipt/${currentDonationId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `receipt_${document.getElementById('receipt-number').textContent}.pdf`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                showToast('Failed to download receipt', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

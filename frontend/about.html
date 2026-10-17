@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Temple | Shree Shanishwara Swamy Temple</title>
+    <meta name="description" content="Learn about the history, traditions, sacred environment, and divine significance of Shree Shanishwara Swamy Temple at Shri Kshetra Siddagiri.">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        /* ============================================================
+           About Temple Dedicated Styles
+           ============================================================ */
+        .about-main-wrapper {
+            background: var(--warm-white);
+            padding: var(--space-3xl) 0 var(--space-4xl);
+        }
+
+        /* Reading Containers */
+        .content-readable-container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Section Headers */
+        .about-section-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            position: relative;
+        }
+
+        .about-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid var(--gold);
+            color: var(--primary-dark);
+            padding: 0.35rem 1.15rem;
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-section-header h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.35rem);
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-family: var(--font-kannada), var(--font-english);
+        }
+
+        .about-divider-line {
+            width: 80px;
+            height: 3px;
+            background: var(--gradient-gold);
+            margin: 0 auto;
+            border-radius: var(--radius-full);
+        }
+
+        /* Full Width Temple History Prose */
+        .history-card-wrapper {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl) var(--space-3xl);
+            box-shadow: 0 4px 20px rgba(11, 61, 46, 0.06);
+            border: 1px solid var(--border-light);
+        }
+
+        .history-prose {
+            font-size: 1.1rem;
+            line-height: 1.88;
+            color: var(--text-primary);
+        }
+
+        .history-prose p {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .history-prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-highlight-lead {
+            border-left: 4px solid var(--gold);
+            background: var(--cream);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-weight: 500;
+            color: var(--primary-dark) !important;
+            margin-bottom: 1.6rem !important;
+        }
+
+        /* Kannada-specific Typography Refinements */
+        body[data-lang="kn"] .history-prose,
+        body[data-lang="kn"] .importance-prose {
+            font-family: var(--font-kannada), sans-serif;
+        }
+
+        body[data-lang="kn"] .history-prose p,
+        body[data-lang="kn"] .importance-prose p {
+            font-family: var(--font-kannada), sans-serif;
+            line-height: 1.95;
+            letter-spacing: 0.15px;
+            word-break: normal;
+            overflow-wrap: break-word;
+            text-rendering: optimizeLegibility;
+        }
+
+        body[data-lang="kn"] .about-section-header h2 {
+            font-family: var(--font-kannada), sans-serif;
+            line-height: 1.45;
+        }
+
+        body[data-lang="kn"] .caption-title,
+        body[data-lang="kn"] .secondary-deity-card .card-info h4,
+        body[data-lang="kn"] .glimpse-title {
+            font-family: var(--font-kannada), sans-serif;
+            line-height: 1.4;
+        }
+
+        /* Responsive adjustments for History card */
+        @media (max-width: 768px) {
+            .history-card-wrapper {
+                padding: var(--space-xl) var(--space-lg);
+                border-radius: var(--radius-lg);
+            }
+            .history-prose {
+                font-size: 1rem;
+                line-height: 1.78;
+            }
+            .history-prose p {
+                text-align: left;
+                margin-bottom: 1.25rem;
+            }
+        }
+
+        /* Sacred Om Divider Between Sections */
+        .sacred-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: var(--space-3xl) auto;
+            max-width: 650px;
+            color: var(--gold);
+        }
+
+        .sacred-divider::before,
+        .sacred-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-medium), transparent);
+        }
+
+        .sacred-divider .om-circle {
+            font-size: 1.85rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: rgba(212, 175, 55, 0.15);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--gold);
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+        }
+
+        /* ============================
+           Temple Glimpses Responsive Gallery
+           ============================ */
+        .glimpses-section {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl) var(--space-2xl);
+            margin: var(--space-3xl) 0;
+            box-shadow: 0 4px 20px rgba(11, 61, 46, 0.06);
+            border: 1px solid var(--border-light);
+        }
+
+        .glimpses-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.35rem;
+            margin-top: var(--space-2xl);
+        }
+
+        @media (max-width: 1024px) {
+            .glimpses-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .glimpses-section {
+                padding: var(--space-2xl) var(--space-md);
+            }
+            .glimpses-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .glimpses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glimpse-card {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #052E20;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 14px rgba(11, 61, 46, 0.08);
+            cursor: pointer;
+            height: 235px;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glimpse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(11, 61, 46, 0.2);
+            border-color: var(--gold);
+        }
+
+        .glimpse-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glimpse-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .glimpse-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 45%, rgba(5, 46, 32, 0.88) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .glimpse-card:hover .glimpse-overlay {
+            background: linear-gradient(180deg, rgba(5, 46, 32, 0.2) 20%, rgba(5, 46, 32, 0.94) 100%);
+        }
+
+        .glimpse-title {
+            color: #FFFFFF;
+            font-size: 0.92rem;
+            font-weight: 600;
+            line-height: 1.35;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .glimpse-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: var(--gold);
+            font-size: 0.76rem;
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        /* Specific Object Positions for 7 Images to prevent excessive cropping */
+        .img-pos-entrance { object-position: center center; }
+        .img-pos-exterior-view { object-position: center 75%; }
+        .img-pos-blue-building { object-position: center 60%; }
+        .img-pos-main-shrine { object-position: center 25%; }
+        .img-pos-naga-shrine { object-position: center 40%; }
+        .img-pos-orange-deity { object-position: center 30%; }
+        .img-pos-interior-hall { object-position: center 35%; }
+
+        /* ============================
+           Importance of Lord Shanishwara Layout
+           ============================ */
+        .importance-card-wrapper {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl);
+            box-shadow: 0 4px 20px rgba(11, 61, 46, 0.06);
+            border: 1px solid var(--border-light);
+        }
+
+        .importance-layout {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 2.75rem;
+            align-items: start;
+            margin-top: var(--space-xl);
+        }
+
+        @media (max-width: 960px) {
+            .importance-layout {
+                grid-template-columns: 1fr;
+                gap: 2.25rem;
+            }
+            .importance-card-wrapper {
+                padding: var(--space-xl) var(--space-lg);
+            }
+        }
+
+        .importance-prose {
+            font-size: 1.08rem;
+            line-height: 1.88;
+            color: var(--text-primary);
+        }
+
+        .importance-prose p {
+            margin-bottom: 1.45rem;
+            color: var(--text-primary);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .importance-prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        .importance-highlight-lead {
+            border-left: 4px solid var(--primary-light);
+            background: var(--cream);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-weight: 500;
+            color: var(--primary-dark) !important;
+            margin-bottom: 1.6rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .importance-prose {
+                font-size: 1rem;
+                line-height: 1.78;
+            }
+            .importance-prose p {
+                text-align: left;
+                margin-bottom: 1.25rem;
+            }
+        }
+
+        /* Sticky Visuals on Desktop, Stacked on Mobile */
+        .importance-visuals {
+            position: sticky;
+            top: calc(var(--nav-height) + 24px);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .featured-deity-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px rgba(11, 61, 46, 0.12);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .featured-deity-card:hover {
+            box-shadow: 0 12px 30px rgba(11, 61, 46, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .featured-deity-card .img-wrap {
+            height: 320px;
+            overflow: hidden;
+            position: relative;
+            background: #052E20;
+        }
+
+        .featured-deity-card .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 25%;
+            transition: transform 0.5s ease;
+        }
+
+        .featured-deity-card:hover .img-wrap img {
+            transform: scale(1.05);
+        }
+
+        .featured-deity-card .card-caption {
+            padding: 1.1rem 1.25rem;
+            background: #FFFFFF;
+        }
+
+        .featured-deity-card .caption-title {
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .featured-deity-card .caption-sub {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .secondary-deity-card {
+            background: #FFFFFF;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(11, 61, 46, 0.08);
+            border: 1px solid var(--border-medium);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-deity-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--gold);
+            box-shadow: 0 8px 22px rgba(11, 61, 46, 0.14);
+        }
+
+        .secondary-deity-card .thumb-wrap {
+            width: 90px;
+            height: 90px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #052E20;
+        }
+
+        .secondary-deity-card .thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .secondary-deity-card .card-info h4 {
+            font-size: 0.96rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .secondary-deity-card .card-info p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* ============================
+           Full-Screen Lightbox Modal
+           ============================ */
+        .about-lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 46, 32, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .about-lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-dialog {
+            position: relative;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close-btn {
+            position: absolute;
+            top: -48px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .lightbox-close-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            border-color: var(--gold);
+            transform: scale(1.08);
+        }
+
+        .lightbox-img-holder {
+            max-width: 100%;
+            max-height: 76vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-img-holder img {
+            max-width: 90vw;
+            max-height: 74vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(212, 175, 55, 0.6);
+        }
+
+        .lightbox-caption-bar {
+            margin-top: 1rem;
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        .lightbox-caption-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 0.3px;
+        }
+
+        .lightbox-caption-counter {
+            font-size: 0.82rem;
+            color: var(--gold);
+            margin-top: 0.2rem;
+        }
+
+        .lightbox-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .lightbox-nav-btn:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+            border-color: var(--gold);
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .lightbox-prev-btn { left: -60px; }
+        .lightbox-next-btn { right: -60px; }
+
+        @media (max-width: 1150px) {
+            .lightbox-prev-btn { left: 10px; }
+            .lightbox-next-btn { right: 10px; }
+        }
+
+        @media (max-width: 600px) {
+            .lightbox-close-btn { top: -45px; right: 0; width: 38px; height: 38px; }
+            .lightbox-nav-btn { width: 40px; height: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <!-- Main About Page Hero Section (Preserved) -->
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="about_title">About the Temple</h1>
+            <p data-i18n="about_subtitle">Know the divine history</p>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="about-main-wrapper">
+        <div class="container">
+
+            <!-- ============================================================
+                 SECTION 1: TEMPLE HISTORY (Full Width, Complete Text)
+                 ============================================================ -->
+            <section class="about-history-section">
+                <div class="about-section-header">
+                    <span class="about-badge"><span class="badge-icon">📜</span> <span data-i18n="about_badge_history">Sacred Chronicle</span></span>
+                    <h2 data-i18n="about_history">Temple History</h2>
+                    <div class="about-divider-line"></div>
+                </div>
+
+                <div class="content-readable-container">
+                    <div class="history-card-wrapper">
+                        <div class="history-prose" id="history-prose-wrap">
+                            <p class="history-highlight-lead" data-i18n="history_p1">Shree Shanishwara Swamy Temple is a sacred place of worship dedicated to Lord Shanishwara Swamy. The temple is located at Shri Kshetra Siddagiri in Kusugundi Village, Koduru Post, Hosanagara Taluk, Shivamogga District, Karnataka. It is surrounded by a peaceful natural environment that creates a spiritual atmosphere for devotees. The greenery around the temple adds to the calmness and beauty of the temple premises. The temple provides devotees with a place to pray, worship and spend time in spiritual reflection. Devotees visit the temple with faith and devotion towards Lord Shanishwara Swamy.</p>
+
+                            <p data-i18n="history_p2">The temple has become an important spiritual place for the local community and provides a peaceful environment for people who wish to spend time in prayer. The temple follows traditional practices associated with the worship of Lord Shanishwara, and daily worship forms an important part of its religious activities. Devotees can visit the temple during the designated darshan timings and participate in regular morning and evening worship activities. Various poojas and sevas are performed as part of the temple traditions, and devotees participate in these religious activities with sincere faith.</p>
+
+                            <p data-i18n="history_p3">The temple provides an opportunity for devotees to seek divine blessings and connect with their spiritual beliefs. Worship at the temple is connected with devotion, discipline and spiritual reflection, while the peaceful surroundings help devotees concentrate on prayer and worship. The temple also serves as a place where people can experience a sense of inner peace. Traditional religious practices are an important part of the temple's identity, and the temple encourages devotees to maintain faith and devotion in their spiritual life.</p>
+
+                            <p data-i18n="history_p4">The temple's activities are supported by the temple management and devotees, while the management works towards maintaining the temple and its religious activities. The temple also serves the spiritual needs of people from the surrounding areas. Devotees visit the temple to offer prayers and seek the blessings of Lord Shanishwara. The temple provides a suitable environment for performing traditional poojas and observing special religious occasions with devotion and participation from devotees. Festivals and special poojas add importance to the religious activities of the temple and provide devotees with opportunities to participate in collective worship. The temple continues to preserve its devotional atmosphere through regular religious activities.</p>
+
+                            <p data-i18n="history_p5">The spiritual environment of Siddagiri gives the temple a distinctive sense of peace, while the natural surroundings make it an inviting place for spiritual visits. Devotees can spend time at the temple away from the distractions of everyday life, making it a space for prayer, meditation and spiritual reflection. Faith is an important part of the relationship between devotees and the temple, and people visit the temple with different personal prayers and spiritual intentions. The temple welcomes devotees who wish to offer their prayers to Lord Shanishwara, and religious services are conducted according to the practices followed by the temple.</p>
+
+                            <p data-i18n="history_p6">The temple's daily activities help maintain continuity in its worship traditions and create opportunities for devotees to come together during special occasions. Community participation contributes to the spiritual atmosphere of the temple, while the religious activities are carried out with respect for traditional values. Devotees can experience the importance of faith through their visits to the temple, and the temple encourages people to approach worship with sincerity and devotion. The peaceful surroundings of Siddagiri complement the devotional character of the temple, making it a spiritual destination within the surrounding community.</p>
+
+                            <p data-i18n="history_p7">Regular darshan allows devotees to maintain a personal connection with their faith, while pooja and seva activities provide different ways for devotees to express their devotion. Special occasions bring additional religious activities to the temple and help maintain its devotional traditions. The temple also provides an environment where families can participate in worship together. Visiting a temple can provide devotees with a moment of peace and spiritual concentration, and Shree Shanishwara Swamy Temple continues to hold an important place in the devotional life of its visitors.</p>
+
+                            <p data-i18n="history_p8">The temple management works to maintain the religious and spiritual character of the temple, while its surroundings provide a natural setting for prayer and reflection. Devotees can experience a sense of calm when they spend time within the temple premises. The temple represents the faith and devotion of the people connected with it, and its religious activities continue to provide opportunities for worship and community participation. The temple's traditions are maintained through regular poojas, darshan and special religious activities.</p>
+
+                            <p data-i18n="history_p9">The presence of devotees adds to the spiritual atmosphere of the temple, and the temple remains a place where people can express their faith through prayer and devotion. The peaceful environment of Shri Kshetra Siddagiri makes a visit spiritually meaningful for many devotees. The temple continues to welcome people who seek a peaceful place for worship. Its combination of devotion, tradition and natural surroundings gives the temple a special character. Shree Shanishwara Swamy Temple therefore remains an important place of worship for devotees connected with the shrine and continues its spiritual journey by preserving devotion, worship and traditional religious practices for future generations.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Decorative Sacred Divider -->
+            <div class="sacred-divider">
+                <span class="om-circle">ॐ</span>
+            </div>
+
+            <!-- ============================================================
+                 SECTION 2: TEMPLE GLIMPSES (8 Real Temple Photographs)
+                 ============================================================ -->
+            <section class="glimpses-section" id="temple-glimpses">
+                <div class="about-section-header">
+                    <span class="about-badge"><span class="badge-icon">📷</span> <span data-i18n="about_badge_glimpses">Darshan & Architecture</span></span>
+                    <h2 data-i18n="about_glimpses">Temple Glimpses</h2>
+                    <div class="about-divider-line"></div>
+                </div>
+
+                <div class="glimpses-grid">
+                    <!-- 1. Temple exterior / entrance path photograph -->
+                    <div class="glimpse-card" onclick="openLightbox(0)">
+                        <img src="/static/assets/gallery/temple-entrance.png" alt="Temple exterior and entrance path photograph" class="img-pos-entrance" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_1_title">Temple Entrance Path</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Temple exterior photograph showing the main temple -->
+                    <div class="glimpse-card" onclick="openLightbox(1)">
+                        <img src="/static/assets/gallery/temple-view.png" alt="Temple exterior photograph showing the main temple" class="img-pos-exterior-view" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_2_title">Temple Exterior & Scenery</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Blue temple building photograph -->
+                    <div class="glimpse-card" onclick="openLightbox(2)">
+                        <img src="/static/assets/gallery/temple-exterior.png" alt="Blue temple building photograph" class="img-pos-blue-building" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_3_title">Blue Temple Building</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 4. Main shrine / Lord Shanishwara worship photograph -->
+                    <div class="glimpse-card" onclick="openLightbox(3)">
+                        <img src="/static/assets/gallery/sacred-shrine.png" alt="Main shrine and Lord Shanishwara worship photograph" class="img-pos-main-shrine" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_4_title">Lord Shanishwara Holy Shrine</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 5. Snake/Naga shrine photograph -->
+                    <div class="glimpse-card" onclick="openLightbox(4)">
+                        <img src="/static/assets/gallery/deity-shrine.png" alt="Snake and Naga shrine photograph" class="img-pos-naga-shrine" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_5_title">Naga Devatha Shrine</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 6. Deity photograph with orange decoration -->
+                    <div class="glimpse-card" onclick="openLightbox(5)">
+                        <img src="/static/assets/gallery/temple-pooja.png" alt="Deity photograph with orange decoration" class="img-pos-orange-deity" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_6_title">Sri Rakteshwari Devi</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+
+                    <!-- 7. Another temple/deity photograph -->
+                    <div class="glimpse-card" onclick="openLightbox(6)">
+                        <img src="/static/assets/gallery/temple-interior.png" alt="Temple interior and prayer hall photograph" class="img-pos-interior-hall" loading="lazy">
+                        <div class="glimpse-overlay">
+                            <div class="glimpse-title" data-i18n="glimpse_7_title">Temple Interior & Hall</div>
+                            <span class="glimpse-hint" data-i18n="glimpse_hint_view">🔍 View Photo</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Decorative Sacred Divider -->
+            <div class="sacred-divider">
+                <span class="om-circle">ॐ</span>
+            </div>
+
+            <!-- ============================================================
+                 SECTION 3: IMPORTANCE OF LORD SHANISHWARA (Text + Deity Image)
+                 ============================================================ -->
+            <section class="importance-card-wrapper" id="importance-section">
+                <div class="about-section-header">
+                    <span class="about-badge"><span class="badge-icon">🪔</span> <span data-i18n="about_badge_importance">Divine Significance</span></span>
+                    <h2 data-i18n="about_importance">Importance of Lord Shanishwara</h2>
+                    <div class="about-divider-line"></div>
+                </div>
+
+                <div class="importance-layout">
+                    <!-- Left: Complete Text in Paragraphs -->
+                    <div class="importance-prose" id="importance-prose-wrap">
+                        <p class="importance-highlight-lead" data-i18n="importance_p1">Lord Shanishwara is an important deity in Hindu tradition and is also commonly known as Shani Dev. Lord Shanishwara is traditionally associated with the planet Saturn and is one of the Navagrahas in Hindu tradition. The worship of Lord Shanishwara has an important place in the spiritual practices of many devotees. Devotees approach Lord Shanishwara with faith, respect and devotion.</p>
+
+                        <p data-i18n="importance_p2">Lord Shanishwara is traditionally associated with justice and responsibility and is also connected with the results of a person's actions. The concept of karma is closely associated with the traditional understanding of Shani, reminding devotees that actions have consequences and that people should live responsibly. Worship of Lord Shanishwara encourages devotees to reflect on their actions and reminds them of the importance of honesty and discipline.</p>
+
+                        <p data-i18n="importance_p3">Lord Shanishwara is traditionally regarded as a deity who teaches patience, which is considered an important quality when facing difficulties in life. Devotees often turn towards prayer during challenging periods, and worship can provide them with emotional strength and spiritual confidence. Many devotees seek the blessings of Lord Shanishwara during difficult phases of life, believing that faith can encourage them to face problems with courage. Devotees also pray for peace and stability in their lives.</p>
+
+                        <p data-i18n="importance_p4">Lord Shanishwara is traditionally associated with discipline and self-control, qualities that are important for maintaining a balanced and responsible life. Worship can encourage devotees to develop positive habits and values. Lord Shanishwara is also respected as a symbol of fairness and justice, and his traditional significance reminds devotees to act responsibly towards others. Devotees are encouraged to understand the importance of their choices and actions, making the worship of Shani a form of spiritual reflection.</p>
+
+                        <p data-i18n="importance_p5">Many people visit Shani temples with sincere prayers for strength and guidance. Some devotees seek relief from difficulties that they traditionally associate with the influence of Saturn. Prayer and devotion can give devotees a sense of hope during challenging situations. Lord Shanishwara is traditionally believed to teach important lessons through life's experiences, which are often connected with patience, responsibility and perseverance. Devotees can view difficult experiences as opportunities for personal growth, while faith can help people remain hopeful while dealing with challenges.</p>
+
+                        <p data-i18n="importance_p6">The worship of Lord Shanishwara therefore has both religious and spiritual significance. Devotees may offer prayers, poojas and other traditional sevas to Lord Shanishwara as expressions of faith and devotion. Special prayers are often performed by devotees seeking divine blessings. Temple visits provide devotees with an opportunity to spend time in peaceful worship, while the spiritual environment of a Shanishwara temple can encourage concentration and reflection. Devotees may also participate in aarti and other traditional worship activities, which help create a strong sense of devotion among visitors.</p>
+
+                        <p data-i18n="importance_p7">Lord Shanishwara is respected by devotees for his traditional connection with justice, and his worship reminds people that responsible actions are important in life. It also encourages people to remain patient during difficult circumstances. Devotion to Lord Shanishwara can inspire people to follow a disciplined way of life. Many devotees believe that sincere prayer provides spiritual support during challenging times. The worship of Shani is therefore associated with faith, patience and perseverance.</p>
+
+                        <p data-i18n="importance_p8">Devotees may seek blessings for the well-being of themselves and their families, and some devotees also visit temples to perform special poojas according to their personal beliefs. Such religious practices are followed with respect for tradition. Lord Shanishwara is regarded with great respect by devotees who follow Navagraha worship. His association with Saturn gives him a unique position among the Navagrahas. The traditional importance of Shani has continued through generations of Hindu religious practice, and his worship remains meaningful to people who seek spiritual guidance and inner strength.</p>
+
+                        <p data-i18n="importance_p9">Devotees can learn the value of patience by reflecting on the traditional teachings associated with Shani. They can also understand the importance of accepting responsibility for their actions. Worship can help people develop a stronger sense of faith during uncertain situations, while prayer can provide a peaceful moment for people dealing with personal difficulties. Lord Shanishwara is therefore not only worshipped for blessings but also respected for the values traditionally associated with him. His significance encourages devotees to combine faith with responsible conduct.</p>
+
+                        <p data-i18n="importance_p10">At Shree Shanishwara Swamy Temple, devotees can offer prayers and seek the blessings of Lord Shanishwara. The temple provides a peaceful environment for devotees to perform their religious practices. Darshan, pooja, abhisheka, aarti and other traditional activities can become meaningful expressions of devotion. Devotees visiting the temple can use their time for prayer, reflection and spiritual connection. The worship of Lord Shanishwara ultimately reminds devotees to remain patient, disciplined, truthful and responsible in their lives. For many devotees, Lord Shanishwara represents faith, justice, perseverance and the strength to face life's challenges with courage.</p>
+                    </div>
+
+                    <!-- Right: Real Deity Photographs (Sticky Desktop, Stacked Mobile) -->
+                    <div class="importance-visuals">
+                        <!-- Primary Deity Card: Main Shrine -->
+                        <div class="featured-deity-card" onclick="openLightbox(3)" title="Click to view full photo">
+                            <div class="img-wrap">
+                                <img src="/static/assets/gallery/sacred-shrine.png" alt="Lord Shanishwara Swamy Sacred Shrine" loading="lazy">
+                            </div>
+                            <div class="card-caption">
+                                <div class="caption-title"><span>🪔</span> <span data-i18n="deity_card_shrine_title">Lord Shanishwara Swamy</span></div>
+                                <div class="caption-sub" data-i18n="deity_card_shrine_sub">Shri Kshetra Siddagiri Holy Sanctum</div>
+                            </div>
+                        </div>
+
+                        <!-- Secondary Worship Area Card -->
+                        <div class="secondary-deity-card" onclick="openLightbox(5)" title="Click to view full photo">
+                            <div class="thumb-wrap">
+                                <img src="/static/assets/gallery/temple-pooja.png" alt="Sri Rakteshwari Devi Holy Shrine" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <h4 data-i18n="deity_card_devi_title">Sri Rakteshwari Devi</h4>
+                                <p data-i18n="deity_card_devi_sub">Sacred deity shrine with floral decoration & traditional aradhana</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ============================================================
+         FULLSCREEN LIGHTBOX MODAL FOR GALLERY IMAGES
+         ============================================================ -->
+    <div class="about-lightbox" id="about-lightbox" onclick="closeLightboxOnBackdrop(event)">
+        <div class="lightbox-dialog" onclick="event.stopPropagation()">
+            <!-- Close Button -->
+            <button class="lightbox-close-btn" onclick="closeLightbox()" title="Close (Esc)" aria-label="Close Lightbox">✕</button>
+
+            <!-- Navigation: Previous -->
+            <button class="lightbox-nav-btn lightbox-prev-btn" onclick="navigateLightbox(-1)" title="Previous Image" aria-label="Previous Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Active Image Viewport -->
+            <div class="lightbox-img-holder">
+                <img id="lightbox-image" src="" alt="Temple Photo">
+            </div>
+
+            <!-- Navigation: Next -->
+            <button class="lightbox-nav-btn lightbox-next-btn" onclick="navigateLightbox(1)" title="Next Image" aria-label="Next Image">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            <!-- Caption Bar -->
+            <div class="lightbox-caption-bar">
+                <div class="lightbox-caption-title" id="lightbox-title">Temple Photograph</div>
+                <div class="lightbox-caption-counter" id="lightbox-counter">1 / 7</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        /**
+         * 7 Real Temple Photographs Data with Bilingual Titles
+         */
+        const templePhotos = [
+            {
+                url: "/static/assets/gallery/temple-entrance.png",
+                title_en: "Temple Entrance Path — Shri Kshetra Siddagiri",
+                title_kn: "ದೇವಸ್ಥಾನದ ಪ್ರವೇಶ ದ್ವಾರ — ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ಧಗಿರಿ",
+                alt_en: "Temple exterior entrance path photograph",
+                alt_kn: "ದೇವಸ್ಥಾನದ ಪ್ರವೇಶ ದ್ವಾರ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/temple-view.png",
+                title_en: "Temple Exterior View & Verdant Greenery",
+                title_kn: "ದೇವಸ್ಥಾನದ ಬಾಹ್ಯ ನೋಟ ಮತ್ತು ಪರಿಸರ",
+                alt_en: "Temple exterior photograph showing the main temple",
+                alt_kn: "ದೇವಸ್ಥಾನದ ಬಾಹ್ಯ ನೋಟ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/temple-exterior.png",
+                title_en: "Blue Temple Building & Gopura View",
+                title_kn: "ದೇವಸ್ಥಾನದ ಕಟ್ಟಡ ಮತ್ತು ಗೋಪುರದ ನೋಟ",
+                alt_en: "Blue temple building photograph",
+                alt_kn: "ದೇವಸ್ಥಾನದ ಕಟ್ಟಡ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/sacred-shrine.png",
+                title_en: "Lord Shanishwara Holy Sanctum & Crow Vahana",
+                title_kn: "ಶ್ರೀ ಶನೀಶ್ವರ ಸ್ವಾಮಿ ಪವಿತ್ರ ಗರ್ಭಗುಡಿ ಮತ್ತು ಕಾಕ ವಾಹನ",
+                alt_en: "Main shrine Lord Shanishwara worship photograph",
+                alt_kn: "ಶ್ರೀ ಶನೀಶ್ವರ ಸ್ವಾಮಿ ಗರ್ಭಗುಡಿ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/deity-shrine.png",
+                title_en: "Naga Devatha Shrine & Sacred Stones",
+                title_kn: "ಶ್ರೀ ನಾಗದೇವತೆ ಸನ್ನಿಧಿ ಮತ್ತು ಪವಿತ್ರ ನಾಗಶಿಲೆಗಳು",
+                alt_en: "Snake / Naga shrine photograph",
+                alt_kn: "ಶ್ರೀ ನಾಗದೇವತೆ ಸನ್ನಿಧಿ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/temple-pooja.png",
+                title_en: "Sri Rakteshwari Devi Sacred Shrine",
+                title_kn: "ಶ್ರೀ ರಕ್ತೇಶ್ವರಿ ದೇವಿ ಪವಿತ್ರ ಸನ್ನಿಧಿ",
+                alt_en: "Deity photograph with orange decoration",
+                alt_kn: "ಶ್ರೀ ರಕ್ತೇಶ್ವರಿ ದೇವಿ ಅಲಂಕಾರ ಛಾಯಾಚಿತ್ರ"
+            },
+            {
+                url: "/static/assets/gallery/temple-interior.png",
+                title_en: "Temple Interior Prayer Hall & Shrines",
+                title_kn: "ದೇವಸ್ಥಾನದ ಒಳಾಂಗಣ ಸಭಾಂಗಣ ಮತ್ತು ಸನ್ನಿಧಿಗಳು",
+                alt_en: "Another temple / deity photograph",
+                alt_kn: "ದೇವಸ್ಥಾನದ ಒಳಾಂಗಣ ಸಭಾಂಗಣ ಛಾಯಾಚಿತ್ರ"
+            }
+        ];
+
+        let currentPhotoIndex = 0;
+
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            updateLightboxContent();
+            const lightbox = document.getElementById('about-lightbox');
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('about-lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOnBackdrop(e) {
+            if (e.target.id === 'about-lightbox') {
+                closeLightbox();
+            }
+        }
+
+        function navigateLightbox(direction) {
+            currentPhotoIndex = (currentPhotoIndex + direction + templePhotos.length) % templePhotos.length;
+            updateLightboxContent();
+        }
+
+        function updateLightboxContent() {
+            const photo = templePhotos[currentPhotoIndex];
+            const img = document.getElementById('lightbox-image');
+            const title = document.getElementById('lightbox-title');
+            const counter = document.getElementById('lightbox-counter');
+            const lang = typeof getCurrentLang === 'function' ? getCurrentLang() : 'en';
+
+            img.src = photo.url;
+            img.alt = lang === 'kn' ? (photo.alt_kn || photo.alt_en) : photo.alt_en;
+            title.textContent = lang === 'kn' ? (photo.title_kn || photo.title_en) : photo.title_en;
+            counter.textContent = `${currentPhotoIndex + 1} / ${templePhotos.length}`;
+        }
+
+        // Keyboard navigation (Esc to close, Left/Right arrows to browse)
+        document.addEventListener('keydown', function(e) {
+            const lightbox = document.getElementById('about-lightbox');
+            if (!lightbox.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                navigateLightbox(-1);
+            } else if (e.key === 'ArrowRight') {
+                navigateLightbox(1);
+            }
+        });
+
+        // Listen for language changes to update active lightbox content dynamically
+        window.addEventListener('languageChanged', function(e) {
+            const lightbox = document.getElementById('about-lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                updateLightboxContent();
+            }
+        });
+    </script>
+</body>
+</html>

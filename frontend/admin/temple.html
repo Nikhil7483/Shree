@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Temple | Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar"></aside>
+        <main class="admin-main">
+            <h1 class="admin-page-title">🏛️ Manage Temple</h1>
+            <div class="admin-form">
+                <form onsubmit="saveTempleData(event)">
+                    <h3>Temple History</h3>
+                    <div class="form-group">
+                        <label class="form-label">History (English)</label>
+                        <textarea id="temple-history-en" class="form-input" rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">History (ಕನ್ನಡ)</label>
+                        <textarea id="temple-history-kn" class="form-input" rows="5" style="font-family:var(--font-kannada);"></textarea>
+                    </div>
+                    <h3 style="margin-top:var(--space-2xl);">Temple Timings</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">
+                        <div class="form-group"><label class="form-label">Morning Open</label><input id="temple-morning-open" class="form-input" placeholder="6:00 AM"></div>
+                        <div class="form-group"><label class="form-label">Morning Close</label><input id="temple-morning-close" class="form-input" placeholder="12:30 PM"></div>
+                        <div class="form-group"><label class="form-label">Evening Open</label><input id="temple-evening-open" class="form-input" placeholder="5:00 PM"></div>
+                        <div class="form-group"><label class="form-label">Evening Close</label><input id="temple-evening-close" class="form-input" placeholder="8:30 PM"></div>
+                    </div>
+                    <h3 style="margin-top:var(--space-2xl);">Contact Information</h3>
+                    <div class="form-group"><label class="form-label">Phone</label><input id="temple-phone" class="form-input"></div>
+                    <div class="form-group"><label class="form-label">Email</label><input id="temple-email" class="form-input" type="email"></div>
+                    <button type="submit" class="btn btn-primary btn-lg" style="margin-top:var(--space-xl);">Save Changes</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/admin.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', loadAdminTemple);</script>
+</body>
+</html>

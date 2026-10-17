@@ -1,0 +1,1 @@
+# Temple domain init

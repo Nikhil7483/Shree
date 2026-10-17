@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Shree Shanishwara Swamy Temple</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        .dashboard-header { background: var(--gradient-maroon); padding: var(--space-2xl); border-radius: var(--radius-xl); margin-bottom: var(--space-2xl); color: white; }
+        .dashboard-header h2 { color: white; margin-bottom: var(--space-xs); }
+        .dashboard-tabs { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); }
+        .tab-btn { padding: 10px 24px; border: 2px solid var(--border-light); border-radius: var(--radius-xl); background: white; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .profile-field { display: flex; justify-content: space-between; padding: var(--space-md) 0; border-bottom: 1px solid var(--border-light); }
+        .profile-field .label { font-weight: 600; color: var(--text-secondary); }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="dashboard_title">My Dashboard</h1>
+        </div>
+    </div>
+    <section class="section">
+        <div class="container">
+            <div class="dashboard-header fade-in">
+                <h2 id="welcome-msg">Welcome!</h2>
+                <p data-i18n="dashboard_subtitle">Manage your donations and profile</p>
+            </div>
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" id="tab-btn-donations" onclick="showTab('donations')" data-i18n="dashboard_donations">My Donations</button>
+                <button class="tab-btn" id="tab-btn-profile" onclick="showTab('profile')" data-i18n="dashboard_profile">My Profile</button>
+            </div>
+            
+            <!-- Donations Tab -->
+            <div class="tab-content active" id="tab-donations">
+                <div class="table-wrapper">
+                    <table class="data-table" id="donations-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="dashboard_date">Date</th>
+                                <th data-i18n="dashboard_type">Type</th>
+                                <th data-i18n="dashboard_amount">Amount</th>
+                                <th data-i18n="dashboard_status">Status</th>
+                                <th data-i18n="dashboard_receipt">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donations-body">
+                            <tr><td colspan="5" style="text-align:center;padding:var(--space-2xl);"><div class="loading-spinner"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Profile Tab -->
+            <div class="tab-content" id="tab-profile">
+                <div class="dashboard-grid">
+                    <!-- Column 1: Summary Card -->
+                    <div class="card" style="padding:var(--space-xl);text-align:center;">
+                        <div class="profile-photo-container">
+                            <img src="" id="profile-avatar-img" class="avatar-img" style="display:none;">
+                            <div class="avatar-initials" id="profile-avatar-initials">U</div>
+                            <label for="photo-file-input" class="photo-upload-overlay">
+                                <span id="photo-upload-label">Change Photo</span>
+                            </label>
+                            <input type="file" id="photo-file-input" accept="image/*" onchange="uploadProfilePhoto(this)">
+                        </div>
+                        <h3 id="profile-card-name" style="margin-bottom:var(--space-xs);">Name</h3>
+                        <p id="profile-card-email" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:var(--space-lg);">email@domain.com</p>
+                        
+                        <div class="stat-group-grid">
+                            <div class="stat-box">
+                                <div class="num" id="profile-stat-total">₹0</div>
+                                <div class="lbl">Total Donated</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="num" id="profile-stat-last">₹0</div>
+                                <div class="lbl" id="profile-stat-last-date">No Donation</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-lg);">
+                            <button class="btn btn-primary btn-sm" onclick="openEditProfileModal()" style="width:100%;">Edit Profile</button>
+                            <button class="btn btn-outline btn-sm" onclick="openChangePasswordModal()" style="width:100%;">Change Password</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Column 2: Detailed Stats & Info -->
+                    <div class="card" style="padding:var(--space-xl);">
+                        <h3 style="color:var(--primary);margin-bottom:var(--space-lg);border-bottom:2px solid var(--border-light);padding-bottom:var(--space-xs);">Personal Profile Details</h3>
+                        <div id="profile-detail-fields">
+                            <div class="profile-field"><span class="label">Full Name</span><span id="detail-name">-</span></div>
+                            <div class="profile-field"><span class="label">Email Address</span><span id="detail-email">-</span></div>
+                            <div class="profile-field"><span class="label">Phone Number</span><span id="detail-phone">-</span></div>
+                            <div class="profile-field"><span class="label">Physical Address</span><span id="detail-address">-</span></div>
+                            <div class="profile-field"><span class="label">Preferred Language</span><span id="detail-lang">-</span></div>
+                            <div class="profile-field"><span class="label">Date Joined</span><span id="detail-joined">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="footer-container"></div>
+
+    <!-- Edit Profile Modal -->
+    <div class="profile-modal" id="edit-profile-modal">
+        <div class="profile-modal-content">
+            <h3 style="color:var(--primary);margin-bottom:var(--space-lg);">Edit Profile Details</h3>
+            <form onsubmit="handleUpdateProfile(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="edit-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" id="edit-phone" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Physical Address</label>
+                    <textarea id="edit-address" class="form-input" rows="3" placeholder="Enter your address"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preferred Language</label>
+                    <select id="edit-lang" class="form-input">
+                        <option value="en">English</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                    </select>
+                </div>
+                <div style="display:flex;gap:var(--space-md);justify-content:flex-end;margin-top:var(--space-lg);">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeEditProfileModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="edit-profile-submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="profile-modal" id="change-password-modal">
+        <div class="profile-modal-content">
+            <h3 style="color:var(--primary);margin-bottom:var(--space-lg);">Change Password</h3>
+            <form onsubmit="handleChangePassword(event)">
+                <div class="form-group">
+                    <label class="form-label">Old Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="change-old-password" class="form-input" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('change-old-password')">👁️</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="change-new-password" class="form-input" required minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('change-new-password')">👁️</button>
+                    </div>
+                </div>
+                <div style="display:flex;gap:var(--space-md);justify-content:flex-end;margin-top:var(--space-lg);">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeChangePasswordModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="change-password-submit">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        const typeLabels = { general: 'General', annadanam: 'Annadanam', temple_development: 'Development', festival: 'Festival', goshala: 'Goshala' };
+        let activeProfileDetails = {};
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            const activeContent = document.getElementById(`tab-${tab}`);
+            
+            if (activeBtn) activeBtn.classList.add('active');
+            if (activeContent) activeContent.classList.add('active');
+        }
+
+        // Modal triggers
+        function openEditProfileModal() {
+            document.getElementById('edit-name').value = activeProfileDetails.name || '';
+            document.getElementById('edit-phone').value = activeProfileDetails.mobile || '';
+            document.getElementById('edit-address').value = activeProfileDetails.address || '';
+            document.getElementById('edit-lang').value = activeProfileDetails.preferred_language || 'en';
+            document.getElementById('edit-profile-modal').classList.add('active');
+        }
+        function closeEditProfileModal() {
+            document.getElementById('edit-profile-modal').classList.remove('active');
+        }
+
+        function openChangePasswordModal() {
+            document.getElementById('change-old-password').value = '';
+            document.getElementById('change-new-password').value = '';
+            document.getElementById('change-password-modal').classList.add('active');
+        }
+        function closeChangePasswordModal() {
+            document.getElementById('change-password-modal').classList.remove('active');
+        }
+
+        async function handleUpdateProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('edit-name').value.trim();
+            const mobile = document.getElementById('edit-phone').value.trim();
+            const address = document.getElementById('edit-address').value.trim();
+            const preferred_language = document.getElementById('edit-lang').value;
+            const submitBtn = document.getElementById('edit-profile-submit');
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-loading');
+
+                await apiFetch('/users/profile', {
+                    method: 'PUT',
+                    body: JSON.stringify({ name, mobile, address, preferred_language })
+                });
+
+                // Update local storage values
+                const user = getUser();
+                user.name = name;
+                user.preferred_language = preferred_language;
+                localStorage.setItem('temple_user', JSON.stringify(user));
+
+                showToast('Profile updated successfully', 'success');
+                closeEditProfileModal();
+                setLanguage(preferred_language);
+                loadDashboard();
+                renderNavbar();
+            } catch (err) {
+                showToast(err.message || 'Failed to update profile', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-loading');
+            }
+        }
+
+        async function handleChangePassword(e) {
+            e.preventDefault();
+            const old_password = document.getElementById('change-old-password').value;
+            const new_password = document.getElementById('change-new-password').value;
+            const submitBtn = document.getElementById('change-password-submit');
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-loading');
+
+                await apiFetch('/users/change-password', {
+                    method: 'POST',
+                    body: JSON.stringify({ old_password, new_password })
+                });
+
+                showToast('Password updated successfully', 'success');
+                closeChangePasswordModal();
+            } catch (err) {
+                showToast(err.message || 'Failed to change password', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-loading');
+            }
+        }
+
+        async function uploadProfilePhoto(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const label = document.getElementById('photo-upload-label');
+                if (label) label.textContent = 'Uploading...';
+
+                const data = await apiFetch('/users/upload-photo', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Update local storage
+                const user = getUser();
+                user.photo_url = data.photo_url;
+                localStorage.setItem('temple_user', JSON.stringify(user));
+
+                showToast('Photo uploaded successfully', 'success');
+                loadDashboard();
+                renderNavbar();
+            } catch (err) {
+                showToast(err.message || 'Upload failed', 'error');
+            } finally {
+                const label = document.getElementById('photo-upload-label');
+                if (label) label.textContent = 'Change Photo';
+            }
+        }
+
+        async function loadDashboard() {
+            if (!isLoggedIn()) { window.location.href = '/login'; return; }
+            const user = getUser();
+            document.getElementById('welcome-msg').textContent = `${t('dashboard_welcome')}, ${user.name}! 🙏`;
+
+            // Read query params to auto-select tab
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam === 'profile' || tabParam === 'donations') {
+                showTab(tabParam);
+            }
+
+            // Load donations
+            let donations = [];
+            try {
+                donations = await apiFetch('/donate/history');
+                const body = document.getElementById('donations-body');
+                if (donations.length === 0) {
+                    body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:var(--space-2xl);color:var(--text-muted);">${t('dashboard_no_donations')}</td></tr>`;
+                } else {
+                    body.innerHTML = donations.map(d => `
+                        <tr>
+                            <td>${formatDate(d.created_at)}</td>
+                            <td>${typeLabels[d.donation_type] || d.donation_type}</td>
+                            <td style="font-weight:700;color:var(--primary-light);">${formatINR(d.amount)}</td>
+                            <td><span class="status-badge ${d.status}">${d.status}</span></td>
+                            <td>
+                                ${d.status === 'completed' ? `<button class="btn btn-sm btn-outline" onclick="downloadDonationReceipt('${d.id}','${d.receipt_number}')">${t('dashboard_download')}</button>` : '—'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) { console.error(err); }
+
+            // Load user profile details
+            try {
+                const profile = await apiFetch('/users/profile');
+                activeProfileDetails = profile;
+
+                // Sync card
+                document.getElementById('profile-card-name').textContent = profile.name;
+                document.getElementById('profile-card-email').textContent = profile.email;
+
+                const avatarImg = document.getElementById('profile-avatar-img');
+                const avatarInitials = document.getElementById('profile-avatar-initials');
+
+                if (profile.photo_url) {
+                    avatarImg.src = profile.photo_url;
+                    avatarImg.style.display = 'block';
+                    avatarInitials.style.display = 'none';
+                } else {
+                    avatarImg.style.display = 'none';
+                    avatarInitials.style.display = 'flex';
+                    avatarInitials.textContent = getUserInitials(profile.name);
+                }
+
+                // Aggregate Donation stats
+                let totalDonated = 0;
+                let lastDonationAmount = 0;
+                let lastDonationDateString = 'No Donation';
+
+                const completed = donations.filter(d => d.status === 'completed');
+                completed.forEach(d => totalDonated += d.amount);
+
+                if (completed.length > 0) {
+                    completed.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    lastDonationAmount = completed[0].amount;
+                    lastDonationDateString = formatDate(completed[0].created_at);
+                }
+
+                document.getElementById('profile-stat-total').textContent = formatINR(totalDonated);
+                document.getElementById('profile-stat-last').textContent = lastDonationAmount > 0 ? formatINR(lastDonationAmount) : '—';
+                document.getElementById('profile-stat-last-date').textContent = lastDonationAmount > 0 ? `On ${lastDonationDateString}` : 'No Donation';
+
+                // Profile detail fields
+                document.getElementById('detail-name').textContent = profile.name;
+                document.getElementById('detail-email').textContent = profile.email;
+                document.getElementById('detail-phone').textContent = profile.mobile;
+                document.getElementById('detail-address').textContent = profile.address || 'Not Added';
+                document.getElementById('detail-lang').textContent = profile.preferred_language === 'kn' ? 'ಕನ್ನಡ (Kannada)' : 'English';
+                document.getElementById('detail-joined').textContent = formatDate(profile.created_at);
+
+            } catch (err) { console.error(err); }
+        }
+
+        async function downloadDonationReceipt(donationId, receiptNum) {
+            try {
+                const token = localStorage.getItem('temple_token');
+                const response = await fetch(`/api/donate/receipt/${donationId}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = `receipt_${receiptNum}.pdf`; a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (err) { showToast('Failed to download', 'error'); }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

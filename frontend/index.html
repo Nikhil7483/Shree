@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shree Shanishwara Swamy Temple | ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ</title>
+    <meta name="description" content="Official website of Shree Shanishwara Swamy Temple (R.), Shree Kshetra Siddagiri. Donate online, view temple timings, festivals, and gallery.">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css?v=3">
+    <style>
+        /* Home-specific styles */
+        .welcome-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+        .welcome-image {
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+        }
+        .welcome-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+        }
+        .welcome-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 3px solid var(--gold-metallic);
+            border-radius: var(--radius-xl);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .welcome-image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0) 100%);
+            padding: var(--space-xl) var(--space-lg) var(--space-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 4px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .welcome-image-caption .caption-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+            letter-spacing: 0.5px;
+        }
+        .welcome-image-caption .caption-sub {
+            color: var(--gold);
+            font-family: var(--font-kannada);
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+        }
+        .welcome-text h2 { margin-bottom: var(--space-lg); }
+        .welcome-text p { font-size: 1.05rem; line-height: 1.9; }
+
+        /* Temple Documents Section */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-2xl);
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        .document-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+        }
+
+        .document-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(11, 61, 46, 0.12);
+            border-color: var(--gold);
+        }
+
+        .document-header {
+            margin-bottom: var(--space-md);
+            text-align: center;
+        }
+
+        .document-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            background: rgba(11, 61, 46, 0.08);
+            border: 1px solid rgba(11, 61, 46, 0.18);
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            margin-bottom: 8px;
+        }
+
+        .document-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .document-preview-wrapper {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: #FDFBF7;
+            cursor: pointer;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .document-img {
+            width: 100%;
+            height: auto;
+            max-height: 520px;
+            object-fit: contain;
+            display: block;
+            transition: transform var(--transition-normal);
+        }
+
+        .document-preview-wrapper:hover .document-img {
+            transform: scale(1.02);
+        }
+
+        .document-overlay-hint {
+            position: absolute;
+            inset: 0;
+            background: rgba(11, 61, 46, 0.6);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            color: #FFFFFF;
+            pointer-events: none;
+        }
+
+        .document-preview-wrapper:hover .document-overlay-hint {
+            opacity: 1;
+        }
+
+        .document-overlay-hint .hint-icon {
+            font-size: 2.2rem;
+        }
+
+        .document-overlay-hint .hint-text {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.45);
+            padding: 6px 18px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        /* Document Lightbox Modal */
+        .doc-lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 46, 32, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+            overflow-y: auto;
+        }
+
+        .doc-lightbox.active {
+            display: flex;
+        }
+
+        .doc-lightbox-content {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--gold);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+            max-width: 960px;
+            width: 100%;
+            max-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .doc-lightbox-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: var(--primary);
+            border-bottom: 2px solid var(--gold);
+            color: #FFFFFF;
+            flex-shrink: 0;
+        }
+
+        .doc-lightbox-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gold);
+            padding-right: 12px;
+        }
+
+        .doc-lightbox-close {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 2.2rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 6px;
+            transition: color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .doc-lightbox-close:hover {
+            color: var(--gold);
+            transform: scale(1.15);
+        }
+
+        .doc-lightbox-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            background: #F4F1EA;
+            flex: 1;
+        }
+
+        .doc-lightbox-image {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .festivals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .gallery-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+        }
+        .gallery-preview-item {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            height: 250px;
+            position: relative;
+            cursor: pointer;
+        }
+        .gallery-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-slow);
+        }
+        .gallery-preview-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .donate-cta {
+            background: var(--gradient-temple);
+            padding: var(--space-3xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .donate-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFD700' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .donate-cta h2 { color: var(--gold); position: relative; }
+        .donate-cta p { color: rgba(255,255,255,0.75); position: relative; max-width: 600px; margin: var(--space-md) auto var(--space-xl); }
+        .donate-cta .btn { position: relative; }
+
+        @media (max-width: 768px) {
+            .welcome-section { grid-template-columns: 1fr; }
+            .welcome-image { order: -1; }
+            .welcome-image img { height: 280px; }
+            .welcome-image-caption { padding: var(--space-lg) var(--space-md) var(--space-sm); }
+            .welcome-image-caption .caption-title { font-size: 1.05rem; }
+            .welcome-image-caption .caption-sub { font-size: 0.88rem; }
+            .documents-grid { grid-template-columns: 1fr; gap: var(--space-xl); }
+            .document-img { max-height: 440px; }
+            .doc-lightbox { padding: var(--space-xs); }
+            .doc-lightbox-content { max-height: 96vh; }
+            .doc-lightbox-body { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-om" data-i18n="hero_om">ॐ</div>
+            <h1 class="hero-temple-name" data-i18n="hero_temple_name">Shree Shanishwara Swamy Temple (R.)</h1>
+            <p class="hero-temple-name-kn" data-i18n="hero_temple_name_kn">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</p>
+            <p class="hero-place" data-i18n="hero_place">Shree Kshetra Siddagiri</p>
+            <p class="hero-desc" data-i18n="hero_welcome">Welcome to the sacred abode of Lord Shanishwara. Experience divine blessings and spiritual peace.</p>
+            <div class="hero-actions">
+                <a href="/donate" class="btn btn-primary btn-lg" data-i18n="hero_donate_btn">🙏 Donate Now</a>
+                <a href="/about" class="btn btn-secondary btn-lg" data-i18n="hero_explore_btn">Explore Temple</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Live Donation Ticker -->
+    <div class="ticker-wrapper" id="donation-ticker-section" style="display: none;">
+        <div class="container">
+            <div class="ticker-container">
+                <div class="ticker-header">
+                    <span class="ticker-title">💛 Recent Donations</span>
+                    <span class="ticker-title-kn">ಇತ್ತೀಚಿನ ದೇಣಿಗೆಗಳು</span>
+                </div>
+                <div class="ticker-track-wrapper">
+                    <div class="ticker-track" id="ticker-track">
+                        <!-- Dynamic scrolling cards will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <section class="section" id="welcome-section">
+        <div class="container">
+            <div class="welcome-section fade-in">
+                <div class="welcome-text">
+                    <h2 data-i18n="home_welcome_title">Welcome to the Temple</h2>
+                    <p id="welcome-text-content">
+                        Shree Shanishwara Swamy Temple, nestled at the sacred Siddagiri hill in Kusugundi village, 
+                        is a revered shrine dedicated to Lord Shanishwara. The temple holds immense spiritual 
+                        significance and has been a beacon of faith for generations.
+                    </p>
+                    <a href="/about" class="btn btn-outline" style="margin-top: var(--space-lg);" data-i18n="hero_explore_btn">Explore Temple</a>
+                </div>
+                <div class="welcome-image fade-in-right">
+                    <img src="/static/assets/gallery/temple-interior.png" alt="Shree Shanishwara Swamy Temple Interior & Deity" loading="lazy">
+                    <div class="welcome-image-caption">
+                        <span class="caption-title">Shree Shanishwara Swamy</span>
+                        <span class="caption-sub">ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Temple Information Section -->
+    <section class="section section-alt" id="temple-info-section">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Temple Information</h2>
+                <p>Official Temple Documents</p>
+            </div>
+            <div class="documents-grid">
+                <!-- Document Page 1 -->
+                <div class="document-card fade-in">
+                    <div class="document-header">
+                        <span class="document-badge">Official Document - Page 1</span>
+                        <h3 class="document-title">Temple Appeal &amp; Registration</h3>
+                    </div>
+                    <div class="document-preview-wrapper" onclick="openDocLightbox('/static/assets/documents/official_document_p1.jpg', 'Official Document - Page 1: Temple Appeal &amp; Registration')" title="Click to view full document">
+                        <img src="/static/assets/documents/official_document_p1.jpg" alt="Official Document - Page 1: Temple Appeal &amp; Registration" class="document-img" loading="lazy">
+                        <div class="document-overlay-hint">
+                            <span class="hint-icon">🔍</span>
+                            <span class="hint-text">Click to View Full Document</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Page 2 -->
+                <div class="document-card fade-in" style="transition-delay:0.1s;">
+                    <div class="document-header">
+                        <span class="document-badge">Official Document - Page 2</span>
+                        <h3 class="document-title">Committee &amp; Deities List</h3>
+                    </div>
+                    <div class="document-preview-wrapper" onclick="openDocLightbox('/static/assets/documents/official_document_p2.jpg', 'Official Document - Page 2: Committee &amp; Deities List')" title="Click to view full document">
+                        <img src="/static/assets/documents/official_document_p2.jpg" alt="Official Document - Page 2: Committee &amp; Deities List" class="document-img" loading="lazy">
+                        <div class="document-overlay-hint">
+                            <span class="hint-icon">🔍</span>
+                            <span class="hint-text">Click to View Full Document</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Lightbox Modal -->
+    <div id="document-lightbox" class="doc-lightbox" onclick="closeDocLightbox(event)">
+        <div class="doc-lightbox-content" onclick="event.stopPropagation()">
+            <div class="doc-lightbox-header">
+                <span id="doc-lightbox-title" class="doc-lightbox-title">Official Document</span>
+                <button type="button" class="doc-lightbox-close" onclick="closeDocLightbox()" aria-label="Close document preview">&times;</button>
+            </div>
+            <div class="doc-lightbox-body">
+                <img id="doc-lightbox-img" src="" alt="Enlarged Document" class="doc-lightbox-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <section class="section" id="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-number" data-target="50" data-suffix="+">0</div>
+                    <div class="stat-label" data-i18n="stat_legacy">Years of Legacy</div>
+                </div>
+                <div class="stat-card fade-in" style="transition-delay:0.1s;">
+                    <div class="stat-number" data-target="10" data-suffix="K+">0</div>
+                    <div class="stat-label" data-i18n="stat_devotees">Monthly Devotees</div>
+                </div>
+                <div class="stat-card fade-in" style="transition-delay:0.2s;">
+                    <div class="stat-number" data-target="250" data-suffix="+">0</div>
+                    <div class="stat-label" data-i18n="stat_annadanam">Daily Annadanam Served</div>
+                </div>
+                <div class="stat-card fade-in" style="transition-delay:0.3s;">
+                    <div class="stat-number" data-target="15" data-suffix="+">0</div>
+                    <div class="stat-label" data-i18n="stat_festivals">Annual Festivals</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Festivals -->
+    <section class="section section-alt" id="festivals-section">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2 data-i18n="home_festivals_title">Upcoming Festivals</h2>
+                <p data-i18n="home_festivals_subtitle">Join us in celebration</p>
+            </div>
+            <div class="festivals-grid" id="festivals-grid">
+                <!-- Populated by JS -->
+                <div class="loading-spinner"></div>
+            </div>
+            <div style="text-align:center;margin-top:var(--space-2xl);">
+                <a href="/timings#festivals" class="btn btn-outline" data-i18n="home_view_all">View All</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donate CTA -->
+    <section class="donate-cta" id="donate-cta">
+        <div class="container fade-in">
+            <h2 data-i18n="home_donate_title">Support the Temple</h2>
+            <p data-i18n="home_donate_desc">Every donation supports daily poojas, Annadanam, temple maintenance, and community welfare.</p>
+            <a href="/donate" class="btn btn-gold btn-lg" data-i18n="hero_donate_btn">🙏 Donate Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        // Load festivals for home page
+        async function loadHomeFestivals() {
+            try {
+                const festivals = await apiFetch('/festivals');
+                const grid = document.getElementById('festivals-grid');
+                const lang = getCurrentLang();
+
+                if (festivals && festivals.length > 0) {
+                    grid.innerHTML = festivals.slice(0, 3).map(f => `
+                        <div class="card fade-in">
+                            <div class="card-image-wrapper">
+                                <div style="height:200px;background:linear-gradient(135deg, ${getGradientForFestival(f.name_en)});display:flex;align-items:center;justify-content:center;">
+                                    <span style="font-size:3rem;">${getFestivalEmoji(f.name_en)}</span>
+                                </div>
+                                ${f.date ? `<span class="card-badge">${f.date}</span>` : ''}
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">${lang === 'kn' ? f.name_kn : f.name_en}</h3>
+                                <p class="card-text">${lang === 'kn' ? f.description_kn : f.description_en}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                    initScrollEffects();
+                } else {
+                    grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);">No festivals found</p>';
+                }
+            } catch (err) {
+                console.error('Failed to load festivals:', err);
+                document.getElementById('festivals-grid').innerHTML = '<p style="text-align:center;color:var(--text-muted);">Unable to load festivals</p>';
+            }
+        }
+
+        // Document Lightbox functions
+        function openDocLightbox(src, title) {
+            const lightbox = document.getElementById('document-lightbox');
+            const img = document.getElementById('doc-lightbox-img');
+            const titleEl = document.getElementById('doc-lightbox-title');
+            if (lightbox && img) {
+                img.src = src;
+                if (titleEl) titleEl.textContent = title || 'Official Temple Document';
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeDocLightbox(e) {
+            if (!e || e.target.id === 'document-lightbox' || e.target.classList.contains('doc-lightbox-close')) {
+                const lightbox = document.getElementById('document-lightbox');
+                if (lightbox) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const lightbox = document.getElementById('document-lightbox');
+                if (lightbox && lightbox.classList.contains('active')) {
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Load temple timings if present on page
+        async function loadTempleTimings() {
+            try {
+                const morningEl = document.getElementById('morning-time');
+                const eveningEl = document.getElementById('evening-time');
+                if (!morningEl || !eveningEl) return;
+                const temple = await apiFetch('/temple');
+                if (temple && temple.timings) {
+                    morningEl.textContent = `${temple.timings.morning_open} – ${temple.timings.morning_close}`;
+                    eveningEl.textContent = `${temple.timings.evening_open} – ${temple.timings.evening_close}`;
+                }
+            } catch (err) {
+                console.error('Failed to load timings:', err);
+            }
+        }
+
+        function getGradientForFestival(name) {
+            const gradients = {
+                'Shani Amavasya': '#1a1a2e, #16213e',
+                'Deepavali': '#ff6b35, #f7c59f',
+                'Ugadi': '#2d6a4f, #74c69d',
+                'Makara Sankranti': '#e76f51, #f4a261',
+                'Annual Jatre': '#800020, #c0392b',
+                'Special Poojas': '#b8860b, #ffd700',
+            };
+            return gradients[name] || '#5D4037, #8D6E63';
+        }
+
+        function getFestivalEmoji(name) {
+            const emojis = {
+                'Shani Amavasya': '🌑',
+                'Deepavali': '🪔',
+                'Ugadi': '🌿',
+                'Makara Sankranti': '☀️',
+                'Annual Jatre': '🎉',
+                'Special Poojas': '🙏',
+            };
+            return emojis[name] || '🕉️';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHomeFestivals();
+            loadTempleTimings();
+        });
+    </script>
+</body>
+</html>

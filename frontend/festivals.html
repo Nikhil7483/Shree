@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festivals | Shree Shanishwara Swamy Temple</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <style>
+        .festivals-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: var(--space-xl); }
+        .festival-card { background: white; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); transition: all var(--transition-normal); }
+        .festival-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+        .festival-banner { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .festival-banner .emoji { font-size: 4rem; }
+        .festival-banner .date-badge { position: absolute; top: var(--space-md); right: var(--space-md); background: rgba(255,255,255,0.95); color: var(--maroon); padding: 6px 14px; border-radius: var(--radius-xl); font-size: 0.8rem; font-weight: 700; box-shadow: var(--shadow-sm); }
+        .festival-body { padding: var(--space-xl); }
+        .festival-body h3 { font-size: 1.2rem; margin-bottom: var(--space-sm); color: var(--dark-brown); }
+        .festival-body p { color: var(--text-muted); line-height: 1.7; font-size: 0.92rem; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="page-header">
+        <div class="container">
+            <h1 data-i18n="festivals_title">Temple Festivals</h1>
+            <p data-i18n="festivals_subtitle">Celebrations of faith and devotion</p>
+        </div>
+    </div>
+    <section class="section">
+        <div class="container">
+            <div class="festivals-container" id="festivals-list"><div class="loading-spinner"></div></div>
+        </div>
+    </section>
+    <div id="footer-container"></div>
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script>
+        const gradients = ['#1a1a2e,#16213e','#ff6b35,#f7c59f','#2d6a4f,#74c69d','#e76f51,#f4a261','#800020,#c0392b','#b8860b,#ffd700','#264653,#2a9d8f'];
+        const emojis = {'Shani Amavasya':'🌑','Deepavali':'🪔','Ugadi':'🌿','Makara Sankranti':'☀️','Annual Jatre':'🎉','Special Poojas':'🙏'};
+        async function loadFestivals() {
+            try {
+                const festivals = await apiFetch('/festivals');
+                const lang = getCurrentLang();
+                const container = document.getElementById('festivals-list');
+                container.innerHTML = festivals.map((f, i) => `
+                    <div class="festival-card fade-in" style="transition-delay:${i*0.08}s;">
+                        <div class="festival-banner" style="background:linear-gradient(135deg,${gradients[i%gradients.length]});">
+                            <span class="emoji">${emojis[f.name_en]||'🕉️'}</span>
+                            ${f.date ? `<span class="date-badge">${f.date}</span>` : ''}
+                        </div>
+                        <div class="festival-body">
+                            <h3>${lang==='kn'?f.name_kn:f.name_en}</h3>
+                            <p>${lang==='kn'?f.description_kn:f.description_en}</p>
+                        </div>
+                    </div>
+                `).join('');
+                initScrollEffects();
+            } catch(e) { console.error(e); }
+        }
+        document.addEventListener('DOMContentLoaded', loadFestivals);
+    </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Official Information | Admin Portal</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <style>
+        .admin-section-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .admin-section-card h3 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 2px solid var(--cream);
+            padding-bottom: 0.75rem;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2col { grid-template-columns: 1fr; }
+        }
+
+        .toggle-switch-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--cream);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-medium);
+        }
+
+        .toggle-switch-wrap input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-box {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            max-width: 560px;
+            width: 100%;
+            padding: 2rem;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h4 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .sticky-action-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(253, 251, 245, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-medium);
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar"></aside>
+        
+        <main class="admin-main">
+            <div class="sticky-action-bar">
+                <div>
+                    <h1 class="admin-page-title" style="margin:0;">📜 Official Temple Information</h1>
+                    <p style="font-size:0.88rem; color:var(--text-muted); margin:0;">
+                        Manage official registration, committee list, parivara deities, donation notices, and documents
+                    </p>
+                </div>
+                <div style="display:flex; gap:0.75rem;">
+                    <a href="/temple-info" target="_blank" class="btn btn-outline btn-sm">👁️ View Public Page</a>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="saveOfficialTempleData(event)">💾 Save All Changes</button>
+                </div>
+            </div>
+
+            <!-- Form starts -->
+            <form onsubmit="saveOfficialTempleData(event)">
+
+                <!-- 1. Basic Temple Info & Registration -->
+                <div class="admin-section-card">
+                    <h3>🏛️ Basic Temple Information & Registration</h3>
+                    
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Temple Heading (ಕನ್ನಡ)</label>
+                            <input id="info-heading-kn" class="form-input" style="font-family:var(--font-kannada); font-weight:600;" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Temple Heading (English)</label>
+                            <input id="info-heading-en" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Registration Number</label>
+                            <input id="info-reg-no" class="form-input" placeholder="DRSH/SOR/637/2023-24" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dharmadarshi Phone Numbers (comma/slash separated)</label>
+                            <input id="info-dharmadarshi-phone" class="form-input" placeholder="9841943965 / 9741943965 / 9482643965">
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Address (ಕನ್ನಡ)</label>
+                            <textarea id="info-address-kn" class="form-input" rows="2" style="font-family:var(--font-kannada);"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address (English)</label>
+                            <textarea id="info-address-en" class="form-input" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Dharmadarshi Name (ಕನ್ನಡ)</label>
+                            <input id="info-dharmadarshi-kn" class="form-input" style="font-family:var(--font-kannada);">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dharmadarshi Name (English)</label>
+                            <input id="info-dharmadarshi-en" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Manager Name (ಕನ್ನಡ)</label>
+                            <input id="info-manager-kn" class="form-input" style="font-family:var(--font-kannada);">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Manager Name (English)</label>
+                            <input id="info-manager-en" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="toggle-switch-wrap">
+                        <input type="checkbox" id="info-doc-public">
+                        <label for="info-doc-public" style="margin:0; cursor:pointer; font-weight:600; color:var(--primary);">
+                            Show Official Document Viewer Section on Public Website
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 2. Special Donation / Building Contribution Notice -->
+                <div class="admin-section-card">
+                    <h3>📜 Special Contribution & Marble Plaque Notice</h3>
+                    
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Minimum Amount</label>
+                            <input id="notice-min-amount" class="form-input" placeholder="10,000/-">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amount Text (ಕನ್ನಡ)</label>
+                            <input id="notice-amount-kn" class="form-input" placeholder="10,000/- (ಹತ್ತು ಸಾವಿರ) ಮೇಲೆ" style="font-family:var(--font-kannada);">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Amount Text (English)</label>
+                        <input id="notice-amount-en" class="form-input" placeholder="₹10,000/- (Ten Thousand) and above">
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Purpose / Contribution Title (ಕನ್ನಡ)</label>
+                            <input id="notice-purpose-kn" class="form-input" placeholder="ದೇವಸ್ಥಾನ ಕಟ್ಟಡಕ್ಕೆ ಧನಸಹಾಯ" style="font-family:var(--font-kannada);">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Purpose / Contribution Title (English)</label>
+                            <input id="notice-purpose-en" class="form-input" placeholder="Contribution for Temple Building Construction">
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Condition / Plaque Honor (ಕನ್ನಡ)</label>
+                            <textarea id="notice-condition-kn" class="form-input" rows="2" style="font-family:var(--font-kannada);"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Condition / Plaque Honor (English)</label>
+                            <textarea id="notice-condition-en" class="form-input" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="form-group">
+                            <label class="form-label">Blessing & Prayers Benefit (ಕನ್ನಡ)</label>
+                            <textarea id="notice-benefit-kn" class="form-input" rows="3" style="font-family:var(--font-kannada);"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Blessing & Prayers Benefit (English)</label>
+                            <textarea id="notice-benefit-en" class="form-input" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Parivara Deities Construction -->
+                <div class="admin-section-card">
+                    <h3>🛕 Parivara Deities Construction</h3>
+                    
+                    <div style="background:var(--cream); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem; border:1px solid var(--border-medium);">
+                        <h4 style="margin-bottom:0.75rem; color:var(--primary); font-size:1rem;">Add New Deity</h4>
+                        <div style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:flex-end;">
+                            <div style="flex:1; min-width:200px;">
+                                <label class="form-label" style="font-size:0.8rem;">Name (ಕನ್ನಡ)</label>
+                                <input id="new-deity-kn" class="form-input" placeholder="ಶ್ರೀ ನಾಗಪರಿವಾರ ದೇವರ ದೇವಸ್ಥಾನ ನಿರ್ಮಾಣ ಸಂಪೂರ್ಣ" style="font-family:var(--font-kannada);">
+                            </div>
+                            <div style="flex:1; min-width:200px;">
+                                <label class="form-label" style="font-size:0.8rem;">Name (English)</label>
+                                <input id="new-deity-en" class="form-input" placeholder="Shree Nagaparivara Devara Temple Construction Completed">
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addDeity(event)">+ Add Deity</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;">Sl No</th>
+                                    <th>Name (Kannada)</th>
+                                    <th>Name (English)</th>
+                                    <th>Status</th>
+                                    <th style="width:80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deities-table-body">
+                                <tr><td colspan="5" style="text-align:center;">Loading deities...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. Committee Members & Donors Management -->
+                <div class="admin-section-card">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+                        <h3 style="margin:0; border:none; padding:0;">👥 Committee Members & Prominent Donors</h3>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="openAddMemberModal()">+ Add Member</button>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;">Sl No</th>
+                                    <th>Name (Kannada)</th>
+                                    <th>Name (English)</th>
+                                    <th>Designation</th>
+                                    <th>Location</th>
+                                    <th style="width:130px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="committee-table-body">
+                                <tr><td colspan="6" style="text-align:center;">Loading members...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 5. Submit Changes -->
+                <div style="text-align:center; margin-bottom: 3rem;">
+                    <button type="submit" class="btn btn-primary btn-lg" style="padding: 1rem 3rem; font-size:1.1rem;">
+                        💾 Save All Changes (ಉಳಿಸಿ)
+                    </button>
+                </div>
+            </form>
+
+            <!-- 6. Upload / Replace Document File -->
+            <div class="admin-section-card">
+                <h3>📁 Upload / Replace Official Document File</h3>
+                <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+                    Upload certified scan images (Page 1 or Page 2) or the complete official PDF document.
+                </p>
+
+                <form onsubmit="uploadOfficialDocumentFile(event)" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end;">
+                    <div style="min-width:200px;">
+                        <label class="form-label">Document Type</label>
+                        <select id="doc-upload-type" class="form-input">
+                            <option value="page1">Page 1 Image (Appeal & Reg)</option>
+                            <option value="image">Page 2 Image (Committee & Deities)</option>
+                            <option value="pdf">Complete PDF Document</option>
+                        </select>
+                    </div>
+                    <div style="flex:1; min-width:240px;">
+                        <label class="form-label">Select File (.jpg, .png, .pdf)</label>
+                        <input type="file" id="doc-upload-file" class="form-input" accept=".jpg,.jpeg,.png,.pdf" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">📤 Upload Document</button>
+                </form>
+            </div>
+
+            <!-- 7. Audit Logs -->
+            <div class="admin-section-card">
+                <h3>📜 Update Audit Logs</h3>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width:180px;">Date & Time</th>
+                                <th>Admin User</th>
+                                <th>Action</th>
+                                <th>Changes Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-logs-body">
+                            <tr><td colspan="4" style="text-align:center;">Loading audit logs...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add / Edit Member Modal -->
+    <div class="modal-overlay" id="member-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h4 id="modal-member-title">Add Committee Member</h4>
+                <button type="button" class="modal-close" onclick="closeMemberModal()">✕</button>
+            </div>
+            <form onsubmit="saveMemberFromModal(event)">
+                <input type="hidden" id="member-edit-sl">
+                
+                <div class="form-group">
+                    <label class="form-label">Serial Number (Sl. No.)</label>
+                    <input type="number" id="member-sl-no" class="form-input" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Name (ಕನ್ನಡ) *</label>
+                    <input type="text" id="member-name-kn" class="form-input" style="font-family:var(--font-kannada);" required placeholder="ಉದಾ: ಡಿ.ಹೆಚ್. ಶಂಕರಮೂರ್ತಿ">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Name (English)</label>
+                    <input type="text" id="member-name-en" class="form-input" placeholder="e.g. D.H. Shankaramurthy">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Designation / Role (ಕನ್ನಡ)</label>
+                    <input type="text" id="member-desig-kn" class="form-input" style="font-family:var(--font-kannada);" placeholder="ಉದಾ: ಮಾಜಿ ಸಭಾಪತಿಗಳು">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Designation / Role (English)</label>
+                    <input type="text" id="member-desig-en" class="form-input" placeholder="e.g. Former Chairman">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location / City (ಕನ್ನಡ)</label>
+                    <input type="text" id="member-loc-kn" class="form-input" style="font-family:var(--font-kannada);" placeholder="ಉದಾ: ಶಿವಮೊಗ್ಗ">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Location / City (English)</label>
+                    <input type="text" id="member-loc-en" class="form-input" placeholder="e.g. Shimoga">
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="closeMemberModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadAdminOfficialInfo);
+    </script>
+</body>
+</html>

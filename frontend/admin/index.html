@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Shree Shanishwara Swamy Temple</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar"></aside>
+        <main class="admin-main">
+            <h1 class="admin-page-title">📊 Dashboard</h1>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="stat-total-amount">₹0</div>
+                    <div class="stat-label">Total Donations</div>
+                    <div class="stat-sub" id="stat-total-count">0 donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="stat-today-amount">₹0</div>
+                    <div class="stat-label">Today's Donations</div>
+                    <div class="stat-sub" id="stat-today-count">0 donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📆</div>
+                    <div class="stat-value" id="stat-monthly-amount">₹0</div>
+                    <div class="stat-label">Monthly Donations</div>
+                    <div class="stat-sub" id="stat-monthly-count">0 donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="stat-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+            </div>
+            <h3 style="margin-bottom:var(--space-lg);">Recent Donations</h3>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead><tr><th>Donor</th><th>Amount</th><th>Type</th><th>Receipt</th><th>Date</th></tr></thead>
+                    <tbody id="recent-donations-body"><tr><td colspan="5"><div class="loading-spinner"></div></td></tr></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/i18n.js"></script>
+    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/admin.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', loadAdminDashboard);</script>
+</body>
+</html>

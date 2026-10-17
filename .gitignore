@@ -1,0 +1,20 @@
+# Environments and secrets
+.env
+backend/.env
+backend/venv/
+
+# Embedded MongoDB server and database data
+backend/mongodb/
+backend/mongod.log
+
+# Large backup archives
+*.zip
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary IDE and OS files
+.DS_Store
+Thumbs.db

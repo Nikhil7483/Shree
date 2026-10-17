@@ -8,7 +8,11 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 razorpay==1.4.2
 reportlab==4.2.2
+uharfbuzz>=0.50.0
+freetype-py>=2.4.0
+pypdf>=5.0.0
 python-multipart==0.0.9
 python-dotenv==1.0.1
 aiofiles==24.1.0
 setuptools<70
+

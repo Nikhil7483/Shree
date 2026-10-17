@@ -24,8 +24,20 @@ from app.domain.donations.router import router as donations_router
 from app.domain.users.router import router as users_router
 from app.domain.admin.router import router as admin_router
 
-# Path to the frontend directory
+# Path to frontend and pages directories
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
+PAGES_DIR = os.path.join(FRONTEND_DIR, "pages")
+
+
+def get_page_path(*path_parts: str) -> str:
+    """
+    Locate a frontend HTML file with backward compatibility:
+    Checks frontend/pages/ first, falling back to frontend/.
+    """
+    candidate_in_pages = os.path.join(PAGES_DIR, *path_parts)
+    if os.path.exists(candidate_in_pages):
+        return candidate_in_pages
+    return os.path.join(FRONTEND_DIR, *path_parts)
 
 
 @asynccontextmanager
@@ -86,32 +98,32 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 @app.get("/")
 async def serve_home():
     """Serve the home page."""
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+    return FileResponse(get_page_path("index.html"))
 
 
 @app.get("/about")
 async def serve_about():
-    return FileResponse(os.path.join(FRONTEND_DIR, "about.html"))
+    return FileResponse(get_page_path("about.html"))
 
 
 @app.get("/gallery")
 async def serve_gallery():
-    return FileResponse(os.path.join(FRONTEND_DIR, "gallery.html"))
+    return FileResponse(get_page_path("gallery.html"))
 
 
 @app.get("/timings")
 async def serve_timings():
-    return FileResponse(os.path.join(FRONTEND_DIR, "timings.html"))
+    return FileResponse(get_page_path("timings.html"))
 
 
 @app.get("/festivals")
 async def serve_festivals():
-    return FileResponse(os.path.join(FRONTEND_DIR, "festivals.html"))
+    return FileResponse(get_page_path("festivals.html"))
 
 
 @app.get("/donate")
 async def serve_donate():
-    return FileResponse(os.path.join(FRONTEND_DIR, "donate.html"))
+    return FileResponse(get_page_path("donate.html"))
 
 
 @app.get("/donations")
@@ -121,56 +133,57 @@ async def serve_donations_redirect():
 
 @app.get("/login")
 async def serve_login():
-    return FileResponse(os.path.join(FRONTEND_DIR, "login.html"))
+    return FileResponse(get_page_path("login.html"))
 
 
 @app.get("/register")
 async def serve_register():
-    return FileResponse(os.path.join(FRONTEND_DIR, "register.html"))
+    return FileResponse(get_page_path("register.html"))
 
 
 @app.get("/dashboard")
 async def serve_dashboard():
-    return FileResponse(os.path.join(FRONTEND_DIR, "dashboard.html"))
+    return FileResponse(get_page_path("dashboard.html"))
 
 
 @app.get("/contact")
 async def serve_contact():
-    return FileResponse(os.path.join(FRONTEND_DIR, "contact.html"))
+    return FileResponse(get_page_path("contact.html"))
 
 
 @app.get("/temple-info")
 async def serve_temple_info():
-    return FileResponse(os.path.join(FRONTEND_DIR, "temple-info.html"))
+    return FileResponse(get_page_path("temple-info.html"))
 
 
 # Admin pages
 @app.get("/admin")
 async def serve_admin_dashboard():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "index.html"))
+    return FileResponse(get_page_path("admin", "index.html"))
 
 
 @app.get("/admin/temple")
 async def serve_admin_temple():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "temple.html"))
+    return FileResponse(get_page_path("admin", "temple.html"))
 
 
 @app.get("/admin/temple-info")
 async def serve_admin_temple_info():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "temple-info.html"))
+    return FileResponse(get_page_path("admin", "temple-info.html"))
 
 
 @app.get("/admin/donations")
 async def serve_admin_donations():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "donations.html"))
+    return FileResponse(get_page_path("admin", "donations.html"))
 
 
 @app.get("/admin/users")
 async def serve_admin_users():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "users.html"))
+    return FileResponse(get_page_path("admin", "users.html"))
 
 
 @app.get("/admin/festivals")
 async def serve_admin_festivals():
-    return FileResponse(os.path.join(FRONTEND_DIR, "admin", "festivals.html"))
+    return FileResponse(get_page_path("admin", "festivals.html"))
+
 

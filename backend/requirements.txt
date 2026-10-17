@@ -1,18 +1,34 @@
+# Core Web Framework
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
+aiofiles==24.1.0
+python-multipart==0.0.9
+
+# Database & ODM (MongoDB)
 motor==3.6.0
 beanie==1.26.0
 pymongo>=4.7,<4.10
+
+# Configuration & Environment
 pydantic-settings==2.4.0
+python-dotenv==1.0.1
+
+# Security & Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
+
+# Payment Gateway
 razorpay==1.4.2
+
+# PDF Receipt Generation & Unicode Kannada Typography
 reportlab==4.2.2
 uharfbuzz>=0.50.0
 freetype-py>=2.4.0
 pypdf>=5.0.0
-python-multipart==0.0.9
-python-dotenv==1.0.1
-aiofiles==24.1.0
+
+# Build & Compatibility
 setuptools<70
 
+# Testing & Quality Assurance
+httpx>=0.28.0
+pytest>=8.0.0

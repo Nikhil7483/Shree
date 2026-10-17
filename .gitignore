@@ -1,21 +1,68 @@
-# Environments and secrets
+# ==============================================================================
+# Shree Shanishwara Swamy Temple Website — Git Ignore
+# ==============================================================================
+
+# Environment files and credentials (NEVER commit secrets!)
 .env
+.env.local
+.env.*.local
 backend/.env
+backend/.env.*.local
+!.env.example
+!backend/.env.example
+
+# Python virtual environment & runtime artifacts
+venv/
 backend/venv/
-
-# Embedded MongoDB server and database data
-backend/mongodb/
-backend/mongod.log
-
-# Large backup archives
-*.zip
-_archive_pre_cleanup/
-
-# Python cache
+.venv/
+ENV/
+env/
 __pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
 *.py[cod]
 *$py.class
+*.pyd
 
-# Temporary IDE and OS files
+# Testing & Coverage
+.pytest_cache/
+*/.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Test output artifacts (generated sample receipts & images)
+receipt_*.pdf
+receipt_*.png
+receipt_*.txt
+test_receipt_*.pdf
+test_receipt_*.png
+donations_admin_report.*
+test_donations_report.*
+
+# Embedded MongoDB binaries and database data
+backend/mongodb/
+backend/mongod.log
+*.log
+
+# Large backup archives & historical backups
+*.zip
+*.tar.gz
+*.rar
+_archive_pre_cleanup/
+
+# Dynamic User Uploads (keep directory structure with .gitkeep)
+frontend/assets/uploads/*
+!frontend/assets/uploads/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Operating System & IDE temp files
 .DS_Store
 Thumbs.db
+ehthumbs.db
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

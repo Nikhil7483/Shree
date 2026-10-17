@@ -9,6 +9,7 @@ backend/mongod.log
 
 # Large backup archives
 *.zip
+_archive_pre_cleanup/
 
 # Python cache
 __pycache__/

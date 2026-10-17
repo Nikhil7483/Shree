@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Donations | Admin</title>
+    <title>Manage Donations & UPI Approvals | Admin</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/components.css">
     <link rel="stylesheet" href="/static/css/admin.css">
@@ -13,45 +14,71 @@
     <div class="admin-layout">
         <aside class="admin-sidebar" id="admin-sidebar"></aside>
         <main class="admin-main">
-            <h1 class="admin-page-title">💰 Manage Donations</h1>
-            <div class="admin-toolbar">
-                <input type="text" class="admin-search" placeholder="Search donations..." oninput="searchDonations(this.value)">
-                <button class="btn btn-primary btn-sm" onclick="exportDonationsPDF()">📄 Export PDF</button>
-                <button class="btn btn-outline btn-sm" onclick="exportDonationsCSV()">📥 Export CSV</button>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                <div>
+                    <h1 class="admin-page-title" style="margin-bottom:4px;">💰 Manage Donations & UPI Approvals</h1>
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">
+                        Verify devotee UPI / bank transfer intimations against Canara Bank credit, approve transactions, and issue official receipts.
+                    </p>
+                </div>
+                <div style="display:flex;gap:10px;">
+                    <button class="btn btn-primary btn-sm" onclick="exportDonationsPDF()">📄 Export PDF Report</button>
+                    <button class="btn btn-outline btn-sm" onclick="exportDonationsCSV()">📥 Export CSV</button>
+                </div>
             </div>
+
+            <!-- Filter Tabs -->
+            <div class="admin-tabs" role="tablist">
+                <button type="button" class="admin-tab-btn active" data-filter="all" onclick="setDonationFilter('all')">
+                    <span>All Donations</span>
+                    <span class="badge-count" id="count-all">0</span>
+                </button>
+                <button type="button" class="admin-tab-btn" data-filter="pending_verification" onclick="setDonationFilter('pending_verification')">
+                    <span>⏳ Pending Approvals</span>
+                    <span class="badge-count" id="count-pending" style="background:#E65100;">0</span>
+                </button>
+                <button type="button" class="admin-tab-btn" data-filter="completed" onclick="setDonationFilter('completed')">
+                    <span>✅ Approved / Completed</span>
+                    <span class="badge-count" id="count-completed" style="background:#2E7D32;">0</span>
+                </button>
+                <button type="button" class="admin-tab-btn" data-filter="rejected" onclick="setDonationFilter('rejected')">
+                    <span>❌ Rejected</span>
+                    <span class="badge-count" id="count-rejected" style="background:#C62828;">0</span>
+                </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="admin-toolbar">
+                <input type="text" class="admin-search" placeholder="🔍 Search by donor name, phone, UTR reference, receipt..." oninput="searchDonations(this.value)">
+            </div>
+
+            <!-- Donations Table -->
             <div class="table-wrapper">
                 <table class="data-table">
-                    <thead><tr><th>Donor</th><th>Email</th><th>Amount</th><th>Type</th><th>Status</th><th>Receipt</th><th>Date</th></tr></thead>
-                    <tbody id="all-donations-body"><tr><td colspan="7"><div class="loading-spinner"></div></td></tr></tbody>
+                    <thead>
+                        <tr>
+                            <th>Devotee / Contact</th>
+                            <th>Amount</th>
+                            <th>UPI Ref / UTR</th>
+                            <th>Purpose</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-donations-body">
+                        <tr><td colspan="7" style="text-align:center;padding:40px;"><div class="loading-spinner"></div></td></tr>
+                    </tbody>
                 </table>
             </div>
         </main>
     </div>
+
     <script src="/static/js/i18n.js"></script>
-    <script src="/static/js/app.js?v=2.1"></script>
+    <script src="/static/js/app.js?v=2.2"></script>
     <script src="/static/js/admin.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', loadAdminDonations);
-        function searchDonations(query) {
-            const rows = document.querySelectorAll('#all-donations-body tr');
-            rows.forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(query.toLowerCase()) ? '' : 'none';
-            });
-        }
-        function exportDonationsCSV() {
-            const table = document.querySelector('.data-table');
-            let csv = [];
-            table.querySelectorAll('tr').forEach(row => {
-                const cols = [];
-                row.querySelectorAll('th, td').forEach(col => cols.push('"' + col.textContent.trim() + '"'));
-                csv.push(cols.join(','));
-            });
-            const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'donations_export.csv';
-            a.click();
-        }
     </script>
 </body>
 </html>

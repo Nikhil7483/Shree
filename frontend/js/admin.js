@@ -54,6 +54,19 @@ function checkAdminAuth() {
 }
 
 /**
+ * Helper to escape HTML characters safely.
+ */
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+/**
  * Load admin dashboard stats.
  */
 async function loadAdminDashboard() {
@@ -71,6 +84,13 @@ async function loadAdminDashboard() {
         document.getElementById('stat-monthly-count').textContent = `${stats.monthly_donations.count} donations`;
         document.getElementById('stat-users').textContent = stats.total_users;
 
+        if (stats.pending_donations) {
+            const pCountElem = document.getElementById('stat-pending-count');
+            const pAmtElem = document.getElementById('stat-pending-amount');
+            if (pCountElem) pCountElem.textContent = `${stats.pending_donations.count} awaiting review →`;
+            if (pAmtElem) pAmtElem.textContent = formatINR(stats.pending_donations.amount);
+        }
+
         // Recent donations table
         const tbody = document.getElementById('recent-donations-body');
         if (stats.recent_donations.length === 0) {
@@ -78,9 +98,9 @@ async function loadAdminDashboard() {
         } else {
             tbody.innerHTML = stats.recent_donations.map(d => `
                 <tr>
-                    <td>${d.donor_name}</td>
+                    <td>${escapeHtml(d.donor_name)}</td>
                     <td style="font-weight:700;color:var(--saffron);">${formatINR(d.amount)}</td>
-                    <td>${d.donation_type}</td>
+                    <td>${escapeHtml(d.donation_type)}</td>
                     <td>
                         <button class="receipt-badge-btn" onclick="downloadReceiptPdf('${d.id}', '${d.receipt_number}')" title="Download Official Receipt PDF">
                             📄 ${d.receipt_number || 'Receipt'}
@@ -96,8 +116,12 @@ async function loadAdminDashboard() {
     }
 }
 
+// In-memory cache and filter state for admin donations
+let allDonationsCache = [];
+let currentDonationFilter = 'all';
+
 /**
- * Load all donations for admin.
+ * Load all donations for admin with filter tabs and approve/reject actions.
  */
 async function loadAdminDonations() {
     if (!checkAdminAuth()) return;
@@ -105,28 +129,288 @@ async function loadAdminDonations() {
 
     try {
         const donations = await apiFetch('/donate/all');
-        const tbody = document.getElementById('all-donations-body');
-        if (donations.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No donations</td></tr>';
-        } else {
-            tbody.innerHTML = donations.map(d => `
-                <tr>
-                    <td>${d.donor_name}</td>
-                    <td>${d.donor_email || '—'}</td>
-                    <td style="font-weight:700;">${formatINR(d.amount)}</td>
-                    <td>${d.donation_type}</td>
-                    <td><span class="status-badge ${d.status}">${d.status}</span></td>
-                    <td>
-                        <button class="receipt-badge-btn" onclick="downloadReceiptPdf('${d.id}', '${d.receipt_number}')" title="Download Official Receipt PDF">
-                            📄 ${d.receipt_number || 'Receipt'}
-                        </button>
-                    </td>
-                    <td>${formatDate(d.created_at)}</td>
-                </tr>
-            `).join('');
+        allDonationsCache = donations || [];
+
+        // Check query param for default filter
+        const urlParams = new URLSearchParams(window.location.search);
+        const filterParam = urlParams.get('filter');
+        if (filterParam && ['all', 'pending_verification', 'completed', 'rejected'].includes(filterParam)) {
+            currentDonationFilter = filterParam;
         }
-    } catch (err) { console.error(err); }
+
+        updateDonationFilterTabs();
+        renderDonationsTable();
+    } catch (err) {
+        console.error('Failed to load donations:', err);
+        showToast('Failed to load donations list', 'error');
+    }
 }
+
+/**
+ * Update counters on the filter tabs.
+ */
+function updateDonationFilterTabs() {
+    const totalCount = allDonationsCache.length;
+    const pendingCount = allDonationsCache.filter(d => d.status === 'pending_verification' || d.status === 'pending').length;
+    const completedCount = allDonationsCache.filter(d => d.status === 'completed').length;
+    const rejectedCount = allDonationsCache.filter(d => d.status === 'rejected').length;
+
+    const countAll = document.getElementById('count-all');
+    const countPending = document.getElementById('count-pending');
+    const countCompleted = document.getElementById('count-completed');
+    const countRejected = document.getElementById('count-rejected');
+
+    if (countAll) countAll.textContent = totalCount;
+    if (countPending) countPending.textContent = pendingCount;
+    if (countCompleted) countCompleted.textContent = completedCount;
+    if (countRejected) countRejected.textContent = rejectedCount;
+
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === currentDonationFilter) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+/**
+ * Switch filter between all, pending_verification, completed, and rejected.
+ */
+function setDonationFilter(filterType) {
+    currentDonationFilter = filterType;
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === filterType);
+    });
+    renderDonationsTable();
+}
+
+/**
+ * Search donations across multiple fields.
+ */
+function searchDonations(query) {
+    renderDonationsTable(query);
+}
+
+/**
+ * Render the donations table based on current filter and search query.
+ */
+function renderDonationsTable(searchQuery = '') {
+    const tbody = document.getElementById('all-donations-body');
+    if (!tbody) return;
+
+    const searchInput = document.querySelector('.admin-search');
+    const q = (searchQuery || (searchInput ? searchInput.value : '')).trim().toLowerCase();
+
+    let list = allDonationsCache.filter(d => {
+        if (currentDonationFilter === 'pending_verification') {
+            return d.status === 'pending_verification' || d.status === 'pending';
+        }
+        if (currentDonationFilter === 'completed') {
+            return d.status === 'completed';
+        }
+        if (currentDonationFilter === 'rejected') {
+            return d.status === 'rejected';
+        }
+        return true;
+    });
+
+    if (q) {
+        list = list.filter(d => 
+            (d.donor_name || '').toLowerCase().includes(q) ||
+            (d.donor_mobile || '').toLowerCase().includes(q) ||
+            (d.donor_email || '').toLowerCase().includes(q) ||
+            (d.utr_number || '').toLowerCase().includes(q) ||
+            (d.receipt_number || '').toLowerCase().includes(q) ||
+            (d.donation_type || '').toLowerCase().includes(q) ||
+            (d.status || '').toLowerCase().includes(q) ||
+            String(d.amount).includes(q)
+        );
+    }
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--text-muted);font-size:0.95rem;">
+            No donations found for this selection.
+        </td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = list.map(d => {
+        const isPending = d.status === 'pending_verification' || d.status === 'pending';
+        const isCompleted = d.status === 'completed';
+        const isRejected = d.status === 'rejected';
+
+        const statusBadge = isPending 
+            ? `<span class="status-badge pending_verification">⏳ Pending Review</span>`
+            : (isCompleted 
+                ? `<span class="status-badge completed">✅ Approved</span>`
+                : (isRejected 
+                    ? `<span class="status-badge rejected">❌ Rejected</span>`
+                    : `<span class="status-badge ${d.status}">${d.status}</span>`));
+
+        const utrDisplay = d.utr_number 
+            ? `<div style="display:inline-flex;align-items:center;gap:6px;">
+                 <span style="font-family:monospace;font-size:0.85rem;background:#F3F4F6;padding:2px 7px;border-radius:4px;border:1px solid #E5E7EB;font-weight:700;color:#1F2937;">${escapeHtml(d.utr_number)}</span>
+                 <button type="button" class="action-btn copy" onclick="copyUtrText('${escapeHtml(d.utr_number)}', this)" title="Copy UTR Reference" style="background:#E5E7EB;color:#374151;padding:2px 6px;">📋</button>
+               </div>`
+            : `<span style="color:var(--text-muted);font-size:0.85rem;">—</span>`;
+
+        let actionHtml = '';
+        if (isPending) {
+            actionHtml = `
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap;">
+                    <button class="btn-approve" onclick="approveDonation('${d.id}', '${escapeHtml(d.donor_name)}', ${d.amount}, '${escapeHtml(d.utr_number || '')}')" title="Verify bank credit & approve donation">
+                        <span>✓</span> Approve
+                    </button>
+                    <button class="btn-reject" onclick="rejectDonation('${d.id}', '${escapeHtml(d.donor_name)}')" title="Reject unverified reference">
+                        <span>✕</span> Reject
+                    </button>
+                </div>
+            `;
+        } else if (isCompleted) {
+            actionHtml = `
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button class="receipt-badge-btn" onclick="downloadReceiptPdf('${d.id}', '${d.receipt_number}')" title="Download Official Receipt PDF">
+                        📄 ${d.receipt_number || 'Receipt'}
+                    </button>
+                </div>
+            `;
+        } else {
+            actionHtml = `<span style="font-size:0.8rem;color:var(--error);font-weight:600;">Rejected</span>`;
+        }
+
+        return `
+            <tr id="donation-row-${d.id}">
+                <td>
+                    <strong>${escapeHtml(d.donor_name)}</strong>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">${escapeHtml(d.donor_mobile || d.donor_email || '—')}</div>
+                </td>
+                <td style="font-weight:800;color:var(--dark-green);font-size:1.05rem;">
+                    ${formatINR(d.amount)}
+                </td>
+                <td>${utrDisplay}</td>
+                <td><span style="font-size:0.85rem;text-transform:capitalize;">${escapeHtml(d.donation_type || 'General')}</span></td>
+                <td>${statusBadge}</td>
+                <td style="font-size:0.82rem;color:var(--text-muted);white-space:nowrap;">
+                    ${formatDateTime(d.created_at)}
+                </td>
+                <td>${actionHtml}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+/**
+ * Approve a pending donation by admin.
+ */
+async function approveDonation(id, donorName, amount, utr) {
+    const utrMsg = utr ? `\n• UTR Ref: ${utr}` : '';
+    const confirmed = confirm(
+        `Are you sure you want to APPROVE this payment?\n\n` +
+        `• Devotee: ${donorName}\n` +
+        `• Amount: ${formatINR(amount)}${utrMsg}\n\n` +
+        `This confirms that the bank transfer has been verified. The status will change to 'Completed' and an official receipt will be generated.`
+    );
+
+    if (!confirmed) return;
+
+    showToast(`Approving payment of ${formatINR(amount)} from ${donorName}...`, 'info');
+
+    try {
+        const result = await apiFetch(`/donate/approve/${id}`, {
+            method: 'POST',
+        });
+
+        showToast(`Payment approved successfully! Receipt #${result.receipt_number} generated. 🙏`, 'success');
+
+        // Refresh donations
+        await loadAdminDonations();
+    } catch (err) {
+        console.error('Approve donation error:', err);
+        showToast(err.message || 'Failed to approve donation', 'error');
+    }
+}
+
+/**
+ * Reject an unverified donation reference.
+ */
+async function rejectDonation(id, donorName) {
+    const confirmed = confirm(
+        `Are you sure you want to REJECT this payment reference for ${donorName}?\n\n` +
+        `This indicates that no matching credit was found in the temple bank account.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const result = await apiFetch(`/donate/reject/${id}`, {
+            method: 'POST',
+        });
+
+        showToast(`Payment reference for ${donorName} marked as rejected.`, 'info');
+        await loadAdminDonations();
+    } catch (err) {
+        console.error('Reject donation error:', err);
+        showToast(err.message || 'Failed to reject donation', 'error');
+    }
+}
+
+/**
+ * Copy UTR text to clipboard with visual feedback.
+ */
+function copyUtrText(text, btnElement) {
+    navigator.clipboard.writeText(text).then(() => {
+        const orig = btnElement.innerHTML;
+        btnElement.innerHTML = '✓';
+        btnElement.style.background = '#2E7D32';
+        btnElement.style.color = '#fff';
+        showToast('Copied UTR: ' + text, 'success');
+        setTimeout(() => {
+            btnElement.innerHTML = orig;
+            btnElement.style.background = '';
+            btnElement.style.color = '';
+        }, 1800);
+    }).catch(err => {
+        console.error('Failed to copy text:', err);
+    });
+}
+
+/**
+ * Export donations to CSV based on loaded records.
+ */
+function exportDonationsCSV() {
+    if (!allDonationsCache || allDonationsCache.length === 0) {
+        showToast('No donations available to export', 'warning');
+        return;
+    }
+
+    const headers = ['Receipt No', 'Donor Name', 'Mobile', 'Email', 'Amount (INR)', 'Type', 'Status', 'UTR Reference', 'Date'];
+    const rows = allDonationsCache.map(d => [
+        `"${(d.receipt_number || '').replace(/"/g, '""')}"`,
+        `"${(d.donor_name || '').replace(/"/g, '""')}"`,
+        `"${(d.donor_mobile || '').replace(/"/g, '""')}"`,
+        `"${(d.donor_email || '').replace(/"/g, '""')}"`,
+        d.amount,
+        `"${(d.donation_type || '').replace(/"/g, '""')}"`,
+        `"${(d.status || '').replace(/"/g, '""')}"`,
+        `"${(d.utr_number || '').replace(/"/g, '""')}"`,
+        `"${(d.created_at || '').replace(/"/g, '""')}"`,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const now = new Date().toISOString().slice(0, 10);
+    a.download = `shree_temple_donations_${now}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Donations CSV exported! 📥', 'success');
+}
+
 
 /**
  * Download a single donation receipt as a PDF.

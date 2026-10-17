@@ -2,6 +2,7 @@
 Shared FastAPI dependencies for authentication and authorization.
 """
 
+from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -10,6 +11,25 @@ from app.domain.users.models import User
 
 # HTTP Bearer token scheme
 security_scheme = HTTPBearer()
+optional_security_scheme = HTTPBearer(auto_error=False)
+
+
+async def get_optional_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(optional_security_scheme),
+) -> Optional[User]:
+    """
+    Extract authenticated User if Authorization header is present, else None.
+    """
+    if credentials is None:
+        return None
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    if payload is None:
+        return None
+    email: str = payload.get("sub")
+    if email is None:
+        return None
+    return await User.find_one(User.email == email)
 
 
 async def get_current_user(

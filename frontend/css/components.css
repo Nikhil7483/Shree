@@ -1216,6 +1216,18 @@ select.form-input {
     color: var(--warning);
 }
 
+.status-badge.pending_verification {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #F59E0B;
+}
+
+.status-badge.rejected {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #EF4444;
+}
+
 .status-badge.failed {
     background: rgba(198, 40, 40, 0.1);
     color: var(--error);

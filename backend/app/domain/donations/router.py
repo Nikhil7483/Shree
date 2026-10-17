@@ -2,13 +2,14 @@
 Donation API routes.
 """
 
-from fastapi import APIRouter, Depends
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from beanie import PydanticObjectId
 import io
 
 from datetime import datetime
-from app.core.dependencies import get_current_user, get_current_admin
+from app.core.dependencies import get_current_user, get_current_admin, get_optional_user
 from app.domain.donations.models import Donation
 from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest, UtrIntimationRequest
 from app.domain.donations.service import create_donation_order, verify_donation_payment, generate_receipt_number
@@ -19,16 +20,22 @@ router = APIRouter(prefix="/donate", tags=["Donations"])
 
 
 @router.post("/submit-utr")
-async def submit_utr(data: UtrIntimationRequest):
+async def submit_utr(
+    data: UtrIntimationRequest,
+    current_user: Optional[User] = Depends(get_optional_user),
+):
     """
     Record an offline direct UPI or bank transfer reference.
     Marks transaction as 'pending_verification' for administrator review.
     """
     receipt_number = generate_receipt_number()
+    user_id = str(current_user.id) if current_user else "direct_upi_donor"
+    donor_email = (current_user.email if current_user and not data.donor_email else (data.donor_email or "")).strip()
+
     donation = Donation(
-        user_id="direct_upi_donor",
+        user_id=user_id,
         donor_name=data.donor_name.strip(),
-        donor_email=data.donor_email.strip() if data.donor_email else "",
+        donor_email=donor_email,
         donor_mobile=data.donor_mobile.strip(),
         donor_address="",
         amount=int(data.amount * 100),  # rupees to paise
@@ -135,9 +142,83 @@ async def all_donations(
             "donor_email": d.donor_email,
             "donor_mobile": d.donor_mobile,
             "user_id": d.user_id,
+            "utr_number": (d.razorpay_payment_id or "").replace("UTR:", "").strip() if (d.razorpay_payment_id or "").startswith("UTR:") else (d.razorpay_payment_id or ""),
         }
         for d in donations
     ]
+
+
+@router.post("/approve/{donation_id}")
+async def approve_donation(
+    donation_id: str,
+    admin: User = Depends(get_current_admin),
+):
+    """
+    Approve a pending donation after administrator verification of bank credit.
+    Updates status to 'completed' and ensures receipt number exists.
+    """
+    try:
+        obj_id = PydanticObjectId(donation_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid donation ID format",
+        )
+
+    donation = await Donation.get(obj_id)
+    if not donation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Donation record not found",
+        )
+
+    donation.status = "completed"
+    if not donation.receipt_number:
+        donation.receipt_number = generate_receipt_number()
+    await donation.save()
+
+    return {
+        "status": "completed",
+        "donation_id": str(donation.id),
+        "receipt_number": donation.receipt_number,
+        "donor_name": donation.donor_name,
+        "amount": donation.amount // 100,
+        "message": f"Payment of ₹{donation.amount // 100} by {donation.donor_name} approved successfully.",
+    }
+
+
+@router.post("/reject/{donation_id}")
+async def reject_donation(
+    donation_id: str,
+    admin: User = Depends(get_current_admin),
+):
+    """
+    Reject an invalid or unverified donation reference.
+    """
+    try:
+        obj_id = PydanticObjectId(donation_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid donation ID format",
+        )
+
+    donation = await Donation.get(obj_id)
+    if not donation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Donation record not found",
+        )
+
+    donation.status = "rejected"
+    await donation.save()
+
+    return {
+        "status": "rejected",
+        "donation_id": str(donation.id),
+        "donor_name": donation.donor_name,
+        "message": f"Payment reference for {donation.donor_name} marked as rejected.",
+    }
 
 
 @router.get("/export-pdf")

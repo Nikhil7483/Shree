@@ -45,6 +45,13 @@ async def get_dashboard_stats() -> dict:
     # Total users
     total_users = await User.find(User.role == "user").count()
 
+    # Pending donations awaiting review/approval
+    pending_list = await Donation.find(
+        Donation.status == "pending_verification"
+    ).to_list()
+    pending_count = len(pending_list)
+    pending_amount = sum(d.amount for d in pending_list) // 100
+
     # Recent donations (last 10)
     recent = await Donation.find(
         Donation.status == "completed"
@@ -66,6 +73,7 @@ async def get_dashboard_stats() -> dict:
         "total_donations": {"count": total_count, "amount": total_amount},
         "today_donations": {"count": today_count, "amount": today_amount},
         "monthly_donations": {"count": monthly_count, "amount": monthly_amount},
+        "pending_donations": {"count": pending_count, "amount": pending_amount},
         "total_users": total_users,
         "recent_donations": recent_list,
     }

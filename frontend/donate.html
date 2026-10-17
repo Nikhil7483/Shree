@@ -752,9 +752,13 @@
             submitBtn.textContent = 'Submitting...';
 
             try {
+                const token = localStorage.getItem('temple_token');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
                 const response = await fetch('/api/donate/submit-utr', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: headers,
                     body: JSON.stringify({
                         donor_name: donorName,
                         donor_mobile: donorMobile,

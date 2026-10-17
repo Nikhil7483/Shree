@@ -231,6 +231,98 @@
     box-shadow: 0 2px 6px rgba(11, 61, 46, 0.2);
 }
 
+/* Approval Buttons */
+.btn-approve {
+    background: #2E7D32;
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm, 6px);
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.btn-approve:hover {
+    background: #1B5E20;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(46, 125, 50, 0.3);
+}
+
+.btn-reject {
+    background: transparent;
+    color: var(--error, #D32F2F);
+    border: 1px solid var(--error, #D32F2F);
+    border-radius: var(--radius-sm, 6px);
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.btn-reject:hover {
+    background: rgba(211, 47, 47, 0.1);
+}
+
+/* Status Badges */
+.status-badge.pending_verification {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #F59E0B;
+}
+
+.status-badge.rejected {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #EF4444;
+}
+
+/* Tab filters on admin */
+.admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.admin-tab-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border-light, #E5E7EB);
+    background: #FFFFFF;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #4B5563;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.admin-tab-btn:hover {
+    border-color: var(--gold, #D4AF37);
+    color: var(--dark-brown, #052E20);
+}
+.admin-tab-btn.active {
+    background: var(--dark-green, #0B3D2E);
+    color: #FFFFFF;
+    border-color: var(--dark-green, #0B3D2E);
+    box-shadow: 0 2px 6px rgba(11, 61, 46, 0.2);
+}
+.admin-tab-btn .badge-count {
+    background: #F39C12;
+    color: #ffffff;
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
 /* Responsive Admin */
 @media (max-width: 1024px) {
     .admin-sidebar {

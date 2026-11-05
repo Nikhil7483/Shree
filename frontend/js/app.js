@@ -46,7 +46,15 @@ async function apiFetch(endpoint, options = {}) {
         return;
     }
 
-    const data = await response.json();
+    let data;
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+        data = await response.json();
+    } else {
+        const text = await response.text();
+        data = { detail: text || response.statusText || 'Server error' };
+    }
+
     if (!response.ok) {
         throw new Error(data.detail || 'Request failed');
     }

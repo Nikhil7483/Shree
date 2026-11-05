@@ -88,7 +88,7 @@ async def donation_history(
 ):
     """Get donation history for the logged-in user."""
     donations = await Donation.find(
-        Donation.user_id == str(current_user.id)
+        {"user_id": str(current_user.id)}
     ).sort("-created_at").to_list()
 
     return [
@@ -263,7 +263,7 @@ async def export_donations_pdf(
 async def recent_donations():
     """Get recent completed donations for the live ticker (public)."""
     donations = await Donation.find(
-        Donation.status == "completed"
+        {"status": "completed"}
     ).sort("-created_at").limit(30).to_list()
 
     return [
@@ -326,11 +326,11 @@ async def youpi_webhook(request: Request):
 
         # Try matching by receipt number
         if not donation and order_id:
-            donation = await Donation.find_one(Donation.receipt_number == order_id)
+            donation = await Donation.find_one({"receipt_number": order_id})
 
         # Try matching by payment ID or UTR
         if not donation and payment_id:
-            donation = await Donation.find_one(Donation.razorpay_payment_id == f"UTR:{payment_id}")
+            donation = await Donation.find_one({"razorpay_payment_id": f"UTR:{payment_id}"})
 
         if donation:
             donation.status = "completed"
@@ -362,7 +362,7 @@ async def check_donation_status(donation_id: str):
         pass
 
     if not donation:
-        donation = await Donation.find_one(Donation.receipt_number == donation_id)
+        donation = await Donation.find_one({"receipt_number": donation_id})
 
     if not donation:
         raise HTTPException(status_code=404, detail="Donation not found")

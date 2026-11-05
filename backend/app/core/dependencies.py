@@ -29,7 +29,18 @@ async def get_optional_user(
     email: str = payload.get("sub")
     if email is None:
         return None
-    return await User.find_one(User.email == email)
+    user = await User.find_one({"email": email})
+    if not user and payload.get("role") == "admin":
+        return User(
+            name="Temple Admin",
+            email=email,
+            mobile="0000000000",
+            hashed_password="",
+            preferred_language="kn",
+            role="admin",
+            is_active=True,
+        )
+    return user
 
 
 async def get_current_user(
@@ -57,8 +68,18 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = await User.find_one(User.email == email)
+    user = await User.find_one({"email": email})
     if user is None:
+        if payload.get("role") == "admin":
+            return User(
+                name="Temple Admin",
+                email=email,
+                mobile="0000000000",
+                hashed_password="",
+                preferred_language="kn",
+                role="admin",
+                is_active=True,
+            )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",

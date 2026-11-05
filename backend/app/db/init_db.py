@@ -59,39 +59,52 @@ async def init_db():
         ],
     )
 
-    # Seed default data
-    await seed_admin()
-    await seed_temple()
-    await seed_official_temple_info()
-    await seed_festivals()
-    await seed_gallery()
+    # Seed default data safely
+    for seed_func, name in [
+        (seed_admin, "admin"),
+        (seed_temple, "temple"),
+        (seed_official_temple_info, "official_temple_info"),
+        (seed_festivals, "festivals"),
+        (seed_gallery, "gallery"),
+    ]:
+        try:
+            await seed_func()
+        except Exception as exc:
+            print(f"[WARN] Seed {name} error: {exc}")
 
 
 
 async def seed_admin():
     """Create or update admin user so credentials in environment variables ALWAYS work."""
-    clean_admin_email = settings.ADMIN_EMAIL.strip().lower()
-    clean_admin_password = settings.ADMIN_PASSWORD.strip()
+    try:
+        clean_admin_email = settings.ADMIN_EMAIL.strip().lower()
+        clean_admin_password = settings.ADMIN_PASSWORD.strip()
 
-    admin = await User.find_one({"role": "admin"})
-    if admin:
-        admin.email = clean_admin_email
-        admin.hashed_password = hash_password(clean_admin_password)
-        admin.is_active = True
-        await admin.save()
-        print(f"[OK] Admin user updated: {clean_admin_email}")
-    else:
-        admin = User(
-            name="Temple Admin",
-            email=clean_admin_email,
-            mobile="0000000000",
-            hashed_password=hash_password(clean_admin_password),
-            preferred_language="kn",
-            role="admin",
-            is_active=True,
-        )
-        await admin.insert()
-        print(f"[OK] Admin user created: {clean_admin_email}")
+        admin = await User.find_one({"role": "admin"})
+        if not admin:
+            admin = await User.find_one({"email": clean_admin_email})
+
+        if admin:
+            admin.email = clean_admin_email
+            admin.hashed_password = hash_password(clean_admin_password)
+            admin.role = "admin"
+            admin.is_active = True
+            await admin.save()
+            print(f"[OK] Admin user updated: {clean_admin_email}")
+        else:
+            admin = User(
+                name="Temple Admin",
+                email=clean_admin_email,
+                mobile="0000000000",
+                hashed_password=hash_password(clean_admin_password),
+                preferred_language="kn",
+                role="admin",
+                is_active=True,
+            )
+            await admin.insert()
+            print(f"[OK] Admin user created: {clean_admin_email}")
+    except Exception as exc:
+        print(f"[WARN] seed_admin: {exc}")
 
 
 async def seed_temple():

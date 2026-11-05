@@ -841,6 +841,11 @@
                     showToast('Reference recorded! Status: Pending Verification', 'info');
                 }
                 banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Start polling for automated verification (YouPI-PG / Admin)
+                if (result.donation_id) {
+                    startPaymentVerificationPolling(result.donation_id);
+                }
             } catch (err) {
                 console.error(err);
                 document.getElementById('recorded-utr-id').textContent = utrRef;
@@ -853,6 +858,52 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = typeof t === 'function' ? t('btn_submit_utr') : 'Submit Reference for Verification';
             }
+        }
+
+        // Live polling function for automated verification (YouPI-PG / Admin approval)
+        function startPaymentVerificationPolling(donationId) {
+            let attempts = 0;
+            const maxAttempts = 100; // Poll for 5 minutes (every 3 seconds)
+            const poller = setInterval(async () => {
+                attempts++;
+                if (attempts > maxAttempts) {
+                    clearInterval(poller);
+                    return;
+                }
+                try {
+                    const res = await fetch(`/api/donate/status/${donationId}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.is_completed) {
+                            clearInterval(poller);
+                            const banner = document.getElementById('pending-status-banner');
+                            if (banner) {
+                                banner.style.background = '#E8F8F5';
+                                banner.style.borderColor = '#27AE60';
+                                banner.innerHTML = `
+                                    <div style="display:inline-flex;align-items:center;gap:6px;background:#27AE60;color:#fff;font-size:0.8rem;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:8px;text-transform:uppercase;">
+                                        <span>✓</span> <span>Payment Verified & Confirmed!</span>
+                                    </div>
+                                    <p style="margin:4px 0 10px;color:#0E6251;font-size:0.95rem;font-weight:600;">
+                                        Thank you! Your donation of ₹${data.amount} has been verified and registered.
+                                    </p>
+                                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                                        <a href="/api/donate/receipt/${donationId}" target="_blank" class="btn" style="background:#052E20;color:#D4AF37;padding:8px 18px;border-radius:8px;font-size:0.85rem;text-decoration:none;font-weight:700;">
+                                            📄 Download Official PDF Receipt
+                                        </a>
+                                        <span style="font-size:0.8rem;color:#117A65;">Receipt No: <strong>${data.receipt_number}</strong></span>
+                                    </div>
+                                `;
+                                if (typeof showToast === 'function') {
+                                    showToast('Payment confirmed! Receipt ready to download.', 'success');
+                                }
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.log('Polling check:', err);
+                }
+            }, 3000);
         }
 
         // Auto-fill logged in user details if available

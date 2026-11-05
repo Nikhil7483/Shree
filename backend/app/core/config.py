@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     RAZORPAY_KEY_ID: str = "rzp_test_placeholder"
     RAZORPAY_KEY_SECRET: str = "placeholder_secret"
 
+    # YouPI-PG Gateway (0% Fee Self-Hosted UPI Gateway & Automated Webhooks)
+    YOUPI_GATEWAY_URL: Optional[str] = None
+    YOUPI_WEBHOOK_SECRET: Optional[str] = None
+
     # Admin
     ADMIN_EMAIL: str = "admin@shreeshani.com"
     ADMIN_PASSWORD: str = "Admin@123"

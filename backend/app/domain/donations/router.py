@@ -3,12 +3,18 @@ Donation API routes.
 """
 
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+import hmac
+import hashlib
+import json
+import io
+from datetime import datetime
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from beanie import PydanticObjectId
-import io
+import httpx
 
-from datetime import datetime
+from app.core.config import get_settings
 from app.core.dependencies import get_current_user, get_current_admin, get_optional_user
 from app.domain.donations.models import Donation
 from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest, UtrIntimationRequest
@@ -16,6 +22,7 @@ from app.domain.donations.service import create_donation_order, verify_donation_
 from app.domain.users.models import User
 from app.utils.pdf_receipt import generate_receipt_pdf, generate_donations_report_pdf
 
+settings = get_settings()
 router = APIRouter(prefix="/donate", tags=["Donations"])
 
 
@@ -269,3 +276,102 @@ async def recent_donations():
         }
         for d in donations
     ]
+
+
+# ==============================================================================
+# YouPI-PG 0% Fee Automated Gateway Endpoints
+# ==============================================================================
+
+@router.post("/youpi-webhook")
+async def youpi_webhook(request: Request):
+    """
+    Receives automated payment verification webhooks from YouPI-PG.
+    Validates HMAC-SHA256 signature and automatically approves donation.
+    """
+    raw_body = await request.body()
+    signature_header = request.headers.get("x-gateway-signature", "")
+
+    # 1. Verify HMAC signature if webhook secret is configured
+    if settings.YOUPI_WEBHOOK_SECRET:
+        secret = settings.YOUPI_WEBHOOK_SECRET.encode("utf-8")
+        computed_sig = hmac.new(secret, raw_body, hashlib.sha256).hexdigest()
+        expected = f"sha256={computed_sig}"
+        # Also check without prefix if gateway sends raw hex
+        if not (hmac.compare_digest(signature_header, expected) or hmac.compare_digest(signature_header, computed_sig)):
+            print("[YouPI Webhook] Invalid signature received.")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid webhook signature",
+            )
+
+    try:
+        payload = json.loads(raw_body.decode("utf-8"))
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+
+    event = payload.get("event") or request.headers.get("x-gateway-event", "")
+    order_id = payload.get("orderId") or payload.get("merchantRefId")
+    payment_id = payload.get("paymentId") or payload.get("utr", "")
+
+    print(f"[YouPI Webhook] Event: {event}, Order ID: {order_id}, Payment ID: {payment_id}")
+
+    # 2. Automatically mark donation as completed upon observed success or reconciliation
+    if event in ["OBSERVED_SUCCESS", "RECONCILED", "SUCCESS"]:
+        donation = None
+        # Try matching by MongoDB ObjectId
+        try:
+            donation = await Donation.get(PydanticObjectId(order_id))
+        except Exception:
+            pass
+
+        # Try matching by receipt number
+        if not donation and order_id:
+            donation = await Donation.find_one(Donation.receipt_number == order_id)
+
+        # Try matching by payment ID or UTR
+        if not donation and payment_id:
+            donation = await Donation.find_one(Donation.razorpay_payment_id == f"UTR:{payment_id}")
+
+        if donation:
+            donation.status = "completed"
+            donation.razorpay_payment_id = f"YOUPI:{payment_id or 'auto'}"
+            if not donation.receipt_number:
+                donation.receipt_number = generate_receipt_number()
+            await donation.save()
+            print(f"[YouPI Webhook] Donation {donation.id} automatically marked COMPLETED. Receipt: {donation.receipt_number}")
+            return {
+                "status": "received",
+                "message": "Donation verified and approved",
+                "receipt_number": donation.receipt_number,
+            }
+        else:
+            print(f"[YouPI Webhook] No matching donation found for order: {order_id}")
+
+    return {"status": "received", "event": event}
+
+
+@router.get("/status/{donation_id}")
+async def check_donation_status(donation_id: str):
+    """
+    Public polling endpoint for frontend to check if donation has been confirmed.
+    """
+    donation = None
+    try:
+        donation = await Donation.get(PydanticObjectId(donation_id))
+    except Exception:
+        pass
+
+    if not donation:
+        donation = await Donation.find_one(Donation.receipt_number == donation_id)
+
+    if not donation:
+        raise HTTPException(status_code=404, detail="Donation not found")
+
+    return {
+        "donation_id": str(donation.id),
+        "status": donation.status,
+        "receipt_number": donation.receipt_number,
+        "amount": donation.amount // 100,
+        "is_completed": donation.status == "completed",
+    }
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,13 +27,14 @@
 
         .donate-hero {
             background: linear-gradient(135deg, rgba(5, 46, 32, 0.95) 0%, rgba(11, 61, 46, 0.92) 50%, rgba(20, 90, 50, 0.88) 100%),
-                        url('/static/assets/gallery/temple-view.png') center/cover no-repeat;
+                url('/static/assets/gallery/temple-view.png') center/cover no-repeat;
             padding: 75px 20px 55px;
             text-align: center;
             color: #ffffff;
             position: relative;
             border-bottom: 3px solid var(--temple-gold);
         }
+
         .donate-hero .badge-om {
             display: inline-flex;
             align-items: center;
@@ -47,16 +49,18 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
+
         .donate-hero h1 {
             font-size: 2.6rem;
             font-weight: 700;
             margin: 0 0 10px;
             color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
         }
+
         .donate-hero p {
             font-size: 1.15rem;
-            color: rgba(255,255,255,0.92);
+            color: rgba(255, 255, 255, 0.92);
             max-width: 680px;
             margin: 0 auto;
         }
@@ -78,6 +82,7 @@
             padding: 42px 40px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .scan-pay-card:hover {
             box-shadow: var(--temple-card-shadow-hover);
         }
@@ -94,9 +99,11 @@
                 grid-template-columns: 1fr;
                 gap: 32px;
             }
+
             .scan-pay-card {
                 padding: 26px 18px;
             }
+
             .donate-hero h1 {
                 font-size: 2rem;
             }
@@ -109,9 +116,11 @@
             flex-direction: column;
             align-items: center;
         }
+
         .qr-card-header {
             margin-bottom: 16px;
         }
+
         .scan-pay-heading {
             font-size: 2rem;
             color: var(--temple-forest);
@@ -119,6 +128,7 @@
             margin: 0 0 6px;
             letter-spacing: -0.5px;
         }
+
         .scan-pay-subheading {
             color: var(--temple-gold);
             font-size: 1.05rem;
@@ -127,6 +137,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
         .scan-pay-instruction {
             font-size: 0.88rem;
             color: #555555;
@@ -146,6 +157,7 @@
             margin: 0 auto 16px;
             position: relative;
         }
+
         .temple-qr-image {
             width: 250px;
             max-width: 100%;
@@ -156,6 +168,7 @@
             border-radius: 8px;
             object-fit: contain;
         }
+
         .qr-apps-badge {
             margin-top: 10px;
             font-size: 0.78rem;
@@ -166,6 +179,7 @@
             justify-content: center;
             gap: 6px;
         }
+
         .qr-apps-badge .live-dot {
             width: 7px;
             height: 7px;
@@ -183,7 +197,9 @@
             max-width: 310px;
             margin-top: 10px;
         }
-        .btn-view-qr, .btn-download-qr {
+
+        .btn-view-qr,
+        .btn-download-qr {
             flex: 1;
             padding: 11px 14px;
             border-radius: 12px;
@@ -198,21 +214,25 @@
             text-decoration: none;
             border: none;
         }
+
         .btn-view-qr {
             background: rgba(212, 175, 55, 0.15);
             color: #8c6d17;
             border: 1.5px solid var(--temple-gold);
         }
+
         .btn-view-qr:hover {
             background: var(--temple-gold);
             color: #ffffff;
             transform: translateY(-2px);
         }
+
         .btn-download-qr {
             background: var(--temple-forest-mid);
             color: #ffffff;
             border: 1.5px solid var(--temple-forest-mid);
         }
+
         .btn-download-qr:hover {
             background: var(--temple-forest-light);
             transform: translateY(-2px);
@@ -225,6 +245,7 @@
             padding: 28px 24px;
             border: 1px solid rgba(212, 175, 55, 0.25);
         }
+
         .bank-column-header {
             display: flex;
             align-items: center;
@@ -233,6 +254,7 @@
             padding-bottom: 12px;
             border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
         }
+
         .bank-column-header .header-icon {
             font-size: 1.6rem;
             background: rgba(212, 175, 55, 0.2);
@@ -244,6 +266,7 @@
             border-radius: 12px;
             color: var(--temple-forest);
         }
+
         .bank-column-header h3 {
             margin: 0;
             font-size: 1.25rem;
@@ -256,6 +279,7 @@
             flex-direction: column;
             gap: 14px;
         }
+
         .bank-info-item {
             background: #ffffff;
             border-radius: 14px;
@@ -267,14 +291,17 @@
             gap: 12px;
             transition: all 0.2s ease;
         }
+
         .bank-info-item:hover {
             border-color: rgba(212, 175, 55, 0.6);
             box-shadow: 0 4px 12px rgba(5, 46, 32, 0.04);
         }
+
         .bank-info-item.upi-featured {
             background: #F4FBF7;
             border: 2px solid var(--temple-forest-light);
         }
+
         .info-label {
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -284,16 +311,19 @@
             margin-bottom: 2px;
             letter-spacing: 0.5px;
         }
+
         .info-val {
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--temple-forest);
         }
+
         .info-val.mono {
             font-family: 'SF Pro Display', Consolas, Menlo, monospace;
             font-size: 1.05rem;
             letter-spacing: 0.5px;
         }
+
         .info-val.upi-text {
             color: var(--temple-forest-light);
             font-size: 1.1rem;
@@ -315,10 +345,12 @@
             align-items: center;
             gap: 5px;
         }
+
         .copy-pill-btn:hover {
             background: var(--temple-gold);
             color: #ffffff;
         }
+
         .copy-pill-btn.copied {
             background: #2E7D32;
             border-color: #2E7D32;
@@ -338,6 +370,7 @@
             gap: 10px;
             line-height: 1.45;
         }
+
         .bank-disclaimer-box .info-icon {
             font-size: 1.1rem;
             flex-shrink: 0;
@@ -353,20 +386,24 @@
             padding: 28px;
             box-shadow: var(--temple-card-shadow);
         }
+
         .utr-card-header {
             margin-bottom: 20px;
         }
+
         .utr-card-header h3 {
             font-size: 1.25rem;
             color: var(--temple-forest);
             margin: 0 0 6px;
             font-weight: 700;
         }
+
         .utr-card-header p {
             font-size: 0.9rem;
             color: var(--text-muted);
             margin: 0;
         }
+
         .utr-form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -383,9 +420,11 @@
             margin-top: 16px;
             animation: fadeIn 0.4s ease;
         }
+
         .pending-status-banner.active {
             display: block;
         }
+
         .status-badge-pending {
             display: inline-flex;
             align-items: center;
@@ -399,6 +438,7 @@
             margin-bottom: 8px;
             text-transform: uppercase;
         }
+
         .pending-text {
             font-size: 0.88rem;
             color: #7D6608;
@@ -423,10 +463,12 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         .qr-modal-backdrop.open {
             display: flex;
             opacity: 1;
         }
+
         .qr-modal-window {
             background: #ffffff;
             border-radius: 24px;
@@ -435,19 +477,21 @@
             width: 100%;
             text-align: center;
             position: relative;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
             border: 2px solid var(--temple-gold);
             transform: scale(0.92);
             transition: transform 0.3s ease;
         }
+
         .qr-modal-backdrop.open .qr-modal-window {
             transform: scale(1);
         }
+
         .qr-modal-close {
             position: absolute;
             top: 14px;
             right: 16px;
-            background: rgba(0,0,0,0.06);
+            background: rgba(0, 0, 0, 0.06);
             border: none;
             width: 36px;
             height: 36px;
@@ -460,9 +504,11 @@
             color: var(--temple-forest);
             transition: background 0.2s;
         }
+
         .qr-modal-close:hover {
             background: #e2e2e2;
         }
+
         .qr-modal-image {
             width: 280px;
             max-width: 100%;
@@ -470,15 +516,23 @@
             margin: 16px auto;
             display: block;
             border-radius: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="navbar-container"></div>
 
@@ -506,17 +560,15 @@
                     </div>
 
                     <p class="scan-pay-instruction" data-i18n="scan_pay_desc">
-                        Scan the official temple UPI QR code using any UPI app (Google Pay, PhonePe, Paytm, BHIM, Canara ai1) to make your sacred offering directly to the temple bank account.
+                        Scan the official temple UPI QR code using any UPI app (Google Pay, PhonePe, Paytm, BHIM, Canara
+                        ai1) to make your sacred offering directly to the temple bank account.
                     </p>
 
                     <!-- Clean White Frame for QR Code -->
                     <div class="qr-box-container">
-                        <img src="/static/assets/qr/temple_qr_only.png" 
-                             alt="Official Temple UPI QR Code" 
-                             id="temple-qr-code-img"
-                             class="temple-qr-image"
-                             loading="eager" />
-                        
+                        <img src="/static/assets/qr/temple_qr_only.png" alt="Official Temple UPI QR Code"
+                            id="temple-qr-code-img" class="temple-qr-image" loading="eager" />
+
                         <div class="qr-apps-badge">
                             <span class="live-dot"></span>
                             <span data-i18n="qr_verified_text">Official Temple UPI QR • Direct Bank Credit</span>
@@ -529,10 +581,8 @@
                             <span>🔍</span>
                             <span data-i18n="btn_view_qr">View QR Code</span>
                         </button>
-                        <a href="/static/assets/qr/temple_qr_only.png" 
-                           download="temple_qr_only.png" 
-                           class="btn-download-qr" 
-                           id="btn-download-qr-action">
+                        <a href="/static/assets/qr/temple_qr_only.png" download="temple_qr_only.png"
+                            class="btn-download-qr" id="btn-download-qr-action">
                             <span>⬇️</span>
                             <span data-i18n="btn_download_qr">Download QR</span>
                         </a>
@@ -545,7 +595,8 @@
                         <span class="header-icon">🏛️</span>
                         <div>
                             <h3 data-i18n="bank_details_title">Official Bank Account & UPI Details</h3>
-                            <small style="color:var(--text-muted);font-size:0.8rem;">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple (R.)</small>
+                            <small style="color:var(--text-muted);font-size:0.8rem;">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) •
+                                Shree Shanishwara Swamy Temple (R.)</small>
                         </div>
                     </div>
 
@@ -556,7 +607,8 @@
                                 <span class="info-label" data-i18n="label_upi_id">UPI ID</span>
                                 <span class="info-val mono upi-text" id="val-upi-id">47808680004653@cnrb</span>
                             </div>
-                            <button type="button" class="copy-pill-btn" onclick="copyValue('47808680004653@cnrb', this)">
+                            <button type="button" class="copy-pill-btn"
+                                onclick="copyValue('47808680004653@cnrb', this)">
                                 <span>📋</span>
                                 <span data-i18n="btn_copy">Copy</span>
                             </button>
@@ -598,14 +650,16 @@
                         <div class="bank-info-item">
                             <div>
                                 <span class="info-label" data-i18n="label_branch">Branch</span>
-                                <span class="info-val" style="font-size:0.9rem;" data-i18n="val_branch">Koduru / Kodur, Shivamogga District, Karnataka</span>
+                                <span class="info-val" style="font-size:0.9rem;" data-i18n="val_branch">Koduru / Kodur,
+                                    Shivamogga District, Karnataka</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="bank-disclaimer-box">
                         <span class="info-icon">ℹ️</span>
-                        <span data-i18n="verify_disclaimer">Verify the details with the temple management before publishing or transferring.</span>
+                        <span data-i18n="verify_disclaimer">Verify the details with the temple management before
+                            publishing or transferring.</span>
                     </div>
                 </div>
             </div>
@@ -614,26 +668,31 @@
             <div class="utr-intimation-card">
                 <div class="utr-card-header">
                     <h3 data-i18n="offline_notice_title">Direct Transfer Intimation (Optional)</h3>
-                    <p data-i18n="offline_notice_desc">Devotees making a direct UPI or NEFT transfer may submit the reference below to record their offering and request an official receipt.</p>
+                    <p data-i18n="offline_notice_desc">Devotees making a direct UPI or NEFT transfer may submit the
+                        reference below to record their offering and request an official receipt.</p>
                 </div>
 
                 <form id="utr-intimation-form" onsubmit="handleUtrSubmission(event)">
                     <div class="utr-form-grid">
                         <div class="form-group">
                             <label class="form-label" data-i18n="donate_name">Devotee Name</label>
-                            <input type="text" id="utr-donor-name" class="form-input" placeholder="Enter your full name" required>
+                            <input type="text" id="utr-donor-name" class="form-input" placeholder="Enter your full name"
+                                required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" data-i18n="donate_mobile">Mobile Number</label>
-                            <input type="tel" id="utr-donor-mobile" class="form-input" placeholder="10-digit mobile number" required>
+                            <input type="tel" id="utr-donor-mobile" class="form-input"
+                                placeholder="10-digit mobile number" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" data-i18n="label_utr">12-Digit UPI Ref / UTR No.</label>
-                            <input type="text" id="utr-ref-number" class="form-input" placeholder="e.g. 3245XXXXXXXX" maxlength="24" required>
+                            <input type="text" id="utr-ref-number" class="form-input" placeholder="e.g. 3245XXXXXXXX"
+                                maxlength="24" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" data-i18n="donate_amount">Amount Paid (₹)</label>
-                            <input type="number" id="utr-amount" class="form-input" placeholder="e.g. 1000" min="1" required>
+                            <input type="number" id="utr-amount" class="form-input" placeholder="e.g. 1000" min="1"
+                                required>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary" id="btn-submit-utr">
@@ -648,10 +707,12 @@
                         <span data-i18n="status_pending_verif">Pending Verification</span>
                     </div>
                     <p class="pending-text" data-i18n="pending_verif_msg">
-                        Your reference has been submitted with status 'Pending Verification'. The transaction will be verified by authorized temple management against bank credit.
+                        Your reference has been submitted with status 'Pending Verification'. The transaction will be
+                        verified by authorized temple management against bank credit.
                     </p>
                     <p style="margin:8px 0 0;font-size:0.8rem;color:#856404;">
-                        <strong>Reference ID:</strong> <span id="recorded-utr-id">—</span> • <strong>Devotee:</strong> <span id="recorded-donor-name">—</span>
+                        <strong>Reference ID:</strong> <span id="recorded-utr-id">—</span> • <strong>Devotee:</strong>
+                        <span id="recorded-donor-name">—</span>
                     </p>
                 </div>
             </div>
@@ -662,29 +723,31 @@
     <div id="qr-modal" class="qr-modal-backdrop" onclick="closeQrModal(event)">
         <div class="qr-modal-window" onclick="event.stopPropagation()">
             <button type="button" class="qr-modal-close" onclick="closeQrModal(event)" aria-label="Close">✕</button>
-            <div style="font-size:0.8rem;color:var(--temple-gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+            <div
+                style="font-size:0.8rem;color:var(--temple-gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
                 ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ
             </div>
-            <h3 style="margin:0;font-size:1.35rem;color:var(--temple-forest);" data-i18n="scan_pay_title">Scan & Pay</h3>
-            <p style="margin:4px 0 0;font-size:0.85rem;color:var(--text-muted);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple (R.)</p>
-            
-            <img src="/static/assets/qr/temple_qr_only.png" 
-                 alt="Temple UPI QR Code Fullscreen" 
-                 class="qr-modal-image" />
-            
-            <div style="font-size:0.95rem;font-weight:700;color:var(--temple-forest);margin-bottom:16px;font-family:monospace;">
+            <h3 style="margin:0;font-size:1.35rem;color:var(--temple-forest);" data-i18n="scan_pay_title">Scan & Pay
+            </h3>
+            <p style="margin:4px 0 0;font-size:0.85rem;color:var(--text-muted);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) •
+                Shree Shanishwara Swamy Temple (R.)</p>
+
+            <img src="/static/assets/qr/temple_qr_only.png" alt="Temple UPI QR Code Fullscreen"
+                class="qr-modal-image" />
+
+            <div
+                style="font-size:0.95rem;font-weight:700;color:var(--temple-forest);margin-bottom:16px;font-family:monospace;">
                 UPI: 47808680004653@cnrb
             </div>
 
             <div style="display:flex;gap:10px;justify-content:center;">
-                <a href="/static/assets/qr/temple_qr_only.png" 
-                   download="temple_qr_only.png" 
-                   class="btn btn-primary" 
-                   style="font-size:0.85rem;padding:8px 16px;">
+                <a href="/static/assets/qr/temple_qr_only.png" download="temple_qr_only.png" class="btn btn-primary"
+                    style="font-size:0.85rem;padding:8px 16px;">
                     <span>⬇️</span>
                     <span data-i18n="btn_download_qr">Download QR</span>
                 </a>
-                <button type="button" class="btn btn-outline" onclick="closeQrModal(event)" style="font-size:0.85rem;padding:8px 16px;">
+                <button type="button" class="btn btn-outline" onclick="closeQrModal(event)"
+                    style="font-size:0.85rem;padding:8px 16px;">
                     <span data-i18n="close">Close</span>
                 </button>
             </div>
@@ -778,6 +841,11 @@
                     showToast('Reference recorded! Status: Pending Verification', 'info');
                 }
                 banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Start polling for automated verification (YouPI-PG / Admin)
+                if (result.donation_id) {
+                    startPaymentVerificationPolling(result.donation_id);
+                }
             } catch (err) {
                 console.error(err);
                 document.getElementById('recorded-utr-id').textContent = utrRef;
@@ -790,6 +858,52 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = typeof t === 'function' ? t('btn_submit_utr') : 'Submit Reference for Verification';
             }
+        }
+
+        // Live polling function for automated verification (YouPI-PG / Admin approval)
+        function startPaymentVerificationPolling(donationId) {
+            let attempts = 0;
+            const maxAttempts = 100; // Poll for 5 minutes (every 3 seconds)
+            const poller = setInterval(async () => {
+                attempts++;
+                if (attempts > maxAttempts) {
+                    clearInterval(poller);
+                    return;
+                }
+                try {
+                    const res = await fetch(`/api/donate/status/${donationId}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.is_completed) {
+                            clearInterval(poller);
+                            const banner = document.getElementById('pending-status-banner');
+                            if (banner) {
+                                banner.style.background = '#E8F8F5';
+                                banner.style.borderColor = '#27AE60';
+                                banner.innerHTML = `
+                                    <div style="display:inline-flex;align-items:center;gap:6px;background:#27AE60;color:#fff;font-size:0.8rem;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:8px;text-transform:uppercase;">
+                                        <span>✓</span> <span>Payment Verified & Confirmed!</span>
+                                    </div>
+                                    <p style="margin:4px 0 10px;color:#0E6251;font-size:0.95rem;font-weight:600;">
+                                        Thank you! Your donation of ₹${data.amount} has been verified and registered.
+                                    </p>
+                                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                                        <a href="/api/donate/receipt/${donationId}" target="_blank" class="btn" style="background:#052E20;color:#D4AF37;padding:8px 18px;border-radius:8px;font-size:0.85rem;text-decoration:none;font-weight:700;">
+                                            📄 Download Official PDF Receipt
+                                        </a>
+                                        <span style="font-size:0.8rem;color:#117A65;">Receipt No: <strong>${data.receipt_number}</strong></span>
+                                    </div>
+                                `;
+                                if (typeof showToast === 'function') {
+                                    showToast('Payment confirmed! Receipt ready to download.', 'success');
+                                }
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.log('Polling check:', err);
+                }
+            }, 3000);
         }
 
         // Auto-fill logged in user details if available
@@ -806,4 +920,5 @@
         });
     </script>
 </body>
+
 </html>

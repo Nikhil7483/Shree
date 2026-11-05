@@ -8,6 +8,7 @@ python-multipart==0.0.9
 motor==3.6.0
 beanie==1.26.0
 pymongo>=4.7,<4.10
+dnspython>=2.6.0
 
 # Configuration & Environment
 pydantic-settings==2.4.0

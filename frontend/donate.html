@@ -617,7 +617,7 @@
                     </div>
 
                     <!-- Direct UPI Intent for Mobile Donors -->
-                    <a id="btn-mobile-upi-intent" href="upi://pay?pa=47808680004653@cnrb&pn=Shree%20Shanishwara%20Swamy%20Temple&cu=INR" class="btn-mobile-upi">
+                    <a id="btn-mobile-upi-intent" href="upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&cu=INR" class="btn-mobile-upi">
                         <span>📱</span>
                         <span>Pay via UPI App (GPay / PhonePe / Paytm)</span>
                     </a>
@@ -959,9 +959,9 @@
                 amtInput.addEventListener('input', () => {
                     const val = parseFloat(amtInput.value.trim());
                     if (val > 0) {
-                        upiBtn.href = `upi://pay?pa=47808680004653@cnrb&pn=Shree%20Shanishwara%20Swamy%20Temple&cu=INR&am=${val.toFixed(2)}`;
+                        upiBtn.href = `upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&cu=INR&am=${val.toFixed(2)}`;
                     } else {
-                        upiBtn.href = 'upi://pay?pa=47808680004653@cnrb&pn=Shree%20Shanishwara%20Swamy%20Temple&cu=INR';
+                        upiBtn.href = 'upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&cu=INR';
                     }
                 });
             }

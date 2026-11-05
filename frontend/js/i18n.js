@@ -11,7 +11,7 @@ const translations = {
         // Navigation
         nav_home: "Home",
         nav_about: "About",
-        nav_temple_info: "Temple Information",
+        nav_temple_info: "ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ",
         nav_gallery: "Gallery",
         nav_timings: "Timings",
         nav_festivals: "Festivals",
@@ -25,9 +25,9 @@ const translations = {
 
         // Hero
         hero_om: "ॐ",
-        hero_temple_name: "Shree Shanishwara Swamy Temple (R.)",
         hero_temple_name_kn: "ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)",
-        hero_place: "Shree Kshetra Siddagiri",
+        hero_temple_name: "Shree Shanishwara Swamy Temple (R.)",
+        hero_place: "ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ • Shree Kshetra Siddagiri",
         hero_welcome: "Welcome to the sacred abode of Lord Shanishwara. Experience divine blessings and spiritual peace.",
         hero_donate_btn: "🙏 Donate Now",
         hero_explore_btn: "Explore Temple",
@@ -232,7 +232,7 @@ const translations = {
         footer_quick_links: "Quick Links",
         footer_timings: "Temple Timings",
         footer_contact: "Contact Info",
-        footer_copyright: "© 2025 Shree Shanishwara Swamy Temple (R.), Shree Kshetra Siddagiri. All rights reserved.",
+        footer_copyright: "© 2025 ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple (R.), Shree Kshetra Siddagiri. All rights reserved.",
 
         // Common
         loading: "Loading...",
@@ -251,9 +251,11 @@ const translations = {
         ticker_empty_en: "Be the first devotee to donate.",
         ticker_empty_kn: "ಮೊದಲ ದೇಣಿಗೆ ನೀಡುವ ಭಕ್ತರಾಗಿರಿ.",
 
-        // Temple Info Page
-        temple_info_title: "Official Temple Information",
-        temple_info_subtitle: "Shree Shanishwara Swamy Temple (R.), Shri Kshetra Siddagiri",
+        // Temple Info Page & Home Section
+        home_temple_info_title: "ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ",
+        home_temple_info_subtitle: "ಅಧಿಕೃತ ದೇವಸ್ಥಾನದ ದಾಖಲೆಗಳು • Official Temple Documents",
+        temple_info_title: "ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ",
+        temple_info_subtitle: "ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple (R.), Shri Kshetra Siddagiri",
         temple_reg_label: "Registration No.",
         temple_dharmadarshi_title: "Founder / Dharmadarshi",
         temple_manager_title: "Manager",
@@ -273,7 +275,12 @@ const translations = {
         temple_doc_title: "Official Document Viewer",
         temple_doc_subtitle: "View original certified appeal and committee document",
         temple_doc_page1: "Page 1: Temple Appeal & Registration",
+        temple_doc_page1_badge: "ಅಧಿಕೃತ ದಾಖಲೆ — ಪುಟ ೧",
+        temple_doc_page1_title: "ದೇವಸ್ಥಾನದ ಮನವಿ ಪತ್ರ ಮತ್ತು ನೋಂದಣಿ",
         temple_doc_page2: "Page 2: Committee & Deities List",
+        temple_doc_page2_badge: "ಅಧಿಕೃತ ದಾಖಲೆ — ಪುಟ ೨",
+        temple_doc_page2_title: "ಸಮಿತಿ ಸದಸ್ಯರು ಮತ್ತು ಪರಿವಾರ ದೇವರುಗಳ ಪಟ್ಟಿ",
+        btn_view_full_temple_info: "📜 ದೇವಸ್ಥಾನದ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ವೀಕ್ಷಿಸಿ • View Full Temple Info",
         temple_doc_zoom_in: "Zoom In",
         temple_doc_zoom_out: "Zoom Out",
         temple_doc_zoom_reset: "Reset",
@@ -300,8 +307,8 @@ const translations = {
 
         // Hero
         hero_om: "ॐ",
-        hero_temple_name: "Shree Shanishwara Swamy Temple (R.)",
         hero_temple_name_kn: "ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)",
+        hero_temple_name: "Shree Shanishwara Swamy Temple (R.)",
         hero_place: "ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ",
         hero_welcome: "ಶನೀಶ್ವರ ದೇವರ ಪವಿತ್ರ ನೆಲೆಗೆ ಸ್ವಾಗತ. ದೈವಿಕ ಆಶೀರ್ವಾದ ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಶಾಂತಿಯನ್ನು ಅನುಭವಿಸಿ.",
         hero_donate_btn: "🙏 ದಾನ ಮಾಡಿ",
@@ -526,9 +533,11 @@ const translations = {
         ticker_empty_en: "Be the first devotee to donate.",
         ticker_empty_kn: "ಮೊದಲ ದೇಣಿಗೆ ನೀಡುವ ಭಕ್ತರಾಗಿರಿ.",
 
-        // Temple Info Page
-        temple_info_title: "ದೇವಸ್ಥಾನದ ಅಧಿಕೃತ ಮಾಹಿತಿ",
-        temple_info_subtitle: "ಶ್ರೀ ಶನೀಶ್ವರ ಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ.), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ",
+        // Temple Info Page & Home Section
+        home_temple_info_title: "ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ",
+        home_temple_info_subtitle: "ಅಧಿಕೃತ ದೇವಸ್ಥಾನದ ದಾಖಲೆಗಳು",
+        temple_info_title: "ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ",
+        temple_info_subtitle: "ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ",
         temple_reg_label: "ನೋಂದಣಿ ಸಂಖ್ಯೆ",
         temple_dharmadarshi_title: "ಸಂಸ್ಥಾಪಕರು / ಧರ್ಮದರ್ಶಿಗಳು",
         temple_manager_title: "ವ್ಯವಸ್ಥಾಪಕರು",
@@ -548,7 +557,12 @@ const translations = {
         temple_doc_title: "ಅಧಿಕೃತ ದಾಖಲೆ ವೀಕ್ಷಕ",
         temple_doc_subtitle: "ದೇವಸ್ಥಾನದ ಅಧಿಕೃತ ಮನವಿ ಪತ್ರ ಮತ್ತು ಸಮಿತಿ ದಾಖಲೆಯ ಮೂಲ ಪ್ರತಿ",
         temple_doc_page1: "ಪುಟ ೧: ದೇವಸ್ಥಾನದ ಮನವಿ ಪತ್ರ ಮತ್ತು ನೋಂದಣಿ",
+        temple_doc_page1_badge: "ಅಧಿಕೃತ ದಾಖಲೆ — ಪುಟ ೧",
+        temple_doc_page1_title: "ದೇವಸ್ಥಾನದ ಮನವಿ ಪತ್ರ ಮತ್ತು ನೋಂದಣಿ",
         temple_doc_page2: "ಪುಟ ೨: ಪರಿವಾರ ದೇವರುಗಳು ಮತ್ತು ಸಮಿತಿ ಪಟ್ಟಿ",
+        temple_doc_page2_badge: "ಅಧಿಕೃತ ದಾಖಲೆ — ಪುಟ ೨",
+        temple_doc_page2_title: "ಸಮಿತಿ ಸದಸ್ಯರು ಮತ್ತು ಪರಿವಾರ ದೇವರುಗಳ ಪಟ್ಟಿ",
+        btn_view_full_temple_info: "📜 ದೇವಸ್ಥಾನದ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ವೀಕ್ಷಿಸಿ",
         temple_doc_zoom_in: "ಹಿಗ್ಗಿಸಿ (+)",
         temple_doc_zoom_out: "ಕುಗ್ಗಿಸಿ (-)",
         temple_doc_zoom_reset: "ಮರುಹೊಂದಿಸಿ",

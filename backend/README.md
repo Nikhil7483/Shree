@@ -1,7 +1,7 @@
 # Backend Architecture & Developer Guide
 
-**Shree Shanishwara Swamy Temple Website**  
-**ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ**
+**ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ**  
+**Shree Shanishwara Swamy Temple (R.)**
 
 ---
 

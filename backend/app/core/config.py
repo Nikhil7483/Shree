@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "Shree Shanishwara Swamy Temple"
     APP_ENV: str = "development"
+    ALLOWED_ORIGINS: str = "*"
+    ENABLE_DOCS: bool = False
 
     model_config = {
         "env_file": ".env",

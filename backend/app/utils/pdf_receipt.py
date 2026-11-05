@@ -790,7 +790,7 @@ def generate_receipt_pdf(donation: Donation) -> bytes:
     # Blessings Title
     draw_styled_text(
         c,
-        "DIVINE BLESSINGS   •   ಶ್ರೀ ಶನೀಶ್ವರ ಸ್ವಾಮಿಯ ಕೃಪಾಶೀರ್ವಾದಗಳು",
+        "ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿಯ ಕೃಪಾಶೀರ್ವಾದಗಳು   •   DIVINE BLESSINGS",
         bless_x + bless_w / 2,
         auth_y + auth_height - 18,
         font_size=7.5,

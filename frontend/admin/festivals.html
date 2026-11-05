@@ -19,11 +19,11 @@
                 <h3>Add New Festival</h3>
                 <form onsubmit="addFestival(event)">
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">
-                        <div class="form-group"><label class="form-label">Name (English)</label><input id="fest-name-en" class="form-input" required></div>
                         <div class="form-group"><label class="form-label">Name (ಕನ್ನಡ)</label><input id="fest-name-kn" class="form-input" required style="font-family:var(--font-kannada);"></div>
+                        <div class="form-group"><label class="form-label">Name (English)</label><input id="fest-name-en" class="form-input" required></div>
                     </div>
-                    <div class="form-group"><label class="form-label">Description (English)</label><textarea id="fest-desc-en" class="form-input" rows="3"></textarea></div>
                     <div class="form-group"><label class="form-label">Description (ಕನ್ನಡ)</label><textarea id="fest-desc-kn" class="form-input" rows="3" style="font-family:var(--font-kannada);"></textarea></div>
+                    <div class="form-group"><label class="form-label">Description (English)</label><textarea id="fest-desc-en" class="form-input" rows="3"></textarea></div>
                     <div class="form-group"><label class="form-label">Date / Schedule</label><input id="fest-date" class="form-input" placeholder="e.g., January 14 or Every Amavasya"></div>
                     <button type="submit" class="btn btn-primary">Add Festival</button>
                 </form>
@@ -31,7 +31,7 @@
             <!-- Festivals Table -->
             <div class="table-wrapper">
                 <table class="data-table">
-                    <thead><tr><th>Name (EN)</th><th>Name (KN)</th><th>Date</th><th>Actions</th></tr></thead>
+                    <thead><tr><th>Name (KN)</th><th>Name (EN)</th><th>Date</th><th>Actions</th></tr></thead>
                     <tbody id="festivals-body"><tr><td colspan="4"><div class="loading-spinner"></div></td></tr></tbody>
                 </table>
             </div>

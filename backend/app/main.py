@@ -1,7 +1,7 @@
 """
-Shree Shanishwara Swamy Temple — FastAPI Application Entry Point
-
-ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ
+ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) — Shree Shanishwara Swamy Temple (R.)
+ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ
+FastAPI Application Entry Point
 
 This module initializes the FastAPI application, sets up the database,
 registers all API routers, and serves the static frontend.
@@ -15,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
 
+from app.core.config import get_settings
 from app.db.init_db import init_db
 from app.domain.auth.router import router as auth_router
 from app.domain.temple.router import router as temple_router
@@ -51,25 +52,42 @@ async def lifespan(app: FastAPI):
     print("Server shutting down...")
 
 
+settings = get_settings()
+is_prod = settings.APP_ENV.lower() == "production"
+
 app = FastAPI(
-    title="Shree Shanishwara Swamy Temple",
-    description="ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ - Temple Information & Donation API",
+    title="ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) — Shree Shanishwara Swamy Temple (R.)",
+    description="ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple - Temple Information & Donation API",
     version="1.0.0",
     lifespan=lifespan,
+    docs_url="/docs" if (not is_prod or settings.ENABLE_DOCS) else None,
+    redoc_url="/redoc" if (not is_prod or settings.ENABLE_DOCS) else None,
+    openapi_url="/openapi.json" if (not is_prod or settings.ENABLE_DOCS) else None,
 )
 
-# CORS middleware — allow frontend requests
+# CORS middleware — production domain restriction or local wildcard
+cors_origins = (
+    ["*"]
+    if settings.ALLOWED_ORIGINS.strip() == "*"
+    else [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()]
+)
+allow_credentials = False if "*" in cors_origins else True
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.middleware("http")
-async def add_no_cache_headers(request: Request, call_next):
+async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     if not request.url.path.startswith("/api"):
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
         response.headers["Pragma"] = "no-cache"

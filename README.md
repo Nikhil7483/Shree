@@ -1,7 +1,7 @@
-# Shree Shanishwara Swamy Temple — Website
+# ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) — Shree Shanishwara Swamy Temple (R.)
 
-**ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ**  
-*A bilingual (English / Kannada) temple information, devotee portal, and online donation system.*
+**ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ), ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ • Shree Shanishwara Swamy Temple (R.)**  
+*A bilingual (ಕನ್ನಡ / English) temple information, devotee portal, and online donation system.*
 
 ---
 

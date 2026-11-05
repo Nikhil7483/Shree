@@ -108,14 +108,15 @@ function renderNavbar() {
             <a href="/" class="nav-brand">
                 ${logoSVG}
                 <span class="brand-text">
-                    Shree Shanishwara
-                    <small>ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ</small>
+                    <span class="brand-title-kn">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ (ರಿ)</span>
+                    <small class="brand-sub-en">Shree Shanishwara Swamy Temple (R.)</small>
                 </span>
             </a>
 
             <div class="nav-links">
                 <a href="/" class="${currentPage === '/' ? 'active' : ''}" data-i18n="nav_home">Home</a>
                 <a href="/about" class="${currentPage === '/about' ? 'active' : ''}" data-i18n="nav_about">About</a>
+                <a href="/temple-info" class="${currentPage === '/temple-info' ? 'active' : ''}" data-i18n="nav_temple_info">ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ</a>
                 <a href="/timings" class="${currentPage === '/timings' ? 'active' : ''}" data-i18n="nav_timings">Timings</a>
                 <a href="/contact" class="${currentPage === '/contact' ? 'active' : ''}" data-i18n="nav_contact">Contact</a>
                 ${user ? `<a href="/dashboard" class="${currentPage === '/dashboard' ? 'active' : ''}" data-i18n="nav_dashboard">Dashboard</a>` : ''}
@@ -209,8 +210,8 @@ function renderFooter() {
                           <path d="M18 82 L82 82 L80 86 L20 86 Z" fill="#D4AF37"/>
                         </svg>
                     </div>
-                    <div class="brand-name">Shree Shanishwara Swamy Temple</div>
-                    <p class="brand-name-kn" style="color: var(--gold-metallic); font-family: var(--font-kannada); font-size: 0.9rem; margin-bottom: var(--space-md);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</p>
+                    <div class="brand-name-kn">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</div>
+                    <div class="brand-name">Shree Shanishwara Swamy Temple (R.)</div>
                     <p data-i18n="footer_about">A sacred temple dedicated to Lord Shanishwara, located at the divine Siddagiri hill.</p>
                     <div class="social-links" style="display:flex;gap:var(--space-sm);margin-top:var(--space-md);">
                         <a href="#" style="font-size:1.4rem;" title="Facebook">🌐</a>
@@ -223,7 +224,7 @@ function renderFooter() {
                     <h4 data-i18n="footer_quick_links">Quick Links</h4>
                     <a href="/" data-i18n="nav_home">Home</a>
                     <a href="/about" data-i18n="nav_about">About</a>
-                    <a href="/temple-info" data-i18n="nav_temple_info">Temple Information</a>
+                    <a href="/temple-info" data-i18n="nav_temple_info">ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ</a>
                     <a href="/gallery" data-i18n="nav_gallery">Gallery</a>
                     <a href="/donate" data-i18n="nav_donate">Donate</a>
                 </div>
@@ -245,7 +246,7 @@ function renderFooter() {
             </div>
 
             <div class="footer-bottom">
-                <p data-i18n="footer_copyright">© 2025 Shree Shanishwara Swamy Temple (R.), Shree Kshetra Siddagiri. All rights reserved.</p>
+                <p data-i18n="footer_copyright">© 2025 ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ) • Shree Shanishwara Swamy Temple (R.), Shree Kshetra Siddagiri. All rights reserved.</p>
             </div>
         </div>
     </footer>

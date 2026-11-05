@@ -14,8 +14,8 @@ function renderAdminSidebar() {
 
     sidebar.innerHTML = `
         <div class="sidebar-header">
-            <h3>🙏 Admin Panel</h3>
-            <p>Temple Management</p>
+            <h3 style="font-family:var(--font-kannada);font-size:1.02rem;color:var(--gold);margin-bottom:2px;">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</h3>
+            <p style="font-size:0.75rem;color:var(--gold-metallic);margin:0;">Shree Shanishwara Swamy Temple (R.)</p>
         </div>
         <a href="/admin" class="nav-item ${currentPage === '/admin' ? 'active' : ''}">
             <span class="icon">📊</span> Dashboard
@@ -24,7 +24,7 @@ function renderAdminSidebar() {
             <span class="icon">🏛️</span> Manage Temple
         </a>
         <a href="/admin/temple-info" class="nav-item ${currentPage === '/admin/temple-info' ? 'active' : ''}">
-            <span class="icon">📜</span> Official Info
+            <span class="icon">📜</span> ದೇವಸ್ಥಾನದ ಮಾಹಿತಿ (Official Info)
         </a>
         <a href="/admin/festivals" class="nav-item ${currentPage === '/admin/festivals' ? 'active' : ''}">
             <span class="icon">🎉</span> Manage Festivals
@@ -259,10 +259,10 @@ function renderDonationsTable(searchQuery = '') {
         if (isPending) {
             actionHtml = `
                 <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap;">
-                    <button class="btn-approve" onclick="approveDonation('${d.id}', '${escapeHtml(d.donor_name)}', ${d.amount}, '${escapeHtml(d.utr_number || '')}')" title="Verify bank credit & approve donation">
+                    <button class="btn-approve" onclick="showApprovalModal({ id: '${d.id}', donorName: '${escapeHtml(d.donor_name)}', amount: ${d.amount}, utr: '${escapeHtml(d.utr_number || '')}' })" title="Verify bank credit & approve donation">
                         <span>✓</span> Approve
                     </button>
-                    <button class="btn-reject" onclick="rejectDonation('${d.id}', '${escapeHtml(d.donor_name)}')" title="Reject unverified reference">
+                    <button class="btn-reject" onclick="showRejectModal({ id: '${d.id}', donorName: '${escapeHtml(d.donor_name)}', amount: ${d.amount}, utr: '${escapeHtml(d.utr_number || '')}' })" title="Reject unverified reference">
                         <span>✕</span> Reject
                     </button>
                 </div>
@@ -301,58 +301,270 @@ function renderDonationsTable(searchQuery = '') {
 }
 
 /**
- * Approve a pending donation by admin.
+ * Helper to get or create the admin modal container in the DOM.
  */
-async function approveDonation(id, donorName, amount, utr) {
-    const utrMsg = utr ? `\n• UTR Ref: ${utr}` : '';
-    const confirmed = confirm(
-        `Are you sure you want to APPROVE this payment?\n\n` +
-        `• Devotee: ${donorName}\n` +
-        `• Amount: ${formatINR(amount)}${utrMsg}\n\n` +
-        `This confirms that the bank transfer has been verified. The status will change to 'Completed' and an official receipt will be generated.`
-    );
+function getAdminModalContainer() {
+    let backdrop = document.getElementById('temple-admin-modal-backdrop');
+    if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'temple-admin-modal-backdrop';
+        backdrop.className = 'temple-modal-backdrop';
+        backdrop.innerHTML = `
+            <div class="temple-modal-card" id="temple-admin-modal-card" onclick="event.stopPropagation()">
+                <!-- Content dynamically injected here -->
+            </div>
+        `;
+        backdrop.onclick = closeAdminModal;
+        document.body.appendChild(backdrop);
 
-    if (!confirmed) return;
-
-    showToast(`Approving payment of ${formatINR(amount)} from ${donorName}...`, 'info');
-
-    try {
-        const result = await apiFetch(`/donate/approve/${id}`, {
-            method: 'POST',
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeAdminModal();
         });
+    }
+    return backdrop;
+}
 
-        showToast(`Payment approved successfully! Receipt #${result.receipt_number} generated. 🙏`, 'success');
-
-        // Refresh donations
-        await loadAdminDonations();
-    } catch (err) {
-        console.error('Approve donation error:', err);
-        showToast(err.message || 'Failed to approve donation', 'error');
+/**
+ * Close the admin modal dialog.
+ */
+function closeAdminModal() {
+    const backdrop = document.getElementById('temple-admin-modal-backdrop');
+    if (backdrop) {
+        backdrop.classList.remove('active');
+        document.body.style.overflow = '';
     }
 }
 
 /**
- * Reject an unverified donation reference.
+ * Show a beautiful approval confirmation modal.
  */
-async function rejectDonation(id, donorName) {
-    const confirmed = confirm(
-        `Are you sure you want to REJECT this payment reference for ${donorName}?\n\n` +
-        `This indicates that no matching credit was found in the temple bank account.`
-    );
+function showApprovalModal({ id, donorName, amount, utr }) {
+    const backdrop = getAdminModalContainer();
+    const card = document.getElementById('temple-admin-modal-card');
+    const formattedAmt = typeof formatINR === 'function' ? formatINR(amount) : `₹${amount}`;
 
-    if (!confirmed) return;
+    card.innerHTML = `
+        <div style="text-align:center;">
+            <div class="modal-header-badge">
+                <span>ॐ</span>
+                <span>ಶ್ರೀ ಕ್ಷೇತ್ರ ಸಿದ್ದಗಿರಿ • ADMIN VERIFICATION</span>
+            </div>
+            
+            <div class="modal-icon-circle approve">
+                <span>✅</span>
+            </div>
 
-    try {
-        const result = await apiFetch(`/donate/reject/${id}`, {
-            method: 'POST',
-        });
+            <h2 class="modal-title">Approve Devotee Payment</h2>
+            <p class="modal-subtitle">
+                Please verify bank credit before issuing the official temple receipt.
+            </p>
 
-        showToast(`Payment reference for ${donorName} marked as rejected.`, 'info');
-        await loadAdminDonations();
-    } catch (err) {
-        console.error('Reject donation error:', err);
-        showToast(err.message || 'Failed to reject donation', 'error');
-    }
+            <div class="modal-details-box">
+                <div class="modal-detail-row">
+                    <span class="modal-label">Devotee Name</span>
+                    <span class="modal-val">${escapeHtml(donorName)}</span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-label">Offering Amount</span>
+                    <span class="modal-val amount-highlight">${formattedAmt}</span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-label">12-Digit UTR Ref</span>
+                    <span class="modal-val mono-badge">${escapeHtml(utr || 'Direct Transfer')}</span>
+                </div>
+            </div>
+
+            <div class="modal-notice-box">
+                <span style="font-size:1.1rem;line-height:1;">ℹ️</span>
+                <span>
+                    This confirms that the bank transfer has been verified in Canara Bank. The donation status will change to <strong>'Completed'</strong> and an official receipt will be generated.
+                </span>
+            </div>
+
+            <div class="modal-actions-row">
+                <button type="button" class="modal-btn cancel" onclick="closeAdminModal()">
+                    <span>Cancel</span>
+                </button>
+                <button type="button" class="modal-btn approve-confirm" id="btn-modal-confirm-approve">
+                    <span>✓ Confirm & Approve Payment</span>
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('btn-modal-confirm-approve').onclick = async () => {
+        const btn = document.getElementById('btn-modal-confirm-approve');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span> <span>Approving...</span>';
+
+        try {
+            const result = await apiFetch(`/donate/approve/${id}`, {
+                method: 'POST',
+            });
+
+            // Show celebratory success modal!
+            showSuccessApprovalModal({
+                id,
+                donorName,
+                amount,
+                receiptNumber: result.receipt_number
+            });
+
+            // Refresh donations table in the background
+            if (typeof loadAdminDonations === 'function') {
+                loadAdminDonations();
+            }
+        } catch (err) {
+            console.error('Approve donation error:', err);
+            closeAdminModal();
+            showToast(err.message || 'Failed to approve donation', 'error');
+        }
+    };
+
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Show a celebratory success modal once donation is approved.
+ */
+function showSuccessApprovalModal({ id, donorName, amount, receiptNumber }) {
+    const card = document.getElementById('temple-admin-modal-card');
+    const formattedAmt = typeof formatINR === 'function' ? formatINR(amount) : `₹${amount}`;
+
+    card.innerHTML = `
+        <div style="text-align:center;">
+            <div class="modal-header-badge" style="background:#E8F5E9;color:#2E7D32;border-color:#A5D6A7;">
+                <span>✨</span>
+                <span>VERIFIED & APPROVED</span>
+            </div>
+            
+            <div class="modal-icon-circle success">
+                <span>🎉</span>
+            </div>
+
+            <h2 class="modal-title" style="color:#145A32;">Payment Approved!</h2>
+            <p class="modal-subtitle">
+                Devotional offering of <strong>${formattedAmt}</strong> from <strong>${escapeHtml(donorName)}</strong> has been verified and recorded.
+            </p>
+
+            <div style="background:#F8F5EE;border-radius:16px;padding:20px;margin-bottom:24px;border:1px solid rgba(212,175,55,0.4);">
+                <div style="font-size:0.8rem;text-transform:uppercase;color:#6B7280;font-weight:700;margin-bottom:6px;letter-spacing:0.5px;">
+                    Official Receipt Number
+                </div>
+                <div style="font-family:monospace;font-size:1.35rem;font-weight:800;color:#052E20;letter-spacing:1px;">
+                    ${escapeHtml(receiptNumber || 'Generated')}
+                </div>
+            </div>
+
+            <div class="modal-actions-row">
+                <button type="button" class="modal-btn cancel" onclick="closeAdminModal()">
+                    <span>Done</span>
+                </button>
+                <button type="button" class="modal-btn approve-confirm" onclick="closeAdminModal(); downloadReceiptPdf('${id}', '${receiptNumber}')">
+                    <span>📄 Download Receipt PDF</span>
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Show a beautiful rejection confirmation modal.
+ */
+function showRejectModal({ id, donorName, amount, utr }) {
+    const backdrop = getAdminModalContainer();
+    const card = document.getElementById('temple-admin-modal-card');
+    const formattedAmt = typeof formatINR === 'function' ? formatINR(amount) : `₹${amount}`;
+
+    card.innerHTML = `
+        <div style="text-align:center;">
+            <div class="modal-header-badge" style="background:#FFEBEE;color:#C62828;border-color:#FFCDD2;">
+                <span>⚠️</span>
+                <span>PAYMENT REJECTION</span>
+            </div>
+            
+            <div class="modal-icon-circle reject">
+                <span>⚠️</span>
+            </div>
+
+            <h2 class="modal-title" style="color:#B71C1C;">Reject Payment Reference?</h2>
+            <p class="modal-subtitle">
+                This indicates that no matching credit was found in the temple bank account.
+            </p>
+
+            <div class="modal-details-box">
+                <div class="modal-detail-row">
+                    <span class="modal-label">Devotee Name</span>
+                    <span class="modal-val">${escapeHtml(donorName)}</span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-label">Offering Amount</span>
+                    <span class="modal-val">${formattedAmt}</span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-label">UTR Ref</span>
+                    <span class="modal-val mono-badge">${escapeHtml(utr || 'Direct Transfer')}</span>
+                </div>
+            </div>
+
+            <div class="modal-notice-box danger">
+                <span style="font-size:1.1rem;line-height:1;">⚠️</span>
+                <span>
+                    The reference will be marked as <strong>'Rejected'</strong>. No official donation receipt will be generated.
+                </span>
+            </div>
+
+            <div class="modal-actions-row">
+                <button type="button" class="modal-btn cancel" onclick="closeAdminModal()">
+                    <span>Cancel</span>
+                </button>
+                <button type="button" class="modal-btn reject-confirm" id="btn-modal-confirm-reject">
+                    <span>✕ Confirm Rejection</span>
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('btn-modal-confirm-reject').onclick = async () => {
+        const btn = document.getElementById('btn-modal-confirm-reject');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span> <span>Rejecting...</span>';
+
+        try {
+            await apiFetch(`/donate/reject/${id}`, {
+                method: 'POST',
+            });
+
+            closeAdminModal();
+            showToast(`Payment reference for ${donorName} marked as rejected.`, 'info');
+
+            if (typeof loadAdminDonations === 'function') {
+                loadAdminDonations();
+            }
+        } catch (err) {
+            console.error('Reject donation error:', err);
+            closeAdminModal();
+            showToast(err.message || 'Failed to reject donation', 'error');
+        }
+    };
+
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Approve a pending donation by admin (wrapper calling showApprovalModal).
+ */
+function approveDonation(id, donorName, amount, utr) {
+    showApprovalModal({ id, donorName, amount, utr });
+}
+
+/**
+ * Reject an unverified donation reference (wrapper calling showRejectModal).
+ */
+function rejectDonation(id, donorName, amount = 0, utr = '') {
+    showRejectModal({ id, donorName, amount, utr });
 }
 
 /**
@@ -584,8 +796,8 @@ async function loadAdminFestivals() {
         const tbody = document.getElementById('festivals-body');
         tbody.innerHTML = festivals.map(f => `
             <tr>
+                <td style="font-family:var(--font-kannada);font-weight:600;">${f.name_kn}</td>
                 <td>${f.name_en}</td>
-                <td>${f.name_kn}</td>
                 <td>${f.date || '—'}</td>
                 <td>
                     <button class="action-btn delete" onclick="deleteFestival('${f._id}')">Delete</button>

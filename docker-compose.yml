@@ -1,0 +1,98 @@
+version: '3.8'
+
+# ==============================================================================
+# Shree Shanishwara Swamy Temple Website — Production Docker Compose
+# Architecture:
+#   - Caddy: Automatic HTTPS (Let's Encrypt), HTTP/3, reverse proxy, static caching
+#   - Backend: FastAPI (Python 3.11, non-root user, 4 Uvicorn workers)
+#   - MongoDB: Isolated internal database, persistent volume, auth enabled
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. MongoDB Database Engine (Isolated internally — NO public port mapping)
+  # ----------------------------------------------------------------------------
+  mongodb:
+    image: mongo:7.0
+    container_name: temple-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-temple_db_admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME:-shree_temple}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - temple-network
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --eval 'db.runCommand(\"ping\").ok' --quiet || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ----------------------------------------------------------------------------
+  # 2. FastAPI Backend & Dynamic Services
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: temple-backend
+    restart: always
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    env_file:
+      - .env.production
+    environment:
+      - MONGODB_URL=mongodb://${MONGO_ROOT_USER:-temple_db_admin}:${MONGO_ROOT_PASSWORD}@mongodb:27017/${DB_NAME:-shree_temple}?authSource=admin
+      - APP_ENV=production
+    volumes:
+      - uploads_data:/app/frontend/assets/uploads
+    networks:
+      - temple-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ----------------------------------------------------------------------------
+  # 3. Caddy Reverse Proxy & Automatic SSL / TLS Provisioner
+  # ----------------------------------------------------------------------------
+  caddy:
+    image: caddy:2-alpine
+    container_name: temple-caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./frontend:/srv/frontend:ro
+      - uploads_data:/srv/frontend/assets/uploads:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+    networks:
+      - temple-network
+
+networks:
+  temple-network:
+    name: temple-network
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    name: temple_mongodb_data
+  uploads_data:
+    name: temple_uploads_data
+  caddy_data:
+    name: temple_caddy_data
+  caddy_config:
+    name: temple_caddy_config
+

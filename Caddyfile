@@ -1,0 +1,49 @@
+# ==============================================================================
+# Caddyfile — Production HTTPS Reverse Proxy for Shree Shanishwara Temple
+# Features:
+#   - Automated Let's Encrypt / ZeroSSL TLS certificates & automated renewal
+#   - HTTP to HTTPS redirection
+#   - HTTP/2 & HTTP/3 (QUIC) support
+#   - Direct high-speed static asset serving with caching
+#   - Hardened security headers
+# ==============================================================================
+
+{$DOMAIN:localhost} {
+    # Encoding & Compression
+    encode gzip zstd
+
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    # Serve static assets directly from frontend directory
+    handle_path /static/* {
+        root * /srv/frontend
+        file_server
+        header Cache-Control "public, max-age=604800"
+    }
+
+    # Reverse proxy API and dynamic routes to FastAPI backend
+    handle {
+        reverse_proxy backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # Access logging
+    log {
+        output stdout
+        format console
+    }
+}
+

@@ -1,0 +1,55 @@
+# Version Control
+.git
+.gitignore
+.github
+
+# Python artifacts & virtual environments
+__pycache__
+*/__pycache__
+*/*/__pycache__
+*/*/*/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+*/.pytest_cache
+.coverage
+htmlcov/
+backend/venv/
+backend/venv*
+venv/
+.venv/
+ENV/
+env/
+
+# Local Embedded Database & Logs
+backend/mongodb/
+backend/mongod.log
+*.log
+
+# Sensitive credentials & environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.*.local
+
+# Test & Local Reports
+receipt_*.*
+test_receipt_*.*
+donations_admin_report.*
+test_donations_report.*
+donations_report*.*
+backend/tests/
+
+# Historical Archives & Backups
+_archive_pre_cleanup/
+*.zip
+*.tar.gz
+*.rar
+
+# IDE & Editor files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

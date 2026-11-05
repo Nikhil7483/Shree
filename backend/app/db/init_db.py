@@ -22,7 +22,12 @@ settings = get_settings()
 
 async def init_db():
     """Initialize Motor client and Beanie ODM with all document models."""
-    safe_url = settings.MONGODB_URL
+    mongo_url = settings.MONGODB_URL
+    if "@" in mongo_url and "authSource" not in mongo_url and not mongo_url.startswith("mongodb+srv"):
+        separator = "&" if "?" in mongo_url else "?"
+        mongo_url = f"{mongo_url}{separator}authSource=admin"
+
+    safe_url = mongo_url
     if "@" in safe_url:
         try:
             prefix, rest = safe_url.split("://", 1)
@@ -33,24 +38,12 @@ async def init_db():
     print(f"Connecting to MongoDB at: {safe_url}")
 
     client = AsyncIOMotorClient(
-        settings.MONGODB_URL,
-        serverSelectionTimeoutMS=5000,
+        mongo_url,
+        serverSelectionTimeoutMS=3000,
     )
 
-    # Retry pinging the database up to 10 times (useful during container startup)
-    for attempt in range(1, 11):
-        try:
-            await client.admin.command("ping")
-            print(f"[OK] Database connected successfully on attempt {attempt}.")
-            break
-        except Exception as exc:
-            if attempt < 10:
-                print(f"[!] Database connection attempt {attempt}/10 pending... retrying in 2s")
-                await asyncio.sleep(2)
-            else:
-                print(f"[ERROR] Could not connect to MongoDB after 10 attempts: {exc}")
-                print("[TIP] Ensure 'MONGO_URL' is linked in your Railway Environment Variables!")
-                raise exc
+    await client.admin.command("ping")
+    print("[OK] Database connection verified.")
 
     database = client[settings.DB_NAME]
 

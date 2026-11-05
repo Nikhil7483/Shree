@@ -8,6 +8,7 @@ registers all API routers, and serves the static frontend.
 """
 
 import os
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -41,15 +42,30 @@ def get_page_path(*path_parts: str) -> str:
     return os.path.join(FRONTEND_DIR, *path_parts)
 
 
+async def init_db_safe():
+    """Background task to initialize DB and seed data without blocking web server startup."""
+    for attempt in range(1, 30):
+        try:
+            print(f"[DB] Initializing database (attempt {attempt})...")
+            await init_db()
+            print("[DB] Database initialized successfully!")
+            return
+        except Exception as exc:
+            print(f"[DB] Attempt {attempt} waiting for MongoDB: {exc}. Retrying in 4s...")
+            await asyncio.sleep(4)
+    print("[DB ERROR] Could not connect to MongoDB after retries. Operating in static/offline mode.")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan: initialize database on startup."""
+    """Application lifespan: starts web server immediately and initializes DB in background."""
     print("Starting Shree Shanishwara Swamy Temple Server...")
-    await init_db()
-    print("Database initialized successfully")
-    print("Server is ready at http://localhost:8000")
+    # Launch database initialization in background so healthcheck passes instantly
+    db_task = asyncio.create_task(init_db_safe())
+    print("Web server ready to accept incoming traffic.")
     yield
     print("Server shutting down...")
+    db_task.cancel()
 
 
 settings = get_settings()
@@ -109,6 +125,14 @@ os.makedirs(uploads_dir, exist_ok=True)
 
 # Mount static files (CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
+
+# --- Healthcheck Endpoint ---
+
+@app.get("/health")
+async def health_check():
+    """Lightweight healthcheck endpoint for Railway / Cloud load balancers."""
+    return {"status": "ok", "app": settings.APP_NAME}
 
 
 # --- Serve Frontend HTML Pages ---

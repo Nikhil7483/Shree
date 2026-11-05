@@ -44,12 +44,15 @@ USER templeuser
 # Set working directory to backend
 WORKDIR /app/backend
 
-# Expose FastAPI port
+# Default port if not provided by host environment
+ENV PORT=8000
+
+# Expose port
 EXPOSE 8000
 
-# Healthcheck to verify the web service is responding
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD curl -f http://127.0.0.1:8000/ || exit 1
+# Healthcheck to verify the web service is responding on the active port
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -f http://127.0.0.1:${PORT:-8000}/ || exit 1
 
 # Launch production server with Uvicorn worker pool (supports dynamic cloud PORT)
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2"]

@@ -69,19 +69,29 @@ async def init_db():
 
 
 async def seed_admin():
-    """Create default admin user if not exists."""
-    existing = await User.find_one(User.email == settings.ADMIN_EMAIL)
-    if not existing:
+    """Create or update admin user so credentials in environment variables ALWAYS work."""
+    clean_admin_email = settings.ADMIN_EMAIL.strip().lower()
+    clean_admin_password = settings.ADMIN_PASSWORD.strip()
+
+    admin = await User.find_one({"role": "admin"})
+    if admin:
+        admin.email = clean_admin_email
+        admin.hashed_password = hash_password(clean_admin_password)
+        admin.is_active = True
+        await admin.save()
+        print(f"[OK] Admin user updated: {clean_admin_email}")
+    else:
         admin = User(
             name="Temple Admin",
-            email=settings.ADMIN_EMAIL,
+            email=clean_admin_email,
             mobile="0000000000",
-            hashed_password=hash_password(settings.ADMIN_PASSWORD),
+            hashed_password=hash_password(clean_admin_password),
             preferred_language="kn",
             role="admin",
+            is_active=True,
         )
         await admin.insert()
-        print(f"Admin user created: {settings.ADMIN_EMAIL}")
+        print(f"[OK] Admin user created: {clean_admin_email}")
 
 
 async def seed_temple():

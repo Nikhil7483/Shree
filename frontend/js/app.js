@@ -38,7 +38,7 @@ async function apiFetch(endpoint, options = {}) {
         headers,
     });
 
-    if (response.status === 401) {
+    if (response.status === 401 && endpoint !== '/auth/login') {
         // Token expired or invalid
         localStorage.removeItem('temple_token');
         localStorage.removeItem('temple_user');

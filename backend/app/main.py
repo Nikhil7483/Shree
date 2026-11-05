@@ -132,7 +132,22 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 @app.get("/health")
 async def health_check():
     """Lightweight healthcheck endpoint for Railway / Cloud load balancers."""
-    return {"status": "ok", "app": settings.APP_NAME}
+    db_status = "offline"
+    admin_info = None
+    try:
+        from app.domain.users.models import User
+        admin = await User.find_one({"role": "admin"})
+        db_status = "connected"
+        admin_info = admin.email if admin else "none"
+    except Exception as e:
+        admin_info = f"err: {str(e)}"
+
+    return {
+        "status": "ok",
+        "app": settings.APP_NAME,
+        "database": db_status,
+        "active_admin": admin_info,
+    }
 
 
 # --- Serve Frontend HTML Pages ---

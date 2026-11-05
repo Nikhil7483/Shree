@@ -3,16 +3,29 @@ Application configuration using pydantic-settings.
 Loads environment variables from .env file.
 """
 
-from pydantic_settings import BaseSettings
 from functools import lru_cache
+from typing import Optional
+from pydantic import model_validator
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
-    # MongoDB
+    # MongoDB (Supports local, Atlas MONGODB_URL, and Railway MONGO_URL / MONGO_PRIVATE_URL)
     MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGO_URL: Optional[str] = None
+    MONGO_PRIVATE_URL: Optional[str] = None
     DB_NAME: str = "shree_temple"
+
+    @model_validator(mode="after")
+    def resolve_mongo_url(self) -> "Settings":
+        """Automatically resolve Railway or Cloud MongoDB variables."""
+        if self.MONGO_PRIVATE_URL:
+            self.MONGODB_URL = self.MONGO_PRIVATE_URL
+        elif self.MONGO_URL:
+            self.MONGODB_URL = self.MONGO_URL
+        return self
 
     # JWT
     JWT_SECRET_KEY: str = "shree-shanishwara-temple-jwt-secret-2024-dev"

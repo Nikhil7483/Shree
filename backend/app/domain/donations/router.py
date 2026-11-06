@@ -258,6 +258,34 @@ async def all_donations(
     ]
 
 
+@router.delete("/clear-all")
+async def clear_all_donations(
+    admin: User = Depends(get_current_admin),
+):
+    """Delete all donation records (admin only)."""
+    await Donation.find_all().delete()
+    return {"status": "ok", "message": "All donation records cleared."}
+
+
+@router.delete("/{donation_id}")
+async def delete_donation(
+    donation_id: str,
+    admin: User = Depends(get_current_admin),
+):
+    """Delete a specific donation record (admin only)."""
+    donation = None
+    try:
+        donation = await Donation.get(PydanticObjectId(donation_id))
+    except Exception:
+        pass
+    if not donation:
+        donation = await Donation.find_one({"receipt_number": donation_id})
+    if not donation:
+        raise HTTPException(status_code=404, detail="Donation not found")
+    await donation.delete()
+    return {"status": "ok", "message": f"Donation {donation_id} deleted."}
+
+
 @router.post("/approve/{donation_id}")
 async def approve_donation(
     donation_id: str,

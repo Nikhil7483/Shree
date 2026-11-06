@@ -157,7 +157,7 @@ function renderNavbar() {
                        </div>
                        `
                     : `<a href="/login" class="nav-auth-btn" data-i18n="nav_login">Login</a>
-                       <a href="${user ? '/donate' : '/login?redirect=/donate'}" class="btn btn-primary btn-sm nav-donate-btn" data-i18n="nav_donate">Donate</a>`
+                       <a href="/donate" class="btn btn-primary btn-sm nav-donate-btn" data-i18n="nav_donate">Donate</a>`
                 }
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -177,7 +177,7 @@ function renderNavbar() {
         <a href="/about" ${currentPage === '/about' ? 'class="active"' : ''} data-i18n="nav_about">About</a>
         <a href="/timings" ${currentPage === '/timings' ? 'class="active"' : ''} data-i18n="nav_timings">Timings</a>
         <a href="/contact" ${currentPage === '/contact' ? 'class="active"' : ''} data-i18n="nav_contact">Contact</a>
-        <a href="${user ? '/donate' : '/login?redirect=/donate'}" ${currentPage === '/donate' ? 'class="active"' : ''} data-i18n="nav_donate">Donate</a>
+        <a href="/donate" ${currentPage === '/donate' ? 'class="active"' : ''} data-i18n="nav_donate">Donate</a>
         ${user ? `<a href="/dashboard" ${currentPage === '/dashboard' ? 'class="active"' : ''} data-i18n="nav_dashboard">Dashboard</a>` : ''}
         ${user && user.role === 'admin' ? `<a href="/admin" ${currentPage.startsWith('/admin') ? 'class="active"' : ''} data-i18n="nav_admin">Admin</a>` : ''}
         ${user

@@ -43,7 +43,7 @@ async def create_donation_order(
     donation = Donation(
         user_id=user_id,
         donor_name=data.donor_name,
-        donor_email=data.donor_email,
+        donor_email=data.donor_email or "",
         donor_mobile=data.donor_mobile,
         donor_address=data.donor_address or "",
         amount=data.amount * 100,  # Convert to paise for Razorpay

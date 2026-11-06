@@ -65,19 +65,20 @@ async def submit_utr(
 @router.post("/create-order")
 async def create_order(
     data: DonationCreateRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_user),
 ):
-    """Create a Razorpay order for donation (authenticated)."""
-    result = await create_donation_order(data, str(current_user.id))
+    """Create a payment order for donation."""
+    user_id = str(current_user.id) if current_user else "online_donor"
+    result = await create_donation_order(data, user_id)
     return result
 
 
 @router.post("/verify")
 async def verify_payment(
     data: DonationVerifyRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_optional_user),
 ):
-    """Verify Razorpay payment after checkout (authenticated)."""
+    """Verify payment and mark donation complete."""
     result = await verify_donation_payment(data)
     return result
 
@@ -108,16 +109,31 @@ async def donation_history(
 @router.get("/receipt/{donation_id}")
 async def download_receipt(
     donation_id: str,
-    current_user: User = Depends(get_current_user),
+    token: Optional[str] = None,
+    current_user: Optional[User] = Depends(get_optional_user),
 ):
     """Download PDF receipt for a specific donation."""
-    donation = await Donation.get(PydanticObjectId(donation_id))
-    if not donation:
-        return {"message": "Donation not found"}
+    from app.core.security import decode_access_token
 
-    # Security check: user can only download their own receipts
-    if donation.user_id != str(current_user.id) and current_user.role != "admin":
-        return {"message": "Unauthorized"}
+    # Check query param token if header was not provided
+    if not current_user and token:
+        try:
+            payload = decode_access_token(token)
+            if payload and payload.get("sub"):
+                current_user = await User.find_one({"email": payload.get("sub")})
+        except Exception:
+            pass
+
+    donation = None
+    try:
+        donation = await Donation.get(PydanticObjectId(donation_id))
+    except Exception:
+        pass
+    if not donation:
+        donation = await Donation.find_one({"receipt_number": donation_id})
+
+    if not donation:
+        raise HTTPException(status_code=404, detail="Donation not found")
 
     # Generate PDF
     pdf_buffer = generate_receipt_pdf(donation)

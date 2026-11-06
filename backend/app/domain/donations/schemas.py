@@ -11,8 +11,8 @@ class DonationCreateRequest(BaseModel):
     amount: int = Field(..., gt=0, description="Amount in INR (rupees)")
     donation_type: str = Field(default="general")
     donor_name: str
-    donor_email: str
     donor_mobile: str
+    donor_email: Optional[str] = ""
     donor_address: Optional[str] = ""
     is_anonymous: Optional[bool] = False
 

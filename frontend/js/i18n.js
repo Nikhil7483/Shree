@@ -149,6 +149,8 @@ const translations = {
         donate_success_msg: "Thank you for your generous contribution. May Lord Shanishwara bless you.",
         donate_receipt: "Receipt Number",
         donate_download: "Download Receipt (PDF)",
+        tab_instant_online: "Instant Online Payment",
+        tab_scan_qr: "Scan Temple UPI QR & Bank",
 
         // Scan & Pay / UPI & Bank Details
         scan_pay_title: "Scan & Pay",
@@ -431,6 +433,8 @@ const translations = {
         donate_success_msg: "ನಿಮ್ಮ ಉದಾರ ಕೊಡುಗೆಗೆ ಧನ್ಯವಾದಗಳು. ಶನೀಶ್ವರ ದೇವರು ನಿಮ್ಮನ್ನು ಆಶೀರ್ವದಿಸಲಿ.",
         donate_receipt: "ರಸೀದಿ ಸಂಖ್ಯೆ",
         donate_download: "ರಸೀದಿ ಡೌನ್‌ಲೋಡ್ (PDF)",
+        tab_instant_online: "ತ್ವರಿತ ಆನ್‌ಲೈನ್ ಪಾವತಿ",
+        tab_scan_qr: "ಕ್ಯೂಆರ್ ಕೋಡ್ ಮತ್ತು ಬ್ಯಾಂಕ್ ಖಾತೆ",
 
         // Scan & Pay / UPI & Bank Details
         scan_pay_title: "ಸ್ಕ್ಯಾನ್ ಮಾಡಿ & ಪಾವತಿಸಿ",

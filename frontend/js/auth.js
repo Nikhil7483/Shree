@@ -32,17 +32,6 @@ function showFieldError(fieldId, message) {
     }
 }
 
-function fillAdminCreds(email, password) {
-    const emailEl = document.getElementById('login-email');
-    const passEl = document.getElementById('login-password');
-    if (emailEl) emailEl.value = email;
-    if (passEl) passEl.value = password;
-    clearErrors();
-    if (typeof showToast === 'function') {
-        showToast('Admin credentials filled. Click Login to enter.', 'info');
-    }
-}
-
 /**
  * Handle login form submission.
  */

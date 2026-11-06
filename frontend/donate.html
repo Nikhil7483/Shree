@@ -238,34 +238,6 @@
             transform: translateY(-2px);
         }
 
-        .btn-mobile-upi {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            max-width: 310px;
-            margin-top: 14px;
-            padding: 13px 18px;
-            background: linear-gradient(135deg, #052E20 0%, #0B3D2E 100%);
-            color: #D4AF37;
-            border: 1.5px solid #D4AF37;
-            border-radius: 14px;
-            font-size: 0.92rem;
-            font-weight: 700;
-            text-decoration: none;
-            box-shadow: 0 4px 16px rgba(5, 46, 32, 0.18);
-            transition: all 0.25s ease;
-            text-align: center;
-        }
-
-        .btn-mobile-upi:hover {
-            background: #D4AF37;
-            color: #052E20;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 22px rgba(212, 175, 55, 0.35);
-        }
-
         /* BANK DETAILS COLUMN */
         .bank-column {
             background: var(--temple-cream);
@@ -615,14 +587,6 @@
                             <span data-i18n="btn_download_qr">Download QR</span>
                         </a>
                     </div>
-
-                    <!-- Direct UPI Intent for Mobile Donors -->
-                    <a id="btn-mobile-upi-intent"
-                        href="upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&mc=8661&tn=Temple%20Donation&cu=INR"
-                        class="btn-mobile-upi">
-                        <span>📱</span>
-                        <span>Pay via UPI App (GPay / PhonePe / Paytm)</span>
-                    </a>
                 </div>
 
                 <!-- Bank & UPI Details Column -->
@@ -958,20 +922,6 @@
                     if (utrNameInput && user.name) utrNameInput.value = user.name;
                     if (utrMobileInput && user.mobile) utrMobileInput.value = user.mobile;
                 }
-            }
-
-            // Dynamically update mobile UPI intent link when amount is typed
-            const amtInput = document.getElementById('utr-amount');
-            const upiBtn = document.getElementById('btn-mobile-upi-intent');
-            if (amtInput && upiBtn) {
-                amtInput.addEventListener('input', () => {
-                    const val = parseFloat(amtInput.value.trim());
-                    if (val > 0) {
-                        upiBtn.href = `upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&mc=8661&tn=Temple%20Donation&cu=INR&am=${val.toFixed(2)}`;
-                    } else {
-                        upiBtn.href = 'upi://pay?pa=47808680004653@cnrb&pn=Sri%20Shaneshwara%20Swamy%20Devastana&mc=8661&tn=Temple%20Donation&cu=INR';
-                    }
-                });
             }
         });
     </script>

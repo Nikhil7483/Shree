@@ -45,3 +45,10 @@ class UtrIntimationRequest(BaseModel):
     donor_email: Optional[str] = ""
     donation_type: Optional[str] = "general"
 
+
+class CashfreeVerifyRequest(BaseModel):
+    """Schema for verifying Cashfree payment status after return redirect."""
+    order_id: str
+    donation_id: Optional[str] = None
+
+

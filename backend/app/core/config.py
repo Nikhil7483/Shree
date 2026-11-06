@@ -40,6 +40,18 @@ class Settings(BaseSettings):
     YOUPI_GATEWAY_URL: Optional[str] = None
     YOUPI_WEBHOOK_SECRET: Optional[str] = None
 
+    # Cashfree Payment Gateway
+    CASHFREE_APP_ID: str = ""
+    CASHFREE_SECRET_KEY: str = ""
+    CASHFREE_ENV: str = "sandbox"  # "sandbox" or "production"
+    CASHFREE_API_VERSION: str = "2023-08-01"
+
+    @property
+    def cashfree_base_url(self) -> str:
+        if self.CASHFREE_ENV.lower() == "production":
+            return "https://api.cashfree.com/pg"
+        return "https://sandbox.cashfree.com/pg"
+
     # Admin
     ADMIN_EMAIL: str = "admin@shreeshani.com"
     ADMIN_PASSWORD: str = "Admin@123"

@@ -17,8 +17,15 @@ import httpx
 from app.core.config import get_settings
 from app.core.dependencies import get_current_user, get_current_admin, get_optional_user
 from app.domain.donations.models import Donation
-from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest, UtrIntimationRequest
-from app.domain.donations.service import create_donation_order, verify_donation_payment, generate_receipt_number
+from app.domain.donations.schemas import DonationCreateRequest, DonationVerifyRequest, UtrIntimationRequest, CashfreeVerifyRequest
+from app.domain.donations.service import (
+    create_donation_order,
+    verify_donation_payment,
+    generate_receipt_number,
+    create_cashfree_order,
+    verify_cashfree_order,
+    verify_cashfree_signature,
+)
 from app.domain.users.models import User
 from app.utils.pdf_receipt import generate_receipt_pdf, generate_donations_report_pdf
 
@@ -81,6 +88,86 @@ async def verify_payment(
     """Verify payment and mark donation complete."""
     result = await verify_donation_payment(data)
     return result
+
+
+@router.post("/cashfree-create-order")
+async def cashfree_create_order(
+    request: Request,
+    data: DonationCreateRequest,
+    current_user: Optional[User] = Depends(get_optional_user),
+):
+    """
+    Create a Cashfree payment order using official APIs.
+    Returns payment_session_id and hosted_url to redirect user to Cashfree Hosted Checkout.
+    """
+    user_id = str(current_user.id) if current_user else "online_donor"
+    # Resolve base URL from request or fallback to production
+    base_url = str(request.base_url).rstrip("/")
+    if "shreeshanishwara" in base_url or "railway.app" in base_url:
+        base_url = "https://shreeshanishwara.up.railway.app"
+    result = await create_cashfree_order(data, user_id, base_url=base_url)
+    return result
+
+
+@router.post("/cashfree-verify")
+async def cashfree_verify_payment(
+    data: CashfreeVerifyRequest,
+    current_user: Optional[User] = Depends(get_optional_user),
+):
+    """
+    Verify payment status with Cashfree APIs securely from backend.
+    """
+    result = await verify_cashfree_order(data.order_id, data.donation_id)
+    return result
+
+
+@router.post("/cashfree-webhook")
+async def cashfree_webhook(request: Request):
+    """
+    Cashfree webhook endpoint with HMAC-SHA256 signature verification.
+    """
+    timestamp = request.headers.get("x-webhook-timestamp", "")
+    signature = request.headers.get("x-webhook-signature", "")
+    raw_body_bytes = await request.body()
+    raw_body_str = raw_body_bytes.decode("utf-8")
+
+    # Verify signature
+    is_valid = verify_cashfree_signature(timestamp, raw_body_str, signature)
+    if not is_valid:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid Cashfree webhook signature",
+        )
+
+    try:
+        payload = json.loads(raw_body_str)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+
+    data = payload.get("data", {})
+    order_data = data.get("order", {})
+    payment_data = data.get("payment", {})
+    order_id = order_data.get("order_id")
+
+    if not order_id:
+        return {"status": "ignored", "reason": "No order_id in webhook"}
+
+    order_status = order_data.get("order_status", "").upper()
+    payment_status = payment_data.get("payment_status", "").upper()
+
+    if order_status == "PAID" or payment_status == "SUCCESS":
+        donation = await Donation.find_one({"cashfree_order_id": order_id})
+        if donation and donation.status != "completed":
+            donation.status = "completed"
+            cf_pay_id = payment_data.get("cf_payment_id")
+            if cf_pay_id:
+                donation.cashfree_payment_id = str(cf_pay_id)
+            if not donation.receipt_number:
+                donation.receipt_number = generate_receipt_number()
+            await donation.save()
+            print(f"[Cashfree Webhook] Order {order_id} marked as completed.")
+
+    return {"status": "received", "order_id": order_id}
 
 
 @router.get("/history")

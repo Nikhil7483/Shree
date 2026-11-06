@@ -23,6 +23,9 @@ class Donation(Document):
     razorpay_order_id: Optional[str] = None
     razorpay_payment_id: Optional[str] = None
     razorpay_signature: Optional[str] = None
+    cashfree_order_id: Optional[str] = None
+    cashfree_payment_id: Optional[str] = None
+    payment_gateway: Optional[str] = None
     status: str = "pending"  # pending, completed, failed
     receipt_number: str = ""
     created_at: datetime = Field(

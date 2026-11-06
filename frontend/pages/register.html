@@ -29,6 +29,18 @@
                 <h2 data-i18n="register_title">Create Account</h2>
                 <p class="auth-subtitle" data-i18n="register_subtitle">Join our temple community</p>
             </div>
+
+            <!-- Active Session Notice Banner -->
+            <div id="already-logged-in-banner" style="display:none; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
+                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-primary);">
+                    Signed in as <strong id="logged-in-username"></strong> (<span id="logged-in-role"></span>)
+                </p>
+                <div style="display: flex; gap: 8px; justify-content: center;">
+                    <a id="logged-in-dash-link" href="/dashboard" class="btn btn-primary btn-sm" style="font-size:0.8rem; padding: 4px 12px;">Go to Dashboard</a>
+                    <button type="button" onclick="logout()" class="btn btn-outline btn-sm" style="font-size:0.8rem; padding: 4px 12px;">Sign Out to Register New</button>
+                </div>
+            </div>
+
             <form onsubmit="handleRegister(event)" novalidate>
                 <div class="form-group">
                     <label class="form-label" data-i18n="register_name">Full Name</label>
@@ -87,5 +99,18 @@
     <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js?v=2.1"></script>
     <script src="/static/js/auth.js"></script>
+    <script>
+        if (isLoggedIn()) {
+            const user = getUser();
+            const banner = document.getElementById('already-logged-in-banner');
+            if (banner && user) {
+                document.getElementById('logged-in-username').textContent = user.name || user.email;
+                document.getElementById('logged-in-role').textContent = user.role === 'admin' ? 'Administrator' : 'Devotee';
+                const link = document.getElementById('logged-in-dash-link');
+                if (link) link.href = user.role === 'admin' ? '/admin' : '/dashboard';
+                banner.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>

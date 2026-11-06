@@ -12,8 +12,16 @@ from app.domain.auth.schemas import RegisterRequest, LoginRequest, TokenResponse
 async def register_user(data: RegisterRequest) -> TokenResponse:
     """
     Register a new user.
-    Validates passwords match, checks for existing email, creates user, returns JWT.
+    Validates passwords match, checks for existing email and mobile, creates user, returns JWT.
     """
+    clean_name = data.name.strip()
+    clean_email = data.email.strip().lower()
+    clean_mobile = data.mobile.strip().replace(" ", "").replace("-", "")
+    if clean_mobile.startswith("+91"):
+        clean_mobile = clean_mobile[3:]
+    elif clean_mobile.startswith("0") and len(clean_mobile) == 11:
+        clean_mobile = clean_mobile[1:]
+
     # Validate passwords match
     if data.password != data.confirm_password:
         raise HTTPException(
@@ -22,21 +30,31 @@ async def register_user(data: RegisterRequest) -> TokenResponse:
         )
 
     # Check if email already exists
-    existing = await User.find_one({"email": data.email.strip().lower()})
+    existing = await User.find_one({"email": clean_email})
     if existing:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Email already registered",
+            detail="Email address is already registered. Please login.",
         )
+
+    # Check if mobile already exists
+    if len(clean_mobile) >= 10:
+        existing_mob = await User.find_one({"mobile": clean_mobile})
+        if existing_mob:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Mobile number is already registered. Please login.",
+            )
 
     # Create user
     user = User(
-        name=data.name,
-        email=data.email,
-        mobile=data.mobile,
+        name=clean_name,
+        email=clean_email,
+        mobile=clean_mobile,
         hashed_password=hash_password(data.password),
         preferred_language=data.preferred_language,
         role="user",
+        is_active=True,
     )
     await user.insert()
 
@@ -155,19 +173,25 @@ async def login_user(data: LoginRequest) -> TokenResponse:
                 photo_url=None,
             )
 
-    # 2. Standard user authentication (case-insensitive email matching + mobile number matching)
+    # 2. Standard user authentication (supports email, mobile number, case-insensitive)
+    clean_mobile = clean_email.replace("+", "").replace("-", "").replace(" ", "")
+    if clean_mobile.startswith("91") and len(clean_mobile) == 12:
+        clean_mobile = clean_mobile[2:]
+    elif clean_mobile.startswith("0") and len(clean_mobile) == 11:
+        clean_mobile = clean_mobile[1:]
+
     user = await User.find_one({"email": clean_email})
+    if not user and clean_mobile.isdigit() and len(clean_mobile) >= 10:
+        user = await User.find_one({"mobile": clean_mobile})
     if not user:
         # Fallback to case-insensitive regex in MongoDB
         import re
         user = await User.find_one({"email": {"$regex": f"^{re.escape(clean_email)}$", "$options": "i"}})
-    if not user and clean_email.replace("+", "").replace("-", "").isdigit():
-        user = await User.find_one({"mobile": clean_email.replace("+", "").replace("-", "")})
 
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password",
+            detail="Invalid email/mobile or password",
         )
 
     if not user.is_active:
@@ -176,10 +200,10 @@ async def login_user(data: LoginRequest) -> TokenResponse:
             detail="Account is blocked. Please contact temple administration.",
         )
 
-    if not verify_password(data.password, user.hashed_password):
+    if not verify_password(raw_password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password",
+            detail="Invalid email/mobile or password",
         )
 
     # Generate JWT

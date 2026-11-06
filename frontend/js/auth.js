@@ -46,12 +46,14 @@ async function handleLogin(event) {
     let hasError = false;
 
     if (!email) {
-        showFieldError('login-email', 'Email address is required');
+        showFieldError('login-email', 'Please enter your email or mobile number');
         hasError = true;
     } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showFieldError('login-email', 'Please enter a valid email address');
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const isPhone = /^[0-9+\-\s]{10,15}$/.test(email);
+        const isAdminUser = email.toLowerCase() === 'admin';
+        if (!isEmail && !isPhone && !isAdminUser) {
+            showFieldError('login-email', 'Please enter a valid email address or 10-digit mobile number');
             hasError = true;
         }
     }
@@ -99,7 +101,9 @@ async function handleLogin(event) {
             }
         }, 800);
     } catch (err) {
-        showToast(err.message || 'Login failed', 'error');
+        const msg = err.message || 'Login failed';
+        showToast(msg, 'error');
+        showFieldError('login-password', msg);
         submitBtn.disabled = false;
         submitBtn.classList.remove('btn-loading');
     }
@@ -114,8 +118,8 @@ async function handleRegister(event) {
     const name = document.getElementById('register-name').value.trim();
     const email = document.getElementById('register-email').value.trim();
     const mobile = document.getElementById('register-mobile').value.trim();
-    const password = document.getElementById('register-password').value;
-    const confirmPassword = document.getElementById('register-confirm').value;
+    const password = document.getElementById('register-password').value.trim();
+    const confirmPassword = document.getElementById('register-confirm').value.trim();
     const preferredLanguage = document.getElementById('register-language').value;
     const submitBtn = event.target.querySelector('button[type="submit"]');
 
@@ -142,8 +146,8 @@ async function handleRegister(event) {
         showFieldError('register-mobile', 'Mobile number is required');
         hasError = true;
     } else {
-        const phoneRegex = /^[0-9]{10}$/;
-        if (!phoneRegex.test(mobile)) {
+        const cleanDigits = mobile.replace(/[^0-9]/g, '');
+        if (cleanDigits.length < 10) {
             showFieldError('register-mobile', 'Please enter a valid 10-digit mobile number');
             hasError = true;
         }
@@ -205,7 +209,15 @@ async function handleRegister(event) {
             window.location.href = '/dashboard';
         }, 800);
     } catch (err) {
-        showToast(err.message || 'Registration failed', 'error');
+        const msg = err.message || 'Registration failed';
+        showToast(msg, 'error');
+        if (msg.toLowerCase().includes('email')) {
+            showFieldError('register-email', msg);
+        } else if (msg.toLowerCase().includes('mobile')) {
+            showFieldError('register-mobile', msg);
+        } else {
+            showFieldError('register-name', msg);
+        }
         submitBtn.disabled = false;
         submitBtn.classList.remove('btn-loading');
     }

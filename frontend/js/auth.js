@@ -92,9 +92,14 @@ async function handleLogin(event) {
 
         showToast('Login successful! Welcome back.', 'success');
 
-        // Redirect based on role
+        // Redirect based on redirect parameter or role
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+
         setTimeout(() => {
-            if (data.user_role === 'admin') {
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else if (data.user_role === 'admin') {
                 window.location.href = '/admin';
             } else {
                 window.location.href = '/dashboard';
@@ -205,8 +210,15 @@ async function handleRegister(event) {
 
         showToast('Account created successfully! Welcome.', 'success');
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+
         setTimeout(() => {
-            window.location.href = '/dashboard';
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = '/dashboard';
+            }
         }, 800);
     } catch (err) {
         const msg = err.message || 'Registration failed';

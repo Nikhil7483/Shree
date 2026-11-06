@@ -793,6 +793,11 @@
     <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js?v=2.2"></script>
     <script>
+        // Require login before donation
+        if (!isLoggedIn()) {
+            window.location.href = '/login?redirect=/donate&reason=donate';
+        }
+
         // Copy to clipboard helper
         function copyValue(text, btnElement) {
             navigator.clipboard.writeText(text).then(() => {

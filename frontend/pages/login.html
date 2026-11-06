@@ -30,6 +30,17 @@
                 <p class="auth-subtitle" data-i18n="login_subtitle">Login to your account</p>
             </div>
 
+            <!-- Login for Donation Welcome Prompt -->
+            <div id="login-donate-prompt" style="display:none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--accent-gold); border-radius: 8px; padding: 12px 14px; margin-bottom: 20px; text-align: center;">
+                <div style="font-size: 1.25rem; margin-bottom: 3px;">🙏</div>
+                <div style="font-weight: 700; color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 3px;">
+                    <span data-i18n="login_donate_heading">ದಾನ ಮಾಡಲು ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಮಾಡಿ</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    Please sign in or register below to proceed with your temple donation.
+                </div>
+            </div>
+
             <!-- Active Session Notice Banner -->
             <div id="already-logged-in-banner" style="display:none; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
                 <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-primary);">
@@ -66,7 +77,7 @@
             </form>
             <div class="auth-links">
                 <span data-i18n="login_no_account">Don't have an account?</span>
-                <a href="/register" data-i18n="login_register">Register here</a>
+                <a href="/register" id="login-register-link" data-i18n="login_register">Register here</a>
             </div>
             <div style="text-align:center;margin-top:var(--space-lg);">
                 <a href="/" style="color:var(--text-muted);font-size:0.85rem;">← Back to Home</a>
@@ -77,16 +88,31 @@
     <script src="/static/js/app.js?v=2.1"></script>
     <script src="/static/js/auth.js"></script>
     <script>
-        // Check if already logged in: show switch banner so users are never trapped in redirect loops
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTarget = urlParams.get('redirect');
+
+        if (redirectTarget === '/donate' || urlParams.get('reason') === 'donate') {
+            const prompt = document.getElementById('login-donate-prompt');
+            if (prompt) prompt.style.display = 'block';
+            const regLink = document.getElementById('login-register-link');
+            if (regLink) regLink.href = '/register?redirect=/donate';
+        }
+
+        // If already logged in:
         if (isLoggedIn()) {
-            const user = getUser();
-            const banner = document.getElementById('already-logged-in-banner');
-            if (banner && user) {
-                document.getElementById('logged-in-username').textContent = user.name || user.email;
-                document.getElementById('logged-in-role').textContent = user.role === 'admin' ? 'Administrator' : 'Devotee';
-                const link = document.getElementById('logged-in-dash-link');
-                if (link) link.href = user.role === 'admin' ? '/admin' : '/dashboard';
-                banner.style.display = 'block';
+            if (redirectTarget) {
+                // If they specifically clicked donate and are already logged in, proceed straight to donate
+                window.location.href = redirectTarget;
+            } else {
+                const user = getUser();
+                const banner = document.getElementById('already-logged-in-banner');
+                if (banner && user) {
+                    document.getElementById('logged-in-username').textContent = user.name || user.email;
+                    document.getElementById('logged-in-role').textContent = user.role === 'admin' ? 'Administrator' : 'Devotee';
+                    const link = document.getElementById('logged-in-dash-link');
+                    if (link) link.href = user.role === 'admin' ? '/admin' : '/dashboard';
+                    banner.style.display = 'block';
+                }
             }
         }
     </script>

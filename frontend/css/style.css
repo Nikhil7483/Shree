@@ -23,7 +23,7 @@
     --secondary-dark: #0B3D2E;
     --accent: #1E8449;
     --accent-light: #27ae60;
-    
+
     /* Legacy aliases to maintain backward-compatibility */
     --saffron: var(--accent);
     --saffron-light: var(--accent-light);
@@ -100,13 +100,16 @@
     width: 8px;
     height: 8px;
 }
+
 ::-webkit-scrollbar-track {
     background: var(--warm-white);
 }
+
 ::-webkit-scrollbar-thumb {
     background: var(--primary);
     border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-light);
 }
@@ -206,23 +209,40 @@ img {
     display: block;
 }
 
-ul, ol {
+ul,
+ol {
     list-style: none;
 }
 
 /* ============================
    Typography
    ============================ */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 700;
     line-height: 1.3;
     color: var(--dark-brown);
 }
 
-h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
-h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
-h4 { font-size: 1.25rem; }
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+h4 {
+    font-size: 1.25rem;
+}
 
 p {
     margin-bottom: var(--space-md);
@@ -291,18 +311,31 @@ p {
     gap: var(--space-xl);
 }
 
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
 
 @media (max-width: 768px) {
-    .grid-2, .grid-3, .grid-4 {
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
         grid-template-columns: 1fr;
     }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-    .grid-3, .grid-4 {
+
+    .grid-3,
+    .grid-4 {
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -368,7 +401,9 @@ p {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .skeleton {
@@ -379,8 +414,13 @@ p {
 }
 
 @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* ============================
@@ -417,12 +457,15 @@ p {
     .hide-mobile {
         display: none !important;
     }
+
     .show-mobile {
         display: block !important;
     }
+
     .container {
         padding: 0 14px;
     }
+
     .section {
         padding: var(--space-xl) 0;
     }
@@ -432,6 +475,7 @@ p {
     .container {
         padding: 0 10px;
     }
+
     .section {
         padding: var(--space-lg) 0;
     }

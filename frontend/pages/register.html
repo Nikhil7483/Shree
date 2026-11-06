@@ -30,6 +30,17 @@
                 <p class="auth-subtitle" data-i18n="register_subtitle">Join our temple community</p>
             </div>
 
+            <!-- Donation Welcome Prompt on Register -->
+            <div id="register-donate-prompt" style="display:none; background: rgba(212, 175, 55, 0.12); border: 1.5px solid var(--accent-gold); border-radius: 8px; padding: 12px 14px; margin-bottom: 20px; text-align: center;">
+                <div style="font-size: 1.25rem; margin-bottom: 3px;">🙏</div>
+                <div style="font-weight: 700; color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 3px;">
+                    <span data-i18n="register_donate_heading">ದಾನ ಮಾಡಲು ಖಾತೆ ರಚಿಸಿ</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    Create a quick account to proceed with your donation and receive official PDF receipts.
+                </div>
+            </div>
+
             <!-- Active Session Notice Banner -->
             <div id="already-logged-in-banner" style="display:none; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center;">
                 <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-primary);">
@@ -89,7 +100,7 @@
             </form>
             <div class="auth-links">
                 <span data-i18n="register_has_account">Already have an account?</span>
-                <a href="/login" data-i18n="register_login">Login here</a>
+                <a href="/login" id="register-login-link" data-i18n="register_login">Login here</a>
             </div>
             <div style="text-align:center;margin-top:var(--space-lg);">
                 <a href="/" style="color:var(--text-muted);font-size:0.85rem;">← Back to Home</a>
@@ -100,15 +111,29 @@
     <script src="/static/js/app.js?v=2.1"></script>
     <script src="/static/js/auth.js"></script>
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTarget = urlParams.get('redirect');
+
+        if (redirectTarget === '/donate') {
+            const prompt = document.getElementById('register-donate-prompt');
+            if (prompt) prompt.style.display = 'block';
+            const logLink = document.getElementById('register-login-link');
+            if (logLink) logLink.href = '/login?redirect=/donate';
+        }
+
         if (isLoggedIn()) {
-            const user = getUser();
-            const banner = document.getElementById('already-logged-in-banner');
-            if (banner && user) {
-                document.getElementById('logged-in-username').textContent = user.name || user.email;
-                document.getElementById('logged-in-role').textContent = user.role === 'admin' ? 'Administrator' : 'Devotee';
-                const link = document.getElementById('logged-in-dash-link');
-                if (link) link.href = user.role === 'admin' ? '/admin' : '/dashboard';
-                banner.style.display = 'block';
+            if (redirectTarget) {
+                window.location.href = redirectTarget;
+            } else {
+                const user = getUser();
+                const banner = document.getElementById('already-logged-in-banner');
+                if (banner && user) {
+                    document.getElementById('logged-in-username').textContent = user.name || user.email;
+                    document.getElementById('logged-in-role').textContent = user.role === 'admin' ? 'Administrator' : 'Devotee';
+                    const link = document.getElementById('logged-in-dash-link');
+                    if (link) link.href = user.role === 'admin' ? '/admin' : '/dashboard';
+                    banner.style.display = 'block';
+                }
             }
         }
     </script>

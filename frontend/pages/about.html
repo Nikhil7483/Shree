@@ -125,19 +125,45 @@
             line-height: 1.4;
         }
 
-        /* Responsive adjustments for History card */
+        /* Responsive adjustments for History card and content */
         @media (max-width: 768px) {
+            .about-main-wrapper {
+                padding: var(--space-lg) 0 var(--space-2xl) !important;
+            }
+            .content-readable-container {
+                padding: 0 4px;
+            }
+            .about-section-header {
+                margin-bottom: var(--space-md) !important;
+            }
+            .about-badge {
+                font-size: 0.78rem;
+                padding: 0.25rem 0.85rem;
+                margin-bottom: 0.5rem;
+            }
+            .about-section-header h2 {
+                font-size: 1.45rem !important;
+                margin-bottom: 0.5rem;
+            }
             .history-card-wrapper {
-                padding: var(--space-xl) var(--space-lg);
-                border-radius: var(--radius-lg);
+                padding: 16px 14px !important;
+                border-radius: var(--radius-md) !important;
+                box-shadow: 0 2px 12px rgba(11, 61, 46, 0.05);
             }
             .history-prose {
-                font-size: 1rem;
-                line-height: 1.78;
+                font-size: 0.95rem !important;
+                line-height: 1.8 !important;
             }
             .history-prose p {
-                text-align: left;
-                margin-bottom: 1.25rem;
+                text-align: left !important;
+                margin-bottom: 1rem !important;
+            }
+            .history-highlight-lead {
+                padding: 10px 12px !important;
+                margin-bottom: 1rem !important;
+                border-left-width: 3px !important;
+                font-size: 0.94rem !important;
+                border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
             }
         }
 

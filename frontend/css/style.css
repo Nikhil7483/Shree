@@ -421,9 +421,18 @@ p {
         display: block !important;
     }
     .container {
-        padding: 0 var(--space-md);
+        padding: 0 14px;
     }
     .section {
-        padding: var(--space-2xl) 0;
+        padding: var(--space-xl) 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    .section {
+        padding: var(--space-lg) 0;
     }
 }

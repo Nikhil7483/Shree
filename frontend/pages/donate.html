@@ -824,8 +824,8 @@
             </div>
         </div>
 
-        <!-- YOUPI-PG 0% FEE ONLINE UPI DONATION & INSTANT RECEIPT -->
-        <div id="section-youpi-pay" class="youpi-card fade-in">
+        <!-- YOUPI-PG 0% FEE ONLINE UPI DONATION & INSTANT RECEIPT (AUTOMATICALLY ACTIVATED ONCE GATEWAY SERVER IS CONFIGURED) -->
+        <div id="section-youpi-pay" class="youpi-card fade-in" style="display:none;margin-top:32px;">
             <!-- Header -->
             <div class="youpi-header">
                 <div class="youpi-badge">
@@ -1227,11 +1227,29 @@
             window.history.replaceState({}, document.title, url.pathname);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            const youpiSection = document.getElementById('section-youpi-pay');
             const params = new URLSearchParams(window.location.search);
             const orderId = params.get('order_id') || params.get('donation_id');
+
+            // If returning from payment, immediately reveal verification screen
             if (orderId) {
+                if (youpiSection) youpiSection.style.display = 'block';
                 startVerifyingOrder(orderId);
+                return;
+            }
+
+            // Only reveal YouPI online checkout if the gateway server is configured
+            try {
+                const res = await fetch('/api/donate/youpi-config-status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.configured) {
+                        if (youpiSection) youpiSection.style.display = 'block';
+                    }
+                }
+            } catch (err) {
+                console.log('YouPI status check:', err);
             }
         });
     </script>

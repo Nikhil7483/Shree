@@ -903,28 +903,45 @@
 
                     <!-- Submit Button -->
                     <button type="submit" id="claim-submit-btn" class="btn-youpi-submit">
-                        <span>📄</span>
-                        <span>ಅಧಿಕೃತ PDF ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ • Download Official PDF Receipt</span>
+                        <span>📤</span>
+                        <span>ಪಾವತಿ ವಿವರ ಸಲ್ಲಿಸಿ • Submit for Admin Approval</span>
                     </button>
                 </form>
+
+                <!-- Receipt Status Lookup for Returning Devotees -->
+                <div style="margin-top:26px;padding-top:22px;border-top:1.5px dashed rgba(212,175,55,0.4);text-align:center;">
+                    <div style="font-weight:700;color:var(--temple-forest);margin-bottom:6px;font-size:0.95rem;">
+                        🔍 ಈಗಾಗಲೇ ಕಾಣಿಕೆ ಸಲ್ಲಿಸಿದ್ದೀರಾ? ರಶೀದಿ ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ • Check Receipt Status
+                    </div>
+                    <p style="color:#666;font-size:0.84rem;margin:0 0 12px;">
+                        Enter your Reference Number, 12-digit UTR, or Mobile Number to check approval status and download your approved receipt.
+                    </p>
+                    <div style="display:flex;gap:8px;max-width:460px;margin:0 auto;">
+                        <input type="text" id="lookup-query" class="youpi-input" style="flex:1;" placeholder="Reference No / UTR / Mobile Number" />
+                        <button type="button" class="btn-view-qr" style="padding:10px 18px;white-space:nowrap;" onclick="handleLookupReceipt()">
+                            <span>🔍</span> <span>Check Status</span>
+                        </button>
+                    </div>
+                    <div id="lookup-msg" style="display:none;margin-top:10px;font-size:0.86rem;font-weight:600;"></div>
+                </div>
             </div>
 
             <!-- Receipt Download Result Container -->
             <div id="claim-result-container" class="youpi-status-container">
-                <div style="font-size:2.8rem;margin-bottom:8px;">🕉️</div>
-                <h2 style="color:#2E7D32;margin:0 0 6px;">ಧನ್ಯವಾದಗಳು • Official Receipt Ready!</h2>
-                <p style="color:#555;font-size:0.92rem;margin:0 0 20px;">
-                    ನಿಮ್ಮ ಪಾವತಿ ವಿವರಗಳು ದಾಖಲಾಗಿವೆ. ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ಅನುಗ್ರಹ ಸದಾ ನಿಮ್ಮ ಮೇಲಿರಲಿ.
+                <div id="claim-status-icon" style="font-size:2.8rem;margin-bottom:8px;">⏳</div>
+                <h2 id="claim-status-title" style="color:var(--temple-forest);margin:0 0 6px;">ಪರಿಶೀಲನೆಗೆ ಸಲ್ಲಿಸಲಾಗಿದೆ • Submitted for Admin Approval</h2>
+                <p id="claim-status-desc" style="color:#555;font-size:0.92rem;margin:0 0 20px;line-height:1.5;">
+                    ನಿಮ್ಮ ಕಾಣಿಕೆ ವಿವರಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ. ದೇವಸ್ಥಾನದ ಆಡಳಿತ ಮಂಡಳಿಯು ಬ್ಯಾಂಕ್ ಜಮೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅನುಮೋದಿಸಿದ (Approve) ನಂತರ ನಿಮ್ಮ ಅಧಿಕೃತ ರಶೀದಿ ಲಭ್ಯವಾಗುತ್ತದೆ.
                 </p>
 
                 <!-- Receipt Box -->
                 <div class="receipt-card">
                     <div class="receipt-header-row">
                         <span style="font-weight:700;color:var(--temple-forest);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</span>
-                        <span style="font-size:0.8rem;color:#2E7D32;font-weight:700;background:rgba(46,125,50,0.1);padding:3px 8px;border-radius:6px;">✓ VERIFIED</span>
+                        <span id="claim-res-badge" style="font-size:0.8rem;color:#E65100;font-weight:700;background:#FFF3E0;padding:4px 10px;border-radius:6px;">⏳ PENDING ADMIN APPROVAL</span>
                     </div>
                     <div class="receipt-row">
-                        <span class="r-label">ರಶೀದಿ ಸಂಖ್ಯೆ • Receipt No</span>
+                        <span class="r-label">ಉಲ್ಲೇಖ ಸಂಖ್ಯೆ • Reference ID</span>
                         <span class="r-value" id="claim-res-rcpt-no">-</span>
                     </div>
                     <div class="receipt-row">
@@ -946,13 +963,19 @@
                 </div>
 
                 <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                    <a id="claim-download-link" href="#" target="_blank" class="btn-youpi-submit" style="text-decoration:none;display:inline-flex;padding:12px 24px;">
-                        <span>⬇️</span>
-                        <span>ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ • Download Receipt PDF</span>
+                    <!-- Download button (Only visible once approved) -->
+                    <a id="claim-download-link" href="#" target="_blank" class="btn-youpi-submit" style="display:none;text-decoration:none;padding:12px 24px;">
+                        <span>📄</span>
+                        <span>ಅಧಿಕೃತ PDF ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ • Download Official Receipt</span>
                     </a>
-                    <button type="button" onclick="resetClaimForm()" class="btn-view-qr" style="padding:12px 20px;">
+                    <!-- Check status button (While pending) -->
+                    <button type="button" id="claim-recheck-btn" onclick="checkCurrentApprovalStatus()" class="btn-view-qr" style="padding:12px 20px;">
+                        <span>🔄</span>
+                        <span>ಅನುಮೋದನೆ ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ • Check Approval Status</span>
+                    </button>
+                    <button type="button" onclick="resetClaimForm()" class="btn-download-qr" style="padding:12px 20px;background:none;color:var(--temple-forest);border:1.5px solid var(--temple-forest);">
                         <span>↺</span>
-                        <span>ಮತ್ತೊಂದು ರಶೀದಿ • Claim Another</span>
+                        <span>ಮತ್ತೊಂದು ಕಾಣಿಕೆ • Submit Another</span>
                     </button>
                 </div>
             </div>
@@ -1362,8 +1385,10 @@
         }
 
         // ============================================================
-        // Claim Official Receipt After Scan & Pay (Immediate PDF)
+        // Claim Official Receipt After Scan & Pay (Requires Admin Approval)
         // ============================================================
+        let activeClaimDonationId = null;
+
         async function handleClaimReceipt(e) {
             e.preventDefault();
             const btn = document.getElementById('claim-submit-btn');
@@ -1380,7 +1405,7 @@
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<span>⏳</span> <span>Generating Official Receipt...</span>';
+            btn.innerHTML = '<span>⏳</span> <span>Submitting Reference to Temple Admin...</span>';
 
             try {
                 const res = await fetch('/api/donate/submit-utr', {
@@ -1399,42 +1424,125 @@
                 const data = await res.json();
 
                 if (res.ok && data.donation_id) {
-                    document.getElementById('claim-form-container').style.display = 'none';
-                    document.getElementById('claim-result-container').style.display = 'block';
-
-                    document.getElementById('claim-res-rcpt-no').textContent = data.receipt_number || 'Confirmed';
-                    document.getElementById('claim-res-name').textContent = data.donor_name || donorName;
-                    document.getElementById('claim-res-seva').textContent = data.donation_type || sevaType;
-                    document.getElementById('claim-res-amount').textContent = '₹' + amount.toLocaleString('en-IN') + '.00';
-                    document.getElementById('claim-res-utr').textContent = utr;
-
-                    const downloadUrl = data.download_receipt_url || `/api/donate/receipt-pdf/${data.donation_id}`;
-                    const link = document.getElementById('claim-download-link');
-                    if (link) {
-                        link.href = downloadUrl;
-                    }
-
-                    // Automatic download trigger
-                    const a = document.createElement('a');
-                    a.href = downloadUrl;
-                    a.download = `receipt_${data.receipt_number || 'donation'}.pdf`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-
-                    if (typeof showToast === 'function') {
-                        showToast('Official receipt downloaded!', 'success');
-                    }
+                    activeClaimDonationId = data.donation_id;
+                    renderClaimResult(data);
                 } else {
-                    alert(data.detail || data.message || 'Could not generate receipt. Please try again.');
+                    alert(data.detail || data.message || 'Could not submit payment reference. Please try again.');
                     btn.disabled = false;
-                    btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+                    btn.innerHTML = '<span>📤</span> <span>Submit for Admin Approval</span>';
                 }
             } catch (err) {
-                console.error('Error claiming receipt:', err);
+                console.error('Error submitting reference:', err);
                 alert('Connection error. Please try again.');
                 btn.disabled = false;
-                btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+                btn.innerHTML = '<span>📤</span> <span>Submit for Admin Approval</span>';
+            }
+        }
+
+        function renderClaimResult(data) {
+            document.getElementById('claim-form-container').style.display = 'none';
+            document.getElementById('claim-result-container').style.display = 'block';
+
+            document.getElementById('claim-res-rcpt-no').textContent = data.receipt_number || 'Recorded';
+            document.getElementById('claim-res-name').textContent = data.donor_name || 'Devotee';
+            document.getElementById('claim-res-seva').textContent = data.donation_type || 'General Fund';
+            document.getElementById('claim-res-amount').textContent = '₹' + (data.amount || 0).toLocaleString('en-IN') + '.00';
+            document.getElementById('claim-res-utr').textContent = data.utr_number || data.utr || '-';
+
+            const isApproved = data.is_completed || data.status === 'completed';
+            const icon = document.getElementById('claim-status-icon');
+            const title = document.getElementById('claim-status-title');
+            const desc = document.getElementById('claim-status-desc');
+            const badge = document.getElementById('claim-res-badge');
+            const downloadBtn = document.getElementById('claim-download-link');
+            const recheckBtn = document.getElementById('claim-recheck-btn');
+
+            if (isApproved) {
+                icon.textContent = '🕉️';
+                title.textContent = 'ಧನ್ಯವಾದಗಳು • Payment Verified & Approved!';
+                title.style.color = '#2E7D32';
+                desc.textContent = 'ನಿಮ್ಮ ಪಾವತಿಯನ್ನು ಆಡಳಿತ ಮಂಡಳಿಯು ಪರಿಶೀಲಿಸಿ ಅನುಮೋದಿಸಿದೆ. ಅಧಿಕೃತ ರಶೀದಿಯನ್ನು ಕೆಳಗೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿಕೊಳ್ಳಬಹುದು.';
+                badge.textContent = '✅ VERIFIED & APPROVED';
+                badge.style.background = '#E8F5E9';
+                badge.style.color = '#2E7D32';
+
+                downloadBtn.style.display = 'inline-flex';
+                downloadBtn.href = data.download_receipt_url || `/api/donate/receipt-pdf/${data.donation_id}`;
+                recheckBtn.style.display = 'none';
+            } else {
+                icon.textContent = '⏳';
+                title.textContent = 'ಪರಿಶೀಲನೆಗೆ ಸಲ್ಲಿಸಲಾಗಿದೆ • Submitted for Admin Approval';
+                title.style.color = 'var(--temple-forest)';
+                desc.textContent = 'ನಿಮ್ಮ ಕಾಣಿಕೆ ವಿವರಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ. ದೇವಸ್ಥಾನದ ಆಡಳಿತ ಮಂಡಳಿಯು ಬ್ಯಾಂಕ್ ಜಮೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅನುಮೋದಿಸಿದ (Approve) ನಂತರ ನಿಮ್ಮ ಅಧಿಕೃತ ರಶೀದಿ ಲಭ್ಯವಾಗುತ್ತದೆ.';
+                badge.textContent = '⏳ PENDING ADMIN APPROVAL (ಪರಿಶೀಲನೆಯಲ್ಲಿದೆ)';
+                badge.style.background = '#FFF3E0';
+                badge.style.color = '#E65100';
+
+                downloadBtn.style.display = 'none';
+                recheckBtn.style.display = 'inline-block';
+            }
+        }
+
+        async function checkCurrentApprovalStatus() {
+            if (!activeClaimDonationId) return;
+            const recheckBtn = document.getElementById('claim-recheck-btn');
+            recheckBtn.disabled = true;
+            recheckBtn.innerHTML = '<span>⏳</span> Checking...';
+
+            try {
+                const res = await fetch(`/api/donate/status/${activeClaimDonationId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    renderClaimResult(data);
+                    if (data.is_completed) {
+                        alert('Great news! Your donation has been approved. You can now download your official receipt.');
+                    } else {
+                        alert('Status: Still pending verification by temple management. Please check back shortly.');
+                    }
+                } else {
+                    alert('Could not verify status. Please try again.');
+                }
+            } catch (e) {
+                console.error('Status check error:', e);
+                alert('Connection error.');
+            } finally {
+                recheckBtn.disabled = false;
+                recheckBtn.innerHTML = '<span>🔄</span> <span>Check Approval Status</span>';
+            }
+        }
+
+        async function handleLookupReceipt() {
+            const input = document.getElementById('lookup-query');
+            const q = input.value.trim();
+            const msg = document.getElementById('lookup-msg');
+
+            if (!q) {
+                alert('Please enter your Reference ID, 12-digit UTR, or Mobile Number.');
+                return;
+            }
+
+            msg.style.display = 'block';
+            msg.style.color = '#666';
+            msg.textContent = 'Searching records...';
+
+            try {
+                const res = await fetch(`/api/donate/status/${encodeURIComponent(q)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    msg.style.display = 'none';
+                    activeClaimDonationId = data.donation_id;
+                    renderClaimResult(data);
+                    document.getElementById('section-claim-receipt').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    msg.style.display = 'block';
+                    msg.style.color = '#C62828';
+                    msg.textContent = 'No matching record found. Please verify your reference or UTR.';
+                }
+            } catch (e) {
+                console.error('Lookup error:', e);
+                msg.style.display = 'block';
+                msg.style.color = '#C62828';
+                msg.textContent = 'Connection error. Please try again.';
             }
         }
 
@@ -1445,7 +1553,7 @@
             const btn = document.getElementById('claim-submit-btn');
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+                btn.innerHTML = '<span>📤</span> <span>Submit for Admin Approval</span>';
             }
         }
 

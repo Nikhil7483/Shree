@@ -40,7 +40,7 @@ async def submit_utr(
 ):
     """
     Record an offline direct UPI or bank transfer reference.
-    Marks transaction as 'completed' and generates instant official receipt.
+    Marks transaction as 'pending_verification' for administrator review and approval.
     """
     receipt_number = generate_receipt_number()
     user_id = str(current_user.id) if current_user else "direct_upi_donor"
@@ -55,7 +55,7 @@ async def submit_utr(
         amount=int(data.amount * 100),  # rupees to paise
         donation_type=data.donation_type or "general",
         is_anonymous=False,
-        status="completed",
+        status="pending_verification",
         receipt_number=receipt_number,
         razorpay_order_id=None,
         razorpay_payment_id=f"UTR:{data.utr_number.strip()}",
@@ -64,15 +64,15 @@ async def submit_utr(
     )
     await donation.insert()
     return {
-        "status": "completed",
+        "status": "pending_verification",
         "receipt_number": receipt_number,
         "donation_id": str(donation.id),
         "donor_name": donation.donor_name,
         "amount": data.amount,
         "donation_type": donation.donation_type,
         "utr_number": data.utr_number.strip(),
-        "download_receipt_url": f"/api/donate/receipt-pdf/{donation.id}",
-        "message": "Payment recorded successfully. Official receipt ready."
+        "is_completed": False,
+        "message": "Payment reference submitted successfully. Pending administrator verification and approval."
     }
 
 
@@ -229,6 +229,14 @@ async def download_receipt(
 
     if not donation:
         raise HTTPException(status_code=404, detail="Donation not found")
+
+    # Only allow download if donation has been verified and approved by admin
+    is_admin = current_user and getattr(current_user, "role", "") == "admin"
+    if not is_admin and donation.status != "completed":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Donation receipt is pending administrator approval. Please check back once verified by temple management.",
+        )
 
     # Generate PDF
     pdf_buffer = generate_receipt_pdf(donation)
@@ -723,21 +731,32 @@ async def youpi_webhook(request: Request):
 @router.get("/status/{donation_id}")
 async def check_donation_status(donation_id: str):
     """
-    Public polling endpoint for frontend to check if donation has been confirmed.
+    Public lookup endpoint to check donation approval status and download receipt once approved.
+    Supports lookup by ObjectId, Receipt Number, UPI UTR reference, or Donor Mobile Number.
     """
     donation = None
+    q = donation_id.strip()
+
     try:
-        donation = await Donation.get(PydanticObjectId(donation_id))
+        donation = await Donation.get(PydanticObjectId(q))
     except Exception:
         pass
 
     if not donation:
-        donation = await Donation.find_one({"receipt_number": donation_id})
+        donation = await Donation.find_one({"receipt_number": q})
     if not donation:
-        donation = await Donation.find_one({"youpi_order_id": donation_id})
+        donation = await Donation.find_one({"youpi_order_id": q})
+    if not donation:
+        donation = await Donation.find_one({"youpi_utr": q})
+    if not donation:
+        donation = await Donation.find_one({"razorpay_payment_id": f"UTR:{q}"})
+    if not donation:
+        donation = await Donation.find({"donor_mobile": q}).sort("-created_at").first_or_none()
 
     if not donation:
-        raise HTTPException(status_code=404, detail="Donation not found")
+        raise HTTPException(status_code=404, detail="Donation record not found")
+
+    is_completed = donation.status == "completed"
 
     return {
         "donation_id": str(donation.id),
@@ -746,8 +765,17 @@ async def check_donation_status(donation_id: str):
         "amount": donation.amount // 100,
         "donor_name": donation.donor_name,
         "donation_type": donation.donation_type,
-        "is_completed": donation.status == "completed",
-        "utr": donation.youpi_utr or "",
-        "download_receipt_url": f"/api/donate/receipt-pdf/{donation.id}",
+        "is_completed": is_completed,
+        "utr": donation.youpi_utr or ((donation.razorpay_payment_id or "").replace("UTR:", "").strip() if (donation.razorpay_payment_id or "").startswith("UTR:") else ""),
+        "download_receipt_url": f"/api/donate/receipt-pdf/{donation.id}" if is_completed else None,
+        "message": (
+            "Payment verified and approved! Your official receipt is ready to download."
+            if is_completed
+            else (
+                "Payment reference has been submitted. Awaiting temple administration approval."
+                if donation.status == "pending_verification"
+                else "Payment reference was marked as rejected by temple administration."
+            )
+        ),
     }
 

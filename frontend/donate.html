@@ -824,6 +824,140 @@
             </div>
         </div>
 
+        <!-- CLAIM OFFICIAL RECEIPT AFTER SCAN & PAY -->
+        <div id="section-claim-receipt" class="youpi-card fade-in" style="margin-top: 32px;">
+            <div class="youpi-header">
+                <div class="youpi-badge" style="background:rgba(212,175,55,0.18);color:#8c6d17;border-color:var(--temple-gold);">
+                    <span>📄</span>
+                    <span>ಅಧಿಕೃತ ಡಿಜಿಟಲ್ ರಶೀದಿ • OFFICIAL TEMPLE RECEIPT</span>
+                </div>
+                <h2>QR ಪಾವತಿಯ ನಂತರ ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</h2>
+                <p>
+                    Scanned the QR code above and paid? Enter your details and the 12-digit UPI Reference Number (UTR) from your GPay / PhonePe / Paytm screen to generate and download your official bilingual PDF receipt instantly.
+                </p>
+            </div>
+
+            <!-- Form Container -->
+            <div id="claim-form-container">
+                <form id="claim-receipt-form" onsubmit="handleClaimReceipt(event)" class="youpi-form-grid">
+                    <!-- Devotee Name -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-donor-name">
+                            <span>ಭಕ್ತರ ಹೆಸರು • Devotee Name</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="text" id="claim-donor-name" class="youpi-input" required placeholder="e.g. Ramesh Kumar" />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-donor-mobile">
+                            <span>ಮೊಬೈಲ್ ಸಂಖ್ಯೆ • Mobile Number</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="tel" id="claim-donor-mobile" class="youpi-input" required pattern="[0-9]{10}" placeholder="10-digit mobile number" />
+                    </div>
+
+                    <!-- Seva Type Selection -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-donation-type">
+                            <span>ಸೇವೆಯ ವಿವರ • Seva / Donation Purpose</span>
+                        </label>
+                        <select id="claim-donation-type" class="youpi-select">
+                            <option value="general">ಸಾಮಾನ್ಯ ನಿಧಿ • General Temple Fund</option>
+                            <option value="annadanam">ಅನ್ನದಾನ ಸೇವೆ • Annadanam (Free Meals)</option>
+                            <option value="temple_development">ದೇವಸ್ಥಾನ ಜೀರ್ಣೋದ್ಧಾರ • Temple Development</option>
+                            <option value="shani_shanthi">ಶನಿ ಶಾಂತಿ ಮಹಾಪೂಜೆ • Shani Shanthi Mahapooja</option>
+                            <option value="deepa_seva">ವಿಶೇಷ ದೀಪ ಸೇವೆ • Special Deepa Seva</option>
+                            <option value="goshala">ಗೋಶಾಲೆ ಸೇವೆ • Goshala Care</option>
+                        </select>
+                    </div>
+
+                    <!-- Email Address (Optional) -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-donor-email">
+                            <span>ಇಮೇಲ್ • Email Address</span>
+                            <small style="color:var(--text-muted);font-weight:normal;">(ಐಚ್ಛಿಕ • Optional)</small>
+                        </label>
+                        <input type="email" id="claim-donor-email" class="youpi-input" placeholder="devotee@example.com" />
+                    </div>
+
+                    <!-- Amount Paid -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-amount">
+                            <span>ಕಾಣಿಕೆ ಮೊತ್ತ • Amount Paid (₹)</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="number" id="claim-amount" class="youpi-input" min="1" required placeholder="e.g. 501" />
+                    </div>
+
+                    <!-- UPI UTR / Reference ID -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="claim-utr">
+                            <span>ಯುಪಿಐ ಉಲ್ಲೇಖ ಸಂಖ್ಯೆ • UPI Ref / UTR (12 digits)</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="text" id="claim-utr" class="youpi-input" required minlength="6" maxlength="22" placeholder="e.g. 412345678901 (from GPay / PhonePe)" />
+                        <small style="color:#666;font-size:0.78rem;">Check your GPay / PhonePe / Paytm transaction details for the 12-digit UTR.</small>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="claim-submit-btn" class="btn-youpi-submit">
+                        <span>📄</span>
+                        <span>ಅಧಿಕೃತ PDF ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ • Download Official PDF Receipt</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Receipt Download Result Container -->
+            <div id="claim-result-container" class="youpi-status-container">
+                <div style="font-size:2.8rem;margin-bottom:8px;">🕉️</div>
+                <h2 style="color:#2E7D32;margin:0 0 6px;">ಧನ್ಯವಾದಗಳು • Official Receipt Ready!</h2>
+                <p style="color:#555;font-size:0.92rem;margin:0 0 20px;">
+                    ನಿಮ್ಮ ಪಾವತಿ ವಿವರಗಳು ದಾಖಲಾಗಿವೆ. ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ಅನುಗ್ರಹ ಸದಾ ನಿಮ್ಮ ಮೇಲಿರಲಿ.
+                </p>
+
+                <!-- Receipt Box -->
+                <div class="receipt-card">
+                    <div class="receipt-header-row">
+                        <span style="font-weight:700;color:var(--temple-forest);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</span>
+                        <span style="font-size:0.8rem;color:#2E7D32;font-weight:700;background:rgba(46,125,50,0.1);padding:3px 8px;border-radius:6px;">✓ VERIFIED</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="r-label">ರಶೀದಿ ಸಂಖ್ಯೆ • Receipt No</span>
+                        <span class="r-value" id="claim-res-rcpt-no">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="r-label">ಭಕ್ತರ ಹೆಸರು • Devotee</span>
+                        <span class="r-value" id="claim-res-name">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="r-label">ಸೇವೆ • Purpose</span>
+                        <span class="r-value" id="claim-res-seva">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="r-label">ಕಾಣಿಕೆ ಮೊತ್ತ • Amount</span>
+                        <span class="r-value" style="color:#2E7D32;font-size:1.1rem;" id="claim-res-amount">-</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span class="r-label">ಬ್ಯಾಂಕ್ UTR • Reference</span>
+                        <span class="r-value mono" id="claim-res-utr">-</span>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                    <a id="claim-download-link" href="#" target="_blank" class="btn-youpi-submit" style="text-decoration:none;display:inline-flex;padding:12px 24px;">
+                        <span>⬇️</span>
+                        <span>ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ • Download Receipt PDF</span>
+                    </a>
+                    <button type="button" onclick="resetClaimForm()" class="btn-view-qr" style="padding:12px 20px;">
+                        <span>↺</span>
+                        <span>ಮತ್ತೊಂದು ರಶೀದಿ • Claim Another</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- YOUPI-PG 0% FEE ONLINE UPI DONATION & INSTANT RECEIPT (AUTOMATICALLY ACTIVATED ONCE GATEWAY SERVER IS CONFIGURED) -->
         <div id="section-youpi-pay" class="youpi-card fade-in" style="display:none;margin-top:32px;">
             <!-- Header -->
@@ -1225,6 +1359,94 @@
             const url = new URL(window.location);
             url.searchParams.delete('order_id');
             window.history.replaceState({}, document.title, url.pathname);
+        }
+
+        // ============================================================
+        // Claim Official Receipt After Scan & Pay (Immediate PDF)
+        // ============================================================
+        async function handleClaimReceipt(e) {
+            e.preventDefault();
+            const btn = document.getElementById('claim-submit-btn');
+            const donorName = document.getElementById('claim-donor-name').value.trim();
+            const donorMobile = document.getElementById('claim-donor-mobile').value.trim();
+            const donorEmail = document.getElementById('claim-donor-email').value.trim();
+            const sevaType = document.getElementById('claim-donation-type').value;
+            const amount = parseInt(document.getElementById('claim-amount').value, 10);
+            const utr = document.getElementById('claim-utr').value.trim();
+
+            if (!donorName || !donorMobile || !amount || amount <= 0 || !utr) {
+                alert('Please fill in all required fields including 12-digit UTR.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span> <span>Generating Official Receipt...</span>';
+
+            try {
+                const res = await fetch('/api/donate/submit-utr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        donor_name: donorName,
+                        donor_mobile: donorMobile,
+                        donor_email: donorEmail,
+                        donation_type: sevaType,
+                        amount: amount,
+                        utr_number: utr
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.donation_id) {
+                    document.getElementById('claim-form-container').style.display = 'none';
+                    document.getElementById('claim-result-container').style.display = 'block';
+
+                    document.getElementById('claim-res-rcpt-no').textContent = data.receipt_number || 'Confirmed';
+                    document.getElementById('claim-res-name').textContent = data.donor_name || donorName;
+                    document.getElementById('claim-res-seva').textContent = data.donation_type || sevaType;
+                    document.getElementById('claim-res-amount').textContent = '₹' + amount.toLocaleString('en-IN') + '.00';
+                    document.getElementById('claim-res-utr').textContent = utr;
+
+                    const downloadUrl = data.download_receipt_url || `/api/donate/receipt-pdf/${data.donation_id}`;
+                    const link = document.getElementById('claim-download-link');
+                    if (link) {
+                        link.href = downloadUrl;
+                    }
+
+                    // Automatic download trigger
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = `receipt_${data.receipt_number || 'donation'}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                    if (typeof showToast === 'function') {
+                        showToast('Official receipt downloaded!', 'success');
+                    }
+                } else {
+                    alert(data.detail || data.message || 'Could not generate receipt. Please try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+                }
+            } catch (err) {
+                console.error('Error claiming receipt:', err);
+                alert('Connection error. Please try again.');
+                btn.disabled = false;
+                btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+            }
+        }
+
+        function resetClaimForm() {
+            document.getElementById('claim-result-container').style.display = 'none';
+            document.getElementById('claim-form-container').style.display = 'block';
+            document.getElementById('claim-receipt-form').reset();
+            const btn = document.getElementById('claim-submit-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>📄</span> <span>Download Official PDF Receipt</span>';
+            }
         }
 
         window.addEventListener('DOMContentLoaded', async () => {

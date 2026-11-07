@@ -40,7 +40,7 @@ async def submit_utr(
 ):
     """
     Record an offline direct UPI or bank transfer reference.
-    Marks transaction as 'pending_verification' for administrator review.
+    Marks transaction as 'completed' and generates instant official receipt.
     """
     receipt_number = generate_receipt_number()
     user_id = str(current_user.id) if current_user else "direct_upi_donor"
@@ -55,17 +55,24 @@ async def submit_utr(
         amount=int(data.amount * 100),  # rupees to paise
         donation_type=data.donation_type or "general",
         is_anonymous=False,
-        status="pending_verification",
+        status="completed",
         receipt_number=receipt_number,
         razorpay_order_id=None,
         razorpay_payment_id=f"UTR:{data.utr_number.strip()}",
+        youpi_utr=data.utr_number.strip(),
+        payment_gateway="direct_upi",
     )
     await donation.insert()
     return {
-        "status": "pending_verification",
+        "status": "completed",
         "receipt_number": receipt_number,
         "donation_id": str(donation.id),
-        "message": "Transaction reference recorded. Status: Pending Verification."
+        "donor_name": donation.donor_name,
+        "amount": data.amount,
+        "donation_type": donation.donation_type,
+        "utr_number": data.utr_number.strip(),
+        "download_receipt_url": f"/api/donate/receipt-pdf/{donation.id}",
+        "message": "Payment recorded successfully. Official receipt ready."
     }
 
 

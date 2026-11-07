@@ -38,7 +38,15 @@ class Settings(BaseSettings):
 
     # YouPI-PG Gateway (0% Fee Self-Hosted UPI Gateway & Automated Webhooks)
     YOUPI_GATEWAY_URL: Optional[str] = None
+    YOUPI_PAYMENT_API_URL: Optional[str] = None
+    YOUPI_CHECKOUT_URL: Optional[str] = None
+    YOUPI_MERCHANT_ID: Optional[str] = None
     YOUPI_WEBHOOK_SECRET: Optional[str] = None
+    YOUPI_PUBLIC_KEY: Optional[str] = None
+
+    @property
+    def youpi_api_base_url(self) -> Optional[str]:
+        return self.YOUPI_PAYMENT_API_URL or self.YOUPI_GATEWAY_URL
 
     # Cashfree Payment Gateway
     CASHFREE_APP_ID: str = ""

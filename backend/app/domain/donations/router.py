@@ -194,6 +194,7 @@ async def donation_history(
 
 
 @router.get("/receipt/{donation_id}")
+@router.get("/receipt-pdf/{donation_id}")
 async def download_receipt(
     donation_id: str,
     token: Optional[str] = None,
@@ -252,7 +253,8 @@ async def all_donations(
             "donor_email": d.donor_email,
             "donor_mobile": d.donor_mobile,
             "user_id": d.user_id,
-            "utr_number": (d.razorpay_payment_id or "").replace("UTR:", "").strip() if (d.razorpay_payment_id or "").startswith("UTR:") else (d.razorpay_payment_id or ""),
+            "payment_gateway": d.payment_gateway or ("youpi" if d.youpi_order_id else "direct_upi"),
+            "utr_number": d.youpi_utr or ((d.razorpay_payment_id or "").replace("UTR:", "").replace("YOUPI:", "").strip() if (d.razorpay_payment_id or "").startswith(("UTR:", "YOUPI:")) else (d.razorpay_payment_id or "")),
         }
         for d in donations
     ]
@@ -413,22 +415,178 @@ async def recent_donations():
 # YouPI-PG 0% Fee Automated Gateway Endpoints
 # ==============================================================================
 
+@router.get("/youpi-config-status")
+async def youpi_config_status():
+    """
+    Check if YouPI gateway is configured in backend environment.
+    """
+    api_url = settings.youpi_api_base_url
+    configured = bool(api_url and settings.YOUPI_MERCHANT_ID)
+    return {
+        "configured": configured,
+        "gateway_url": api_url,
+        "checkout_url": settings.YOUPI_CHECKOUT_URL or None,
+        "public_key": settings.YOUPI_PUBLIC_KEY or None,
+    }
+
+
+@router.post("/youpi-create-order")
+async def youpi_create_order(
+    request: Request,
+    data: DonationCreateRequest,
+    current_user: Optional[User] = Depends(get_optional_user),
+):
+    """
+    Initiate a donation order with YouPI-PG.
+    Creates a pending donation and calls YouPI Payment API: POST /api/v1/payments.
+    """
+    api_url = settings.youpi_api_base_url
+    merchant_id = settings.YOUPI_MERCHANT_ID
+
+    receipt_number = generate_receipt_number()
+    user_id = str(current_user.id) if current_user else "online_donor"
+    donor_email = (current_user.email if current_user and not data.donor_email else (data.donor_email or "")).strip()
+
+    # Create pending donation record in MongoDB
+    donation = Donation(
+        user_id=user_id,
+        donor_name=data.donor_name.strip(),
+        donor_email=donor_email,
+        donor_mobile=data.donor_mobile.strip(),
+        donor_address=(data.donor_address or "").strip(),
+        amount=int(data.amount * 100),  # rupees to paise
+        donation_type=data.donation_type or "general",
+        is_anonymous=bool(data.is_anonymous),
+        payment_gateway="youpi",
+        status="pending",
+        receipt_number=receipt_number,
+    )
+    await donation.insert()
+
+    # Determine return URL for redirect after payment
+    base_url = str(request.base_url).rstrip("/")
+    if "shreeshanishwara" in base_url or "railway.app" in base_url:
+        base_url = "https://shreeshanishwara.up.railway.app"
+    return_url = f"{base_url}/donate?order_id={str(donation.id)}"
+
+    # If YouPI gateway is not configured, inform the user to use direct QR
+    if not api_url or not merchant_id:
+        return {
+            "success": False,
+            "configured": False,
+            "donation_id": str(donation.id),
+            "receipt_number": donation.receipt_number,
+            "message": "YouPI Gateway server is not configured yet. Devotees can scan the Canara Bank QR code directly.",
+            "fallback": {
+                "upi_id": "47808680004653@cnrb",
+                "account_no": "1516101004653",
+                "ifsc": "CNRB0001516",
+                "bank_name": "Canara Bank",
+            }
+        }
+
+    order_id = str(donation.id)
+    donation.youpi_order_id = order_id
+    await donation.save()
+
+    payload = {
+        "orderId": order_id,
+        "amount": f"{data.amount:.2f}",
+        "currency": "INR",
+        "returnUrl": return_url,
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "X-Merchant-Id": merchant_id,
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            resp = await client.post(
+                f"{api_url.rstrip('/')}/api/v1/payments",
+                json=payload,
+                headers=headers,
+            )
+            if resp.status_code not in (200, 201):
+                print(f"[YouPI Error] API returned status {resp.status_code}: {resp.text}")
+                return {
+                    "success": False,
+                    "configured": True,
+                    "donation_id": str(donation.id),
+                    "receipt_number": donation.receipt_number,
+                    "message": f"YouPI Payment API error ({resp.status_code}). Devotees can scan the official Canara Bank QR code.",
+                }
+
+            youpi_data = resp.json()
+            donation.youpi_payment_id = youpi_data.get("paymentId")
+            await donation.save()
+
+            return {
+                "success": True,
+                "configured": True,
+                "donation_id": str(donation.id),
+                "order_id": order_id,
+                "payment_id": youpi_data.get("paymentId"),
+                "checkout_url": youpi_data.get("checkoutUrl"),
+                "status": youpi_data.get("status", "ACTIVE"),
+                "receipt_number": donation.receipt_number,
+                "amount": data.amount,
+            }
+    except Exception as exc:
+        print(f"[YouPI Exception] Failed to reach YouPI gateway: {exc}")
+        return {
+            "success": False,
+            "configured": True,
+            "donation_id": str(donation.id),
+            "receipt_number": donation.receipt_number,
+            "message": f"Could not reach YouPI Gateway server: {str(exc)}. Please scan the Canara Bank QR code directly.",
+        }
+
+
 @router.post("/youpi-webhook")
 async def youpi_webhook(request: Request):
     """
     Receives automated payment verification webhooks from YouPI-PG.
-    Validates HMAC-SHA256 signature and automatically approves donation.
+    Follows Part G of the YouPI-PG integration specification:
+    1. Reads raw body exactly as received.
+    2. Validates HMAC-SHA256 signature (X-Gateway-Signature / X-Gateway-Signature-V2).
+    3. Checks deliveryId for idempotency / duplicate prevention.
+    4. Finds donation by orderId.
+    5. Validates amount (amountPaise == donation.amount).
+    6. Prevents duplicate UTR misuse.
+    7. Marks donation completed and assigns receipt number.
     """
     raw_body = await request.body()
-    signature_header = request.headers.get("x-gateway-signature", "")
+    signature_header = (
+        request.headers.get("x-gateway-signature")
+        or request.headers.get("X-Gateway-Signature")
+        or request.headers.get("x-gateway-signature-v2")
+        or request.headers.get("X-Gateway-Signature-V2")
+        or ""
+    )
 
     # 1. Verify HMAC signature if webhook secret is configured
     if settings.YOUPI_WEBHOOK_SECRET:
         secret = settings.YOUPI_WEBHOOK_SECRET.encode("utf-8")
         computed_sig = hmac.new(secret, raw_body, hashlib.sha256).hexdigest()
-        expected = f"sha256={computed_sig}"
-        # Also check without prefix if gateway sends raw hex
-        if not (hmac.compare_digest(signature_header, expected) or hmac.compare_digest(signature_header, computed_sig)):
+        expected_prefixed = f"sha256={computed_sig}"
+
+        timestamp = (
+            request.headers.get("x-gateway-timestamp")
+            or request.headers.get("X-Gateway-Timestamp")
+            or ""
+        )
+        computed_v2 = ""
+        if timestamp:
+            computed_v2 = hmac.new(secret, f"{timestamp}.".encode("utf-8") + raw_body, hashlib.sha256).hexdigest()
+
+        is_valid = (
+            hmac.compare_digest(signature_header, expected_prefixed)
+            or hmac.compare_digest(signature_header, computed_sig)
+            or (computed_v2 and (hmac.compare_digest(signature_header, f"sha256={computed_v2}") or hmac.compare_digest(signature_header, computed_v2)))
+        )
+
+        if not is_valid:
             print("[YouPI Webhook] Invalid signature received.")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -440,45 +598,119 @@ async def youpi_webhook(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
 
-    event = payload.get("event") or request.headers.get("x-gateway-event", "")
-    order_id = payload.get("orderId") or payload.get("merchantRefId")
-    payment_id = payload.get("paymentId") or payload.get("utr", "")
+    event = (
+        payload.get("event")
+        or request.headers.get("x-gateway-event")
+        or request.headers.get("X-Gateway-Event")
+        or ""
+    ).upper()
 
-    print(f"[YouPI Webhook] Event: {event}, Order ID: {order_id}, Payment ID: {payment_id}")
+    order_id = payload.get("orderId") or payload.get("merchantRefId") or payload.get("order_id")
+    payment_id = payload.get("paymentId") or payload.get("payment_id") or ""
+    utr = payload.get("utr") or ""
+    amount_paise = payload.get("amountPaise")
+    delivery_id = (
+        payload.get("deliveryId")
+        or request.headers.get("x-gateway-delivery-id")
+        or request.headers.get("X-Gateway-Delivery-Id")
+        or ""
+    )
 
-    # 2. Automatically mark donation as completed upon observed success or reconciliation
-    if event in ["OBSERVED_SUCCESS", "RECONCILED", "SUCCESS"]:
+    print(f"[YouPI Webhook] Event: {event}, Order ID: {order_id}, Payment ID: {payment_id}, UTR: {utr}")
+
+    # Deduplication check: if delivery_id was already processed
+    if delivery_id:
+        existing_delivery = await Donation.find_one({"youpi_delivery_id": delivery_id})
+        if existing_delivery and existing_delivery.status == "completed":
+            print(f"[YouPI Webhook] Delivery {delivery_id} already processed.")
+            return {"received": True, "already_processed": True}
+
+    # Only process successful credit events
+    if event in ["SUCCESS", "OBSERVED_SUCCESS", "RECONCILED", "PAID"]:
         donation = None
-        # Try matching by MongoDB ObjectId
-        try:
-            donation = await Donation.get(PydanticObjectId(order_id))
-        except Exception:
-            pass
+        if order_id:
+            try:
+                donation = await Donation.get(PydanticObjectId(order_id))
+            except Exception:
+                pass
 
-        # Try matching by receipt number
-        if not donation and order_id:
-            donation = await Donation.find_one({"receipt_number": order_id})
+            if not donation:
+                donation = await Donation.find_one({"receipt_number": order_id})
+            if not donation:
+                donation = await Donation.find_one({"youpi_order_id": order_id})
+            if not donation:
+                donation = await Donation.find_one({"razorpay_order_id": order_id})
 
-        # Try matching by payment ID or UTR
+        if not donation and utr:
+            donation = await Donation.find_one({"youpi_utr": utr})
         if not donation and payment_id:
-            donation = await Donation.find_one({"razorpay_payment_id": f"UTR:{payment_id}"})
+            donation = await Donation.find_one({"youpi_payment_id": payment_id})
 
-        if donation:
-            donation.status = "completed"
-            donation.razorpay_payment_id = f"YOUPI:{payment_id or 'auto'}"
-            if not donation.receipt_number:
-                donation.receipt_number = generate_receipt_number()
-            await donation.save()
-            print(f"[YouPI Webhook] Donation {donation.id} automatically marked COMPLETED. Receipt: {donation.receipt_number}")
-            return {
-                "status": "received",
-                "message": "Donation verified and approved",
-                "receipt_number": donation.receipt_number,
-            }
-        else:
+        if not donation:
             print(f"[YouPI Webhook] No matching donation found for order: {order_id}")
+            return {"received": True, "status": "order_not_found"}
 
-    return {"status": "received", "event": event}
+        if donation.status == "completed":
+            if delivery_id and not donation.youpi_delivery_id:
+                donation.youpi_delivery_id = delivery_id
+                await donation.save()
+            return {"received": True, "already_completed": True, "receipt_number": donation.receipt_number}
+
+        # Amount validation
+        if amount_paise is not None:
+            try:
+                expected_paise = int(amount_paise)
+                if donation.amount != expected_paise:
+                    print(f"[YouPI Webhook WARNING] Amount mismatch! Donation: {donation.amount} paise vs Webhook: {expected_paise} paise")
+                    return {"received": True, "warning": "amount_mismatch"}
+            except Exception:
+                pass
+
+        # Duplicate UTR check across different completed donations
+        if utr:
+            utr_used = await Donation.find_one({
+                "youpi_utr": utr,
+                "status": "completed",
+                "_id": {"$ne": donation.id}
+            })
+            if utr_used:
+                print(f"[YouPI Webhook WARNING] UTR {utr} already used for donation {utr_used.id}!")
+                return {"received": True, "warning": "duplicate_utr"}
+
+        # Mark donation completed
+        donation.status = "completed"
+        donation.payment_gateway = "youpi"
+        if utr:
+            donation.youpi_utr = str(utr).strip()
+            donation.razorpay_payment_id = f"UTR:{utr}"
+        if payment_id:
+            donation.youpi_payment_id = str(payment_id).strip()
+        if delivery_id:
+            donation.youpi_delivery_id = str(delivery_id).strip()
+        if not donation.receipt_number:
+            donation.receipt_number = generate_receipt_number()
+
+        await donation.save()
+        print(f"[YouPI Webhook] Donation {donation.id} marked COMPLETED. Receipt: {donation.receipt_number}, UTR: {utr}")
+
+        return {
+            "received": True,
+            "status": "completed",
+            "donation_id": str(donation.id),
+            "receipt_number": donation.receipt_number,
+        }
+
+    elif event in ["FAILED", "EXPIRED", "CANCELLED"]:
+        if order_id:
+            try:
+                donation = await Donation.get(PydanticObjectId(order_id))
+                if donation and donation.status == "pending":
+                    donation.status = event.lower()
+                    await donation.save()
+            except Exception:
+                pass
+
+    return {"received": True, "event": event}
 
 
 @router.get("/status/{donation_id}")
@@ -494,6 +726,8 @@ async def check_donation_status(donation_id: str):
 
     if not donation:
         donation = await Donation.find_one({"receipt_number": donation_id})
+    if not donation:
+        donation = await Donation.find_one({"youpi_order_id": donation_id})
 
     if not donation:
         raise HTTPException(status_code=404, detail="Donation not found")
@@ -503,6 +737,10 @@ async def check_donation_status(donation_id: str):
         "status": donation.status,
         "receipt_number": donation.receipt_number,
         "amount": donation.amount // 100,
+        "donor_name": donation.donor_name,
+        "donation_type": donation.donation_type,
         "is_completed": donation.status == "completed",
+        "utr": donation.youpi_utr or "",
+        "download_receipt_url": f"/api/donate/receipt-pdf/{donation.id}",
     }
 

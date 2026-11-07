@@ -377,75 +377,6 @@
             margin-top: 1px;
         }
 
-        /* UTR INTIMATION SECTION */
-        .utr-intimation-card {
-            margin-top: 36px;
-            background: #ffffff;
-            border-radius: 20px;
-            border: 1px solid rgba(5, 46, 32, 0.12);
-            padding: 28px;
-            box-shadow: var(--temple-card-shadow);
-        }
-
-        .utr-card-header {
-            margin-bottom: 20px;
-        }
-
-        .utr-card-header h3 {
-            font-size: 1.25rem;
-            color: var(--temple-forest);
-            margin: 0 0 6px;
-            font-weight: 700;
-        }
-
-        .utr-card-header p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .utr-form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .pending-status-banner {
-            display: none;
-            background: #FEF9E7;
-            border: 1.5px solid #F5B041;
-            border-radius: 14px;
-            padding: 16px 20px;
-            margin-top: 16px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .pending-status-banner.active {
-            display: block;
-        }
-
-        .status-badge-pending {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #F39C12;
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .pending-text {
-            font-size: 0.88rem;
-            color: #7D6608;
-            line-height: 1.5;
-            margin: 0;
-        }
-
         /* MODAL LIGHTBOX FOR QR CODE */
         .qr-modal-backdrop {
             display: none;
@@ -529,6 +460,234 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* YOUPI PG INSTANT UPI DONATION & RECEIPT STYLES */
+        .youpi-card {
+            background: var(--temple-ivory);
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            box-shadow: var(--temple-card-shadow);
+            padding: 38px 36px;
+            margin-top: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youpi-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 28px;
+        }
+
+        .youpi-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(20, 90, 50, 0.12);
+            color: #145A32;
+            border: 1px solid rgba(20, 90, 50, 0.3);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .youpi-header h2 {
+            font-size: 1.85rem;
+            color: var(--temple-forest);
+            margin: 0 0 8px;
+            font-weight: 800;
+        }
+
+        .youpi-header p {
+            color: #555555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .youpi-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 720px) {
+            .youpi-form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .youpi-card {
+                padding: 24px 18px;
+            }
+        }
+
+        .youpi-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .youpi-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .youpi-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--temple-forest);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .youpi-label span.req {
+            color: #C0392B;
+        }
+
+        .youpi-input,
+        .youpi-select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(5, 46, 32, 0.2);
+            background: #ffffff;
+            font-size: 0.95rem;
+            color: #222222;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .youpi-input:focus,
+        .youpi-select:focus {
+            border-color: var(--temple-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .quick-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .amount-pill {
+            background: #ffffff;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            color: var(--temple-forest);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .amount-pill:hover,
+        .amount-pill.active {
+            background: var(--temple-gold);
+            color: #ffffff;
+            border-color: var(--temple-gold);
+            transform: translateY(-1px);
+        }
+
+        .btn-youpi-submit {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #052E20 0%, #0B3D2E 50%, #145A32 100%);
+            color: #ffffff;
+            border: 2px solid var(--temple-gold);
+            padding: 15px 24px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(5, 46, 32, 0.25);
+            transition: all 0.25s ease;
+            margin-top: 8px;
+        }
+
+        .btn-youpi-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(5, 46, 32, 0.35);
+            background: linear-gradient(135deg, #0B3D2E 0%, #145A32 100%);
+        }
+
+        .btn-youpi-submit:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        /* Status & Receipt Card */
+        .youpi-status-container {
+            display: none;
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 24px 16px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .youpi-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(212, 175, 55, 0.3);
+            border-top-color: var(--temple-forest);
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+            margin: 0 auto 18px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .receipt-card {
+            background: #ffffff;
+            border-radius: 18px;
+            border: 2px solid var(--temple-gold);
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(5, 46, 32, 0.08);
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .receipt-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1.5px dashed rgba(212, 175, 55, 0.4);
+            padding-bottom: 14px;
+            margin-bottom: 16px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.92rem;
+        }
+
+        .receipt-row .r-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .receipt-row .r-value {
+            color: var(--temple-forest);
+            font-weight: 700;
         }
     </style>
 </head>
@@ -664,6 +823,173 @@
                 </div>
             </div>
         </div>
+
+        <!-- YOUPI-PG 0% FEE ONLINE UPI DONATION & INSTANT RECEIPT -->
+        <div id="section-youpi-pay" class="youpi-card fade-in">
+            <!-- Header -->
+            <div class="youpi-header">
+                <div class="youpi-badge">
+                    <span>⚡</span>
+                    <span>YouPI-PG • 0% ಶುಲ್ಕ • ನೇರ ಖಾತೆಗೆ ಜಮೆ</span>
+                </div>
+                <h2>ಆನ್‌ಲೈನ್ ಕಾಣಿಕೆ & ತ್ವರಿತ ಅಧಿಕೃತ ರಶೀದಿ</h2>
+                <p>
+                    Make your sacred offering using Google Pay, PhonePe, Paytm or BHIM. Your payment is verified instantly via Bank SMS observer, and your official bilingual PDF receipt is issued immediately.
+                </p>
+            </div>
+
+            <!-- Form Container -->
+            <div id="youpi-form-container">
+                <form id="youpi-donation-form" onsubmit="handleYoupiSubmit(event)" class="youpi-form-grid">
+                    <!-- Devotee Name -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="yp-donor-name">
+                            <span>ಭಕ್ತರ ಹೆಸರು • Devotee Name</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="text" id="yp-donor-name" class="youpi-input" required placeholder="e.g. Ramesh Kumar" />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="yp-donor-mobile">
+                            <span>ಮೊಬೈಲ್ ಸಂಖ್ಯೆ • Mobile Number</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="tel" id="yp-donor-mobile" class="youpi-input" required pattern="[0-9]{10}" placeholder="10-digit mobile number" />
+                    </div>
+
+                    <!-- Email Address (Optional) -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="yp-donor-email">
+                            <span>ಇಮೇಲ್ • Email Address</span>
+                            <small style="color:var(--text-muted);font-weight:normal;">(ಐಚ್ಛಿಕ • Optional)</small>
+                        </label>
+                        <input type="email" id="yp-donor-email" class="youpi-input" placeholder="devotee@example.com" />
+                    </div>
+
+                    <!-- Seva Type Selection -->
+                    <div class="youpi-form-group">
+                        <label class="youpi-label" for="yp-donation-type">
+                            <span>ಸೇವೆಯ ವಿವರ • Seva / Donation Purpose</span>
+                        </label>
+                        <select id="yp-donation-type" class="youpi-select">
+                            <option value="general">ಸಾಮಾನ್ಯ ನಿಧಿ • General Temple Fund</option>
+                            <option value="annadanam">ಅನ್ನದಾನ ಸೇವೆ • Annadanam (Free Meals)</option>
+                            <option value="temple_development">ದೇವಸ್ಥಾನ ಜೀರ್ಣೋದ್ಧಾರ • Temple Renovation & Development</option>
+                            <option value="shani_shanthi">ಶನಿ ಶಾಂತಿ ಮಹಾಪೂಜೆ • Shani Shanthi Mahapooja</option>
+                            <option value="deepa_seva">ವಿಶೇಷ ದೀಪ ಸೇವೆ • Special Deepa Seva</option>
+                            <option value="goshala">ಗೋಶಾಲೆ ಸೇವೆ • Goshala & Cow Care</option>
+                        </select>
+                    </div>
+
+                    <!-- Amount Group -->
+                    <div class="youpi-form-group full-width">
+                        <label class="youpi-label" for="yp-amount">
+                            <span>ಕಾಣಿಕೆ ಮೊತ್ತ • Donation Amount (₹)</span>
+                            <span class="req">*</span>
+                        </label>
+                        <input type="number" id="yp-amount" class="youpi-input" min="1" required placeholder="Enter amount in Rupees (e.g. 501)" value="501" />
+
+                        <!-- Quick Presets -->
+                        <div class="quick-amounts">
+                            <button type="button" class="amount-pill" onclick="setQuickAmount(101)">₹101</button>
+                            <button type="button" class="amount-pill" onclick="setQuickAmount(251)">₹251</button>
+                            <button type="button" class="amount-pill active" onclick="setQuickAmount(501)">₹501</button>
+                            <button type="button" class="amount-pill" onclick="setQuickAmount(1001)">₹1,001</button>
+                            <button type="button" class="amount-pill" onclick="setQuickAmount(2501)">₹2,501</button>
+                            <button type="button" class="amount-pill" onclick="setQuickAmount(5001)">₹5,001</button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="yp-submit-btn" class="btn-youpi-submit">
+                        <span>⚡</span>
+                        <span>ಯುಪಿಐ ಮೂಲಕ ಪಾವತಿಸಿ & ತ್ವರಿತ ರಶೀದಿ ಪಡೆಯಿರಿ • Pay via UPI & Get Instant Receipt</span>
+                    </button>
+                </form>
+
+                <div id="yp-notice-banner" style="display:none;margin-top:16px;background:rgba(212,175,55,0.15);border:1px solid var(--temple-gold);border-radius:12px;padding:12px 16px;font-size:0.86rem;color:#4a3e14;text-align:center;">
+                    ℹ️ YouPI SMS Observer server is connecting. You can also scan the official Canara Bank QR code above.
+                </div>
+            </div>
+
+            <!-- Status / Verification & Instant PDF Receipt Container -->
+            <div id="youpi-status-container" class="youpi-status-container">
+                <!-- Verifying state -->
+                <div id="yp-status-verifying">
+                    <div class="youpi-spinner"></div>
+                    <h3 style="color:var(--temple-forest);margin:0 0 8px;">ಬ್ಯಾಂಕ್ ಪಾವತಿ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...</h3>
+                    <p style="color:#666;font-size:0.9rem;margin:0 0 16px;">
+                        Verifying Canara Bank credit via SMS Observer... Please wait a moment.
+                    </p>
+                    <div style="font-family:monospace;font-size:0.82rem;background:#eee;padding:6px 12px;border-radius:8px;display:inline-block;" id="yp-status-order-display">
+                        Order ID: <span id="yp-display-id">-</span>
+                    </div>
+                </div>
+
+                <!-- Completed / Success State with Instant PDF Download -->
+                <div id="yp-status-success" style="display:none;">
+                    <div style="font-size:2.8rem;margin-bottom:8px;">🕉️</div>
+                    <h2 style="color:#2E7D32;margin:0 0 6px;">ಧನ್ಯವಾದಗಳು • Payment Successful!</h2>
+                    <p style="color:#555;font-size:0.92rem;margin:0 0 20px;">
+                        ನಿಮ್ಮ ಕಾಣಿಕೆ ಯಶಸ್ವಿಯಾಗಿ ಜಮೆಯಾಗಿದೆ. ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ಅನುಗ್ರಹ ಸದಾ ನಿಮ್ಮ ಮೇಲಿರಲಿ.
+                    </p>
+
+                    <!-- Receipt Details Box -->
+                    <div class="receipt-card">
+                        <div class="receipt-header-row">
+                            <span style="font-weight:700;color:var(--temple-forest);">ಶ್ರೀ ಶನೀಶ್ವರಸ್ವಾಮಿ ದೇವಸ್ಥಾನ (ರಿ)</span>
+                            <span style="font-size:0.8rem;color:#2E7D32;font-weight:700;background:rgba(46,125,50,0.1);padding:3px 8px;border-radius:6px;">✓ VERIFIED</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="r-label">ರಶೀದಿ ಸಂಖ್ಯೆ • Receipt No</span>
+                            <span class="r-value" id="rcpt-no">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="r-label">ಭಕ್ತರ ಹೆಸರು • Devotee</span>
+                            <span class="r-value" id="rcpt-name">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="r-label">ಸೇವೆ • Purpose</span>
+                            <span class="r-value" id="rcpt-seva">-</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="r-label">ಕಾಣಿಕೆ ಮೊತ್ತ • Amount</span>
+                            <span class="r-value" style="color:#2E7D32;font-size:1.1rem;" id="rcpt-amount">-</span>
+                        </div>
+                        <div class="receipt-row" id="rcpt-utr-row" style="display:none;">
+                            <span class="r-label">ಬ್ಯಾಂಕ್ UTR • Reference</span>
+                            <span class="r-value mono" id="rcpt-utr">-</span>
+                        </div>
+                    </div>
+
+                    <!-- PDF Download Button -->
+                    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                        <a id="rcpt-download-btn" href="#" target="_blank" class="btn-youpi-submit" style="text-decoration:none;display:inline-flex;padding:12px 24px;">
+                            <span>📄</span>
+                            <span>ಅಧಿಕೃತ PDF ರಶೀದಿ ಡೌನ್‌ಲೋಡ್ • Download Official Receipt</span>
+                        </a>
+                        <button type="button" onclick="resetYoupiForm()" class="btn-view-qr" style="padding:12px 20px;">
+                            <span>↺</span>
+                            <span>ಮತ್ತೊಂದು ಕಾಣಿಕೆ • Donate Again</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error / Timeout State -->
+                <div id="yp-status-timeout" style="display:none;margin-top:20px;">
+                    <div style="font-size:2rem;margin-bottom:8px;">⏳</div>
+                    <h3 style="color:#D35400;margin:0 0 6px;">ಪರಿಶೀಲನೆ ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ</h3>
+                    <p style="color:#555;font-size:0.9rem;margin:0 0 16px;">
+                        The bank confirmation SMS is taking longer than usual. If the amount was debited, your donation will be verified shortly.
+                    </p>
+                    <button type="button" onclick="checkStatusAgain()" class="btn-view-qr" style="padding:10px 20px;">
+                        <span>🔄</span> Check Status Again
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- QR LIGHTBOX MODAL -->
@@ -740,6 +1066,173 @@
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeQrModal();
+        });
+
+        // ============================================================
+        // YouPI-PG UPI Gateway & Live Status Polling Logic
+        // ============================================================
+        let activePollingTimer = null;
+        let currentOrderId = null;
+
+        function setQuickAmount(amount) {
+            const input = document.getElementById('yp-amount');
+            if (input) {
+                input.value = amount;
+            }
+            document.querySelectorAll('.amount-pill').forEach(btn => {
+                if (btn.innerText.includes(amount.toLocaleString('en-IN'))) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        async function handleYoupiSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('yp-submit-btn');
+            const donorName = document.getElementById('yp-donor-name').value.trim();
+            const donorMobile = document.getElementById('yp-donor-mobile').value.trim();
+            const donorEmail = document.getElementById('yp-donor-email').value.trim();
+            const sevaType = document.getElementById('yp-donation-type').value;
+            const amount = parseInt(document.getElementById('yp-amount').value, 10);
+
+            if (!donorName || !donorMobile || !amount || amount <= 0) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span> <span>Connecting to Temple Gateway...</span>';
+
+            try {
+                const res = await fetch('/api/donate/youpi-create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        donor_name: donorName,
+                        donor_mobile: donorMobile,
+                        donor_email: donorEmail,
+                        donation_type: sevaType,
+                        amount: amount
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success && data.checkout_url) {
+                    window.location.href = data.checkout_url;
+                } else if (data.donation_id) {
+                    if (data.configured === false) {
+                        const notice = document.getElementById('yp-notice-banner');
+                        if (notice) {
+                            notice.style.display = 'block';
+                            notice.innerHTML = 'ℹ️ ' + (data.message || 'YouPI Gateway server is being initialized. Devotees can scan the Canara Bank QR code above.');
+                        }
+                        btn.disabled = false;
+                        btn.innerHTML = '<span>⚡</span> <span>Pay via UPI & Get Instant Receipt</span>';
+                        document.getElementById('section-scan-pay').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        startVerifyingOrder(data.donation_id);
+                    }
+                } else {
+                    alert(data.message || 'Could not initiate payment. Please use Canara Bank QR code directly.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>⚡</span> <span>Pay via UPI & Get Instant Receipt</span>';
+                }
+            } catch (err) {
+                console.error('Payment initiation error:', err);
+                alert('Connection error. Please try scanning the official Canara Bank QR code directly.');
+                btn.disabled = false;
+                btn.innerHTML = '<span>⚡</span> <span>Pay via UPI & Get Instant Receipt</span>';
+            }
+        }
+
+        function startVerifyingOrder(orderId) {
+            currentOrderId = orderId;
+            document.getElementById('youpi-form-container').style.display = 'none';
+            document.getElementById('youpi-status-container').style.display = 'block';
+            document.getElementById('yp-status-verifying').style.display = 'block';
+            document.getElementById('yp-status-success').style.display = 'none';
+            document.getElementById('yp-status-timeout').style.display = 'none';
+            document.getElementById('yp-display-id').textContent = orderId;
+
+            let pollAttempts = 0;
+            const maxAttempts = 40; // 40 * 3s = 2 minutes
+
+            if (activePollingTimer) clearInterval(activePollingTimer);
+
+            activePollingTimer = setInterval(async () => {
+                pollAttempts++;
+                try {
+                    const res = await fetch(`/api/donate/status/${orderId}`);
+                    if (res.ok) {
+                        const statusData = await res.json();
+                        if (statusData.is_completed) {
+                            clearInterval(activePollingTimer);
+                            showSuccessReceipt(statusData);
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.log('Status polling...', e);
+                }
+
+                if (pollAttempts >= maxAttempts) {
+                    clearInterval(activePollingTimer);
+                    document.getElementById('yp-status-verifying').style.display = 'none';
+                    document.getElementById('yp-status-timeout').style.display = 'block';
+                }
+            }, 3000);
+        }
+
+        function showSuccessReceipt(data) {
+            document.getElementById('yp-status-verifying').style.display = 'none';
+            document.getElementById('yp-status-timeout').style.display = 'none';
+            document.getElementById('yp-status-success').style.display = 'block';
+
+            document.getElementById('rcpt-no').textContent = data.receipt_number || 'Confirmed';
+            document.getElementById('rcpt-name').textContent = data.donor_name || 'Devotee';
+            document.getElementById('rcpt-seva').textContent = data.donation_type || 'General Fund';
+            document.getElementById('rcpt-amount').textContent = '₹' + (data.amount || 0).toLocaleString('en-IN');
+
+            if (data.utr) {
+                document.getElementById('rcpt-utr-row').style.display = 'flex';
+                document.getElementById('rcpt-utr').textContent = data.utr;
+            }
+
+            const downloadBtn = document.getElementById('rcpt-download-btn');
+            if (downloadBtn) {
+                downloadBtn.href = data.download_receipt_url || `/api/donate/receipt-pdf/${data.donation_id}`;
+            }
+        }
+
+        function checkStatusAgain() {
+            if (currentOrderId) {
+                startVerifyingOrder(currentOrderId);
+            }
+        }
+
+        function resetYoupiForm() {
+            if (activePollingTimer) clearInterval(activePollingTimer);
+            document.getElementById('youpi-status-container').style.display = 'none';
+            document.getElementById('youpi-form-container').style.display = 'block';
+            const btn = document.getElementById('yp-submit-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<span>⚡</span> <span>Pay via UPI & Get Instant Receipt</span>';
+            }
+            const url = new URL(window.location);
+            url.searchParams.delete('order_id');
+            window.history.replaceState({}, document.title, url.pathname);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('order_id') || params.get('donation_id');
+            if (orderId) {
+                startVerifyingOrder(orderId);
+            }
         });
     </script>
 </body>

@@ -129,6 +129,13 @@ app.include_router(donations_router, prefix="/api")
 app.include_router(users_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
 
+
+@app.post("/api/youpi-webhook")
+async def top_level_youpi_webhook(request: Request):
+    """Direct alias for /api/donate/youpi-webhook for Merchant Admin compatibility."""
+    from app.domain.donations.router import youpi_webhook
+    return await youpi_webhook(request)
+
 # Ensure uploads directory exists
 uploads_dir = os.path.join(FRONTEND_DIR, "assets", "uploads")
 os.makedirs(uploads_dir, exist_ok=True)

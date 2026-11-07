@@ -25,6 +25,10 @@ class Donation(Document):
     razorpay_signature: Optional[str] = None
     cashfree_order_id: Optional[str] = None
     cashfree_payment_id: Optional[str] = None
+    youpi_order_id: Optional[str] = None
+    youpi_payment_id: Optional[str] = None
+    youpi_utr: Optional[str] = None
+    youpi_delivery_id: Optional[str] = None
     payment_gateway: Optional[str] = None
     status: str = "pending"  # pending, completed, failed
     receipt_number: str = ""
